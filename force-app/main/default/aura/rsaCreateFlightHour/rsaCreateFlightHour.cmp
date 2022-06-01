@@ -1,0 +1,114 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global" controller="rsaCreateFlightHours">
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{       
+        height:unset !important;
+        max-height:unset !important;
+        overflow: initial;        
+        
+    </aura:html>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="equip" type="Equipment__c"/>
+    
+    <aura:attribute name="newFlightHour" type="Object"/>
+    <aura:attribute name="newFlightHourError" type="String"/>
+    <aura:attribute name="simpleNewFlightHour" type="Object"/>
+    
+    <force:recordData aura:id="flightHourRecordCreator"
+                      layoutType="FULL"
+                      targetRecord="{!v.newFlightHour}"
+                      targetFields="{!v.simpleNewFlightHour}"
+                      fields="Parent_Equipment__c, 
+                              Equipment__c, 
+                              Cycles__c, 
+                              Cycles_Date__c,
+                              Hours__c, 
+                              Hours_Date__c, 
+                              Source__c, 
+                              Flow_Counter_EZ_Flight_Hour__c"
+                      targetError="{!v.newFlightHourError}"
+                      mode="New"/>
+    
+    <div class="slds-modal__header slds-text-heading_large">
+        Create Flight Hour
+    </div>
+    
+    <div class="slds-modal__content slds-m-around--large" aura:id="modalbody" id="modalbody">
+        <div class="slds-p-horizontal--small">
+            <!-- Display Lightning Data Service errors -->
+            
+            <aura:if isTrue="{!not(empty(v.newFlightHourError))}">
+                <div class="recordError">
+                    <ui:message title="Error" severity="error" closable="true">
+                        {!v.newFlightHourError}
+                    </ui:message>
+                </div>
+            </aura:if>
+            
+            <lightning:layoutItem padding="around-small">
+                <div class="slds-text-heading_medium slds-align_absolute-center">Flight Hour Info for: {!v.equip.Name}</div>
+                <div>
+                    <label class="slds-form-element__label" for="lh" id="inline-text-label">Last Hours: </label>
+                    <ui:outputText aura:id="lh" class="field" value="{!v.equip.LastHours__c}"/>
+                </div>
+                <div>
+                    <label class="slds-form-element__label" for="lhd" id="inline-text-label">Last Hours Date: </label>
+                    <ui:outputDate aura:id="lhd" class="field" value="{!v.equip.LastHoursDate__c}"/>
+                </div>
+                <div>
+                    <label class="slds-form-element__label" for="lc" id="inline-text-label">Last Cycles: </label>
+                    <ui:outputText aura:id="lc" class="field" value="{!v.equip.LastCycles__c}"/>
+                </div>
+                <div>
+                    <label class="slds-form-element__label" for="lcd" id="inline-text-label">Last Cycles Date: </label>
+                    <ui:outputDate aura:id="lcd" class="field" value="{!v.equip.LastCyclesDate__c}"/> 
+                </div>
+            </lightning:layoutItem>
+            
+            <!-- Display the new Flight Hour form -->
+            <div class="slds-form_stacked">
+                <lightning:select name="source" label="Source" required="true" value="{!v.simpleNewFlightHour.Source__c}"> 
+                    <option value="">Select Flight Hour Source...</option>
+                    <option value="Customer Contact-AR/NP">Customer Contact-AR/NP</option>
+                    <option value="Customer Contact-RSA">Customer Contact-RSA</option>
+                    <option value="Customer Contact-RSM">Customer Contact-RSM</option>
+                    <option value="Customer Contact-Other">Customer Contact-Other</option>
+                    <option value="Customer Logbooks">Customer Logbooks</option>
+                    <option value="StandardAero Inspection Reports">StandardAero Inspection Reports</option>
+                    <option value="Amstat">Amstat</option>
+                    <option value="CAMP">CAMP</option>
+                    <option value="E-Engines">E-Engines</option>
+                    <option value="Jetnet">Jetnet</option>
+                    <option value="JSSI">JSSI</option>
+                    <option value="MAP">MAP</option>
+                    <option value="MSP Claims">MSP Claims</option>
+                    <option value="MSP Contract">MSP Contract</option>
+                    <option value="MST">MST</option>
+                    <option value="RPA">RPA</option>
+                    <option value="SAL">SAL</option>
+                    <option value="Aircraft Tracking Program (Other)">Aircraft Tracking Program (Other)</option>
+                    <option value="DMT ~ CAMP">DMT ~ CAMP</option>
+                    <option value="DMT ~ Claims Honeywell MSP">DMT ~ Claims Honeywell MSP</option>
+                    <option value="DMT ~ E-Engines">DMT ~ E-Engines</option>
+                    <option value="DMT ~ Service Authorization">DMT ~ Service Authorization</option>
+                    <option value="SOAP - Jet-Care">SOAP - Jet-Care</option>
+                    <option value="Broker/Dealer Website">Broker/Dealer Website</option>
+                </lightning:select>
+            </div>          
+        </div>
+    </div>
+    
+    <div class="slds-modal__footer">
+        <lightning:button variant="brand" label="Cancel" onclick="{!c.cancel}" />
+        <lightning:button variant="brand" label="Create Flight Hour" onclick="{!c.handleSaveFlightHour}" />
+    </div>
+    
+    
+</aura:component>

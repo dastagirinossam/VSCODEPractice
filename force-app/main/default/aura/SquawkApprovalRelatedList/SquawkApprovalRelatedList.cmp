@@ -1,0 +1,121 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="approvalHistory" type="Object[]"/>
+    <aura:attribute name="approvalHistorySize" type="Object"/>
+	<aura:attribute name="squawkName" type="String"/>
+    <aura:attribute type="Boolean" name="sortAsc" />
+    <aura:attribute type="String" name="sortField"/> 
+	
+    <div class="container">
+    	<div class="slds-page-header--object-home slds-page-header slds-shrink-none forceListViewManagerHeader">
+            <div class="slds-media slds-no-space slds-grow">
+                <div class="slds-media__body slds-align-middle">
+                    <nav role="navigation" aria-label="Breadcrumbs">
+                        <ol class="slds-breadcrumb slds-list--horizontal">
+                            <li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+                                <a title="Squawk Quote" href="javascript:void(0);">
+                                    <span class="uiOutputText">Squawk</span>
+                                </a>
+                            </li>
+                            <li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+                                <a title="Return To Previous Page" href="javascript:void(0);">
+                                    <span class="uiOutputText" onclick="{!c.redirect}">Return To Previous Page</span>
+                                </a>
+                            </li>
+                        </ol>
+                    </nav>
+                    <h1 class="slds-page-header__title slds-truncate">Approval History</h1>
+                    <p class="slds-text-body--small">
+                        <div class="test-listViewStatusInfo">
+                            <span class="uiOutputText">{!v.approvalHistorySize} items</span>
+                        </div>
+                    </p>
+                </div>    
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="container slds-p-top_medium forceRelatedListSingleContainer">
+        	<article class="forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+        		<div class="slds-grid listDisplays"> 
+        			<table class="slds-table slds-table--cell-buffer slds-table_bordered"> 
+        				<thead>
+							<tr class="slds-text-title_caps">            	
+                    			<th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Action</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Date</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Status</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Assigned To</div>  
+       							</th>          
+							</tr> 
+    					</thead>
+                        <tbody>
+                        	<aura:iteration items="{!v.approvalHistory}" var="ah">
+								<tr>				
+                					<td scope="row" class="slds-p-vertical--xx-small">                 
+                     					<div class="slds-truncate slds-text-align--center">
+                                            <aura:if isTrue="{!ah.StepStatus == 'Started'}">
+                                            	Submitted for Approval
+                                            </aura:if>
+                                            <aura:if isTrue="{!and(ah.StepStatus == 'NoResponse', ah.ProcessInstance.Status == 'Pending')}">                                             
+                                            	Pending
+                                            </aura:if>                                          
+                                            <aura:if isTrue="{!and(ah.StepStatus == 'NoResponse', ah.ProcessInstance.Status == 'Approved')}">                                             
+                                            	Approved
+                                            </aura:if> 
+                                            <aura:if isTrue="{!ah.StepStatus == 'Approved'}">
+                                                Approved
+                                            </aura:if>
+                                            <aura:if isTrue="{!ah.StepStatus == 'Removed'}">
+                                                Recalled
+                                            </aura:if>
+                                            <aura:if isTrue="{!and(ah.StepStatus == 'NoResponse', ah.ProcessInstance.Status == 'Rejected')}">                                             
+                                            	Rejected
+                                            </aura:if>                                            
+                                            <aura:if isTrue="{!ah.StepStatus == 'Rejected'}">
+                                                Rejected
+                                            </aura:if> 
+                                        </div>
+									</td>   
+									<td scope="row" class="slds-p-vertical--xx-small">                                        
+                    					<div class="slds-truncate slds-text-align--center">
+                                            <ui:outputDateTime value="{!ah.CreatedDate}"/>
+                                        </div>            	
+									</td>                 
+									<td scope="row" class="slds-p-vertical--xx-small">
+                     					<div class="slds-truncate slds-text-align--center">
+                                            <aura:if isTrue="{!or(and(ah.StepStatus == 'Started', ah.ProcessInstance.Status == 'Approved'),
+                                                                  and(ah.StepStatus == 'Started', ah.ProcessInstance.Status == 'Rejected'))}">
+                                                Pending
+                                            </aura:if>
+ 											<aura:if isTrue="{!or(and(ah.StepStatus == 'Started', ah.ProcessInstance.Status == 'Removed'),
+                                                             	  and(ah.StepStatus == 'Started', ah.ProcessInstance.Status == 'Pending'))}">
+                                            	Pending
+                                            </aura:if>                                          
+                                            <aura:if isTrue="{!ah.StepStatus != 'Started'}">
+                                            	{!ah.ProcessInstance.Status}
+                                            </aura:if>
+                                        </div>
+									</td>                 
+									<td scope="row" class="slds-p-vertical--xx-small">
+										<div class="slds-truncate slds-text-align--center">{!ah.OriginalActor.Name}</div>                 
+									</td>                              
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+            	</div>
+        	</article>        
+		</div>
+    </div>
+</aura:component>

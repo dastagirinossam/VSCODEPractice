@@ -1,0 +1,427 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="EngineForSaleApex" >
+    <aura:attribute type="Equipment__c[]" name="EquipList"/>
+    <aura:attribute type="List" name="WarpList"/>
+    <aura:attribute  type="Boolean" name="EnginesAvilable" default ="false" />
+    <aura:attribute  type="Boolean" name="EnginesAvilable1" default ="false" />
+    <aura:attribute  type="Boolean" name="EnginesAvilable2" default ="false" />
+    <aura:attribute  type="Boolean" name="EnginesAvilable3" default ="false" />
+    <aura:attribute  type="Integer" name="Count" default ="0" />
+    
+    <aura:handler name="init" value="{!this }" action="{! c.DoInit }"/>
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <aura:attribute name="spinner" type="boolean" default="FALSE"/>
+    
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <article class="slds-card">
+        <aura:if isTrue="{!$Browser.formFactor == 'PHONE'}">
+            
+            <div class="slds-media slds-no-space slds-grow slds-card__header slds-border_bottom slds-align_absolute-center" style="background-color: rgb(250, 250, 249);">
+                <div class="slds-button-group slds-p-around--small" role="group">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.handleClick1}">All</button>	
+                    <button class="slds-button slds-button_neutral" onclick="{!c.handleClick2}">APU</button>
+                    <button class="slds-button slds-button_neutral" onclick="{!c.handleClick3}">Honeywell</button>
+                    <button class="slds-button slds-button_neutral slds-truncate" onclick="{!c.handleClick4}">Pratt &#38; Whitney</button>
+                </div>
+            </div>
+            
+            <div class="slds-modal__content" style="height: 73vh;">
+                <aura:if isTrue = "{!v.EnginesAvilable}">
+                    <ui:scrollerWrapper class="sWrap">
+                        <aura:iteration items="{!v.WarpList}" var="e">
+                            <tr>
+                                <div class="slds-p-around_x-small">
+                                    <ul class="slds-has-dividers_around-space">
+                                        <li class="slds-item" style="width: 90vw;">
+                                            <article class="slds-tile slds-tile_board">
+                                                <h3 class="slds-tile__title slds-truncate">
+                                                    <a href="javascript:void(0);">{!e.equip.Model__c}</a>
+                                                </h3>
+                                                <div class="slds-tile__detail">
+                                                    <p class="slds-text-heading_medium">Serial No: {!e.equip.EngineorAPUSN__c}</p>
+                                                    <p class="slds-truncate">
+                                                        <a href="javascript:void(0);">Part No: {!e.equip.Part_No__c}</a>
+                                                    </p>
+                                                    <p class="slds-truncate">Total Hours: {!e.equip.LastHours__c}</p>
+                                                    <p class="slds-truncate">Total Cycles: {!e.equip.LastCycles__c}</p>
+                                                </div>
+                                            </article>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </tr>
+                        </aura:iteration>
+                    </ui:scrollerWrapper>
+                </aura:if>   
+                
+                <!--APU-->
+                <aura:if isTrue = "{!v.EnginesAvilable1}"> 
+                    <ui:scrollerWrapper class="sWrap">
+                        <aura:iteration items="{!v.WarpList}" var="e">
+                            <tr>
+                                <div class="slds-p-around_x-small">
+                                    <ul class="slds-has-dividers_around-space">
+                                        <li class="slds-item" style="width: 90vw;">
+                                            <article class="slds-tile slds-tile_board">
+                                                <h3 class="slds-tile__title slds-truncate">
+                                                    <a href="javascript:void(0);">{!e.equip.Model__c}</a>
+                                                </h3>
+                                                <div class="slds-tile__detail">
+                                                    <p class="slds-text-heading_medium">Serial No: {!e.equip.EngineorAPUSN__c}</p>
+                                                    <p class="slds-truncate">
+                                                        <a href="javascript:void(0);">Part No: {!e.equip.Part_No__c}</a>
+                                                    </p>
+                                                    <p class="slds-truncate">Total Hours: {!e.equip.LastHours__c}</p>
+                                                </div>
+                                            </article>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </tr>
+                        </aura:iteration>                           
+                    </ui:scrollerWrapper>
+                </aura:if> 
+            
+            	<!--HON-->
+                <aura:if isTrue = "{!v.EnginesAvilable2}">
+                    <ui:scrollerWrapper class="sWrap">
+                        <aura:iteration items="{!v.WarpList}" var="e">
+                            <tr>
+                                <div class="slds-p-around_x-small">
+                                    <ul class="slds-has-dividers_around-space">
+                                        <li class="slds-item" style="width: 90vw;">
+                                            <article class="slds-tile slds-tile_board">
+                                                <h3 class="slds-tile__title slds-truncate">
+                                                    <a href="javascript:void(0);">{!e.equip.Model__c}</a>
+                                                </h3>
+                                                <div class="slds-tile__detail">
+                                                    <p class="slds-text-heading_medium">Serial No: {!e.equip.EngineorAPUSN__c}</p>
+                                                    <p class="slds-truncate">
+                                                        <a href="javascript:void(0);">Part No: {!e.equip.Part_No__c}</a>
+                                                    </p>
+                                                    <p class="slds-truncate">Total Hours: {!e.equip.LastHours__c}</p>
+                                                    <p class="slds-truncate">Total Cycles: {!e.equip.LastCycles__c}</p>
+                                                    <p class="slds-truncate">MPI Remaining: {!e.equip.MPI_Remaining__c}</p>
+                                                    <p class="slds-truncate">CZI Remaining: {!e.equip.CZI_Remaining__c}</p>                                                                                                                
+                                                </div>
+                                            </article>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </tr>
+                        </aura:iteration>                          
+                    </ui:scrollerWrapper>
+                </aura:if> 
+            
+            <!--Pratt-->
+                <aura:if isTrue = "{!v.EnginesAvilable3}">
+                    <ui:scrollerWrapper class="sWrap">
+                        <aura:iteration items="{!v.WarpList}" var="e">
+                            <tr>
+                                <div class="slds-p-around_x-small">
+                                    <ul class="slds-has-dividers_around-space">
+                                        <li class="slds-item" style="width: 90vw;">
+                                            <article class="slds-tile slds-tile_board">
+                                                <h3 class="slds-tile__title slds-truncate">
+                                                    <a href="javascript:void(0);">{!e.equip.Model__c}</a>
+                                                </h3>
+                                                <div class="slds-tile__detail">
+                                                    <p class="slds-text-heading_medium">Serial No: {!e.equip.EngineorAPUSN__c}</p>
+                                                    <p class="slds-truncate">
+                                                        <a href="javascript:void(0);">Part No: {!e.equip.Part_No__c}</a>
+                                                    </p>
+                                                    <p class="slds-truncate">Total Hours: {!e.equip.LastHours__c}</p>
+                                                    <p class="slds-truncate">Total Cycles: {!e.equip.LastCycles__c}</p>                                                                                                                
+                                                </div>
+                                            </article>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </tr>
+                        </aura:iteration>                            
+                    </ui:scrollerWrapper>                   
+                </aura:if> 
+                <div class="slds-p-top_small">
+                    <div class="slds-align_absolute-center" style="color:GRAY"><h2>For More Information Contact</h2></div>  
+                    <div class="slds-grid slds-gutters,slds-align_absolute-center">
+                        <div class="slds-col slds-size_1-of-2">
+                            <span class="slds-align_absolute-center"><h3><a href="mailto: Rhyse.Booth@StandardAero.com">Rhyse Booth</a></h3></span>
+                            <p class="slds-align_absolute-center"><lightning:formattedPhone value="14803773113"></lightning:formattedPhone></p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <span class="slds-align_absolute-center"><h3><a href="mailto: Kevin.Jacobs@StandardAero.com">Kevin Jacobs</a></h3></span>
+                            <p class="slds-align_absolute-center"><lightning:formattedPhone value="14803773151"></lightning:formattedPhone></p>
+                        </div>
+                    </div>   
+                </div>  
+            </div>
+        </aura:if>
+    
+        <aura:if isTrue="{!$Browser.formFactor != 'PHONE'}">
+            <div class="slds">                            
+                <div style="background-color: rgb(250, 250, 249); position: relative; height: 65vh; overflow: hidden; display: flex;">
+                    <div class="slds-panel slds-size_medium slds-panel_docked slds-panel_docked-left slds-panel_drawer slds-is-open">
+                        <div class="slds-panel__body">
+                            <tr class="slds-align_absolute-center">
+                                <lightning:button variant="base" label="All" onclick="{!c.handleClick1}" />	
+                            </tr>
+                            <tr class="slds-align_absolute-center" >
+                                <lightning:button variant="base" label="APU" onclick= "{!c.handleClick2}" />
+                            </tr>
+                            <tr class="slds-align_absolute-center" >
+                                <lightning:button variant="base" label="HoneyWell" onclick="{!c.handleClick3}" />
+                            </tr>            
+                            <tr class="slds-align_absolute-center">
+                                <lightning:button variant="base" label="Pratt &#38; Whitney Canada" onclick="{!c.handleClick4}" /> 
+                            </tr>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-table--header-fixed_container" style="height:60vh;"/>
+                    <div class="slds-col slds-p-around_medium slds-scrollable_y" style="height:100%;">
+                        <aura:if isTrue = "{!v.EnginesAvilable}">
+                            <table class="slds-table slds-table--bordered slds-border_left slds-border_right slds-table--cell-buffer">                       
+                                <thead>                                
+                                    <tr class="slds-text-title--caps">
+                                        <th scope="col" >
+                                            <div class="slds-truncate">No.</div>
+                                        </th>                                    
+                                        <th scope="col" >
+                                            <div class="slds-truncate">Model</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Part No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Serial No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Total Hours</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Total Cycles</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.WarpList}" var="e"  >
+                                        <tr>
+                                            <th scope="row" data-label="No.">
+                                                <div class="slds-truncate">{!e.i}</div>
+                                            </th>                                       
+                                            <td data-label="Model">
+                                                <div class="slds-truncate">{!e.equip.Model__c}</div>
+                                            </td>
+                                            <td data-label="Part No">
+                                                <div class="slds-truncate">{!e.equip.Part_No__c}</div>
+                                            </td>
+                                            <td data-label="Serial No">
+                                                <div class="slds-truncate">{!e.equip.EngineorAPUSN__c}</div>
+                                            </td>
+                                            <td data-label="Total Hours">
+                                                <div class="slds-truncate">{!e.equip.LastHours__c}</div>
+                                            </td>
+                                            <td data-label="Total Cycles">
+                                                <div class="slds-truncate">{!e.equip.LastCycles__c}</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>                           
+                                </tbody>
+                            </table> 
+                        </aura:if>  
+                        
+                        <!--APU-->
+                        <aura:if isTrue = "{!v.EnginesAvilable1}">
+                            <table class="slds-table slds-table--bordered slds-border_left slds-border_right slds-table--cell-buffer">
+                                
+                                <thead>
+                                    
+                                    <tr class="slds-text-title--caps">
+                                        <th scope="col" >
+                                            <div class="slds-truncate">No.</div>
+                                        </th>                                
+                                        <th scope="col" >
+                                            <div class="slds-truncate">Model</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Part No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Serial No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Totals Hours</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.WarpList}" var="e"  >
+                                        <tr>
+                                            <td>
+                                                <div class="slds-truncate">{!e.i}</div>
+                                            </td>                                   
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.Model__c }</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.Part_No__c }</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.EngineorAPUSN__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.LastHours__c }</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>                           
+                                </tbody>
+                            </table> 
+                        </aura:if> 
+                        
+                        <!--HON-->
+                        <aura:if isTrue = "{!v.EnginesAvilable2}">
+                            <table class="slds-table slds-table--bordered slds-border_left slds-border_right slds-table--cell-buffer">                       
+                                <thead>                           
+                                    <tr class="slds-text-title--caps">
+                                        <th scope="col" >
+                                            <div class="slds-truncate">No.</div>
+                                        </th>                                
+                                        <th scope="col" >
+                                            <div class="slds-truncate">Model</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Part No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Serial No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Total Hours</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Total Cycles</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">MPI Remaining</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">CZI Remaining</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.WarpList}" var="e">
+                                        <tr>
+                                            <td data-label="Index">
+                                                <div class="slds-truncate">{!e.i}</div>
+                                            </td>                                    
+                                            <td scope="row">
+                                                <div class="slds-truncate">{!e.equip.Model__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.Part_No__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.EngineorAPUSN__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{! e.equip.LastHours__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{! e.equip.LastCycles__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.MPI_Remaining__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.CZI_Remaining__c}</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>
+                                    
+                                </tbody>
+                            </table> 
+                        </aura:if> 
+                        
+                        <!--Pratt-->
+                        <aura:if isTrue = "{!v.EnginesAvilable3}">
+                            <table class="slds-table slds-table--bordered slds-border_left slds-border_right slds-table--cell-buffer">                        
+                                <thead>                            
+                                    <tr class="slds-text-title--caps">
+                                        <th scope="col" >
+                                            <div class="slds-truncate">No.</div>
+                                        </th>                                
+                                        <th scope="col" >
+                                            <div class="slds-truncate">Model</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Part No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Serial No</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Total Hours</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate">Total Cycles</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.WarpList}" var="e">
+                                        <tr>
+                                            <td data-label="Index">
+                                                <div class="slds-truncate">{!e.i}</div>
+                                            </td>                                    
+                                            <td scope="row">
+                                                <div class="slds-truncate">{!e.equip.Model__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.Part_No__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{!e.equip.EngineorAPUSN__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{! e.equip.LastHours__c}</div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">{! e.equip.LastCycles__c}</div>
+                                            </td>
+                                        </tr>
+                                    </aura:iteration>                            
+                                </tbody>
+                            </table> 
+                        </aura:if>             
+                    </div>
+                </div>
+                <div class="slds-p-top_large slds-p-bottom_medium">
+                    <div class="slds-align_absolute-center" style="color:GRAY"><h1>For More Information Contact</h1></div>  
+                    <div class="slds-grid slds-gutters,slds-align_absolute-center">
+                        <div class="slds-col slds-size_1-of-2">
+                            <span class="slds-align_absolute-center"><h2><a href="mailto: Rhyse.Booth@StandardAero.com">Rhyse Booth</a></h2></span>
+                            <p class="slds-align_absolute-center"><lightning:formattedPhone value="14803773113"></lightning:formattedPhone></p>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <span class="slds-align_absolute-center"><h2><a href="mailto: Kevin.Jacobs@StandardAero.com">Kevin Jacobs</a></h2></span>
+                            <p class="slds-align_absolute-center"><lightning:formattedPhone value="14803773151"></lightning:formattedPhone></p>
+                        </div>
+                    </div>   
+                </div>
+            </div>
+        </aura:if>
+    </article>
+
+</aura:component>

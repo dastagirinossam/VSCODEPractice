@@ -1,0 +1,572 @@
+<apex:page standardcontroller="account" extensions="AcctSummaryExt" sidebar="false" showHeader="false" docType="html-5.0" renderAs="PDF">
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no"/> 
+        <style>
+            @page {
+            size:landscape;
+            margin:2%;
+            
+            @bottom-right {
+            content: "Page " counter(page);  
+            }             
+            }      
+            body {
+            font-family: Arial Unicode MS; 
+            font-size:11px;
+            date:0,date,yyyy     
+            }
+            .title{
+            font-weight:bold;
+            font-size:19px;
+            color:red
+            }
+            .header{
+            font-size:13px;
+            font-weight:bold;
+            background-color:#C0C0C0
+            }
+            .subtitle{
+            font-weight:bold;
+            font-size:15px
+            }                     
+        </style> 
+    </head>
+    
+    <center>
+        <apex:panelGrid columns="1" width="100%">
+            <apex:outputText value="{!account.Name}" styleClass="title"/>
+        </apex:panelGrid>
+    </center>
+    
+    <p></p>
+    
+    <apex:dataTable value="{!account}" var="a" cellPadding="2" border="1" width="100%" rows="2">
+        <apex:column headerValue="Account Owner" width="15%" headerClass="header" >
+            {!account.owner.firstname} {!account.owner.lastname}
+        </apex:column>
+        
+        <apex:column headerValue="Area" width="6%" headerClass="header" >          
+            {!a.Area__c}      
+        </apex:column>
+        
+        <apex:column headerValue="Type" width="10%" headerClass="header" >          
+            {!a.type}      
+        </apex:column>
+        
+        <apex:column headerValue="Rating" width="7%" headerClass="header" >          
+            {!a.Customer_Account_Rating__c}
+        </apex:column>
+        
+        <apex:column headerValue="Phone" width="12%" headerClass="header" >          
+            {!a.phone}      
+        </apex:column>
+        
+        <apex:column headerValue=" Address" width="33%" headerClass="header" value="{!a.billingstreet} ~ {!a.billingcity}, {! a.BillingState} {!a.billingpostalcode} ~ {!a.billingCountry}" />          
+        
+        <apex:column headerValue="Date Run" width="7%" headerClass="header" >          
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!now()}" /> 
+            </apex:outputText>                     
+        </apex:column>
+        
+    </apex:dataTable>
+    
+    <p></p>  
+    
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="CONTACTS" styleClass="subtitle"/>
+    </apex:panelGrid>
+    <apex:dataTable value="{!contactsum}" var="c" cellPadding="2" border="1" width="100%">
+        <apex:column headerValue="Contact Name" width="18%" headerclass="header">
+            {!c.name}
+        </apex:column>
+        
+        <apex:column headerValue="Title" width="17%" headerclass="header" >
+            {!c.Title}     
+        </apex:column>
+        
+        <apex:column headerValue="Type" width="15%"  headerclass="header">
+            {!c.ContactType__c}
+        </apex:column>
+        
+        <apex:column headerValue="Phone" width="10%" headerclass="header" >               
+            {!c.phone} 
+        </apex:column>
+        
+        <apex:column headerValue="Hangar Phone" width="10%" headerclass="header">
+            {!c.HangarPhone__c}                 
+        </apex:column>
+        
+        <apex:column headerValue="Mobile Phone" width="10%"  headerclass="header">
+            {!c.mobilephone}
+        </apex:column>
+        
+        <apex:column headerValue="Email" width="20%"  headerclass="header">
+            {!c.email}
+        </apex:column>
+    </apex:dataTable>
+    
+    <p></p> 
+    
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="AIRCRAFT" styleClass="subtitle"/>
+    </apex:panelGrid>
+    
+    <apex:dataTable value="{!ACSum}" var="ac" cellPadding="2" border="1" width="100%">
+        <apex:column headerValue="Aircraft Name" width="14%" headerclass="header">
+            {!ac.name}
+        </apex:column>
+        
+        <apex:column headerValue="Aircraft Model" width="14%" headerclass="header" >
+            {!ac.Aircraft_Model_2011__c}               
+        </apex:column>
+        
+        <apex:column headerValue="Registration" width="7%"  headerclass="header">
+            {!ac.ACReg__c}              
+        </apex:column>
+        
+        <apex:column headerValue="Delivery Date" width="8%" headerclass="header" >
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!ac.AircraftDeliveryDate__c}" /> 
+            </apex:outputText>                       
+        </apex:column>
+        
+        <apex:column headerValue="Status" width="8%" headerclass="header" >  
+            {!ac.Aircraft_Status__c}
+        </apex:column>
+        
+        <apex:column headerValue="Last Hours" width="10%" headerclass="header" >  
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!ac.ACHRS__c}"/>
+            </apex:outputText>              
+        </apex:column>
+        
+        <apex:column headerValue="Last Hours Date" width="10%" headerclass="header" >
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!ac.ACHRSDate__c}" /> 
+            </apex:outputText>                      
+        </apex:column>
+        
+        <apex:column headerValue="AMH" width="4%" headerclass="header" >  
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!ac.Average_Monthly_Hours__c}"/>
+            </apex:outputText>              
+        </apex:column>
+        
+        <apex:column headerValue="Airport" width="5%" headerclass="header" >  
+            {!ac.Airport_Code__c}              
+        </apex:column>
+        
+        <apex:column headerValue="MX Prgm" width="10%" headerclass="header" >  
+            {!ac.Maintenance_Program__c}              
+        </apex:column>
+        
+        <apex:column headerValue="Tracking Prgm" width="10%" headerclass="header" >  
+            {!ac.Aircraft_Tracking_Program__c}              
+        </apex:column>
+    </apex:dataTable>
+    
+    <p></p>  
+
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="MANAGED AIRCRAFT" styleClass="subtitle"/>
+    </apex:panelGrid>
+    
+    <apex:dataTable value="{!ManagedAC}" var="mac" cellPadding="2" border="1" width="100%">
+        <apex:column headerValue="Aircraft Name" width="14%" headerclass="header">
+            {!mac.name}
+        </apex:column>
+        
+        <apex:column headerValue="Aircraft Model" width="14%" headerclass="header" >
+            {!mac.Aircraft_Model_2011__c}               
+        </apex:column>
+        
+        <apex:column headerValue="Registration" width="7%"  headerclass="header">
+            {!mac.ACReg__c}              
+        </apex:column>
+        
+        <apex:column headerValue="Delivery Date" width="8%" headerclass="header" >
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!mac.AircraftDeliveryDate__c}" /> 
+            </apex:outputText>                       
+        </apex:column>
+        
+        <apex:column headerValue="Status" width="8%" headerclass="header" >  
+            {!mac.Aircraft_Status__c}
+        </apex:column>
+        
+        <apex:column headerValue="Last Hours" width="10%" headerclass="header" >  
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!mac.ACHRS__c}"/>
+            </apex:outputText>              
+        </apex:column>
+        
+        <apex:column headerValue="Last Hours Date" width="10%" headerclass="header" >
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!mac.ACHRSDate__c}" /> 
+            </apex:outputText>                      
+        </apex:column>
+        
+        <apex:column headerValue="AMH" width="4%" headerclass="header" >  
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!mac.Average_Monthly_Hours__c}"/>
+            </apex:outputText>              
+        </apex:column>
+        
+        <apex:column headerValue="Airport" width="5%" headerclass="header" >  
+            {!mac.Airport_Code__c}              
+        </apex:column>
+        
+        <apex:column headerValue="MX Prgm" width="10%" headerclass="header" >  
+            {!mac.Maintenance_Program__c}              
+        </apex:column>
+        
+        <apex:column headerValue="Tracking Prgm" width="10%" headerclass="header" >  
+            {!mac.Aircraft_Tracking_Program__c}              
+        </apex:column>
+    </apex:dataTable>
+    
+    <p></p>  
+    
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="EQUIPMENT" styleClass="subtitle"/>
+    </apex:panelGrid>
+    
+    <apex:dataTable value="{!equipsum}" var="e" cellPadding="2" border="1" width="100%">
+        
+        <apex:column headerValue="Equipment Name" width="10%" headerclass="header"> 
+            {!e.name}
+        </apex:column>
+        <apex:column headerValue="Model" width="10%" headerclass="header" >
+            {!e.AircraftEngineorAPUMode__c}  
+        </apex:column>
+        
+        <apex:column headerValue="Aircraft" width="10%"  headerclass="header"> 
+            {!e.Aircraft_System_Name__c}  
+        </apex:column>
+        
+        <apex:column headerValue="MX Prgm" width="4%"  headerclass="header">        
+            {!e.MaintenancePrgmType__c}                 
+        </apex:column>
+        
+        <apex:column headerValue="AMH" width="4%" headerclass="header" > 
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!e.Average_Monthly_Hours__c}"/>
+            </apex:outputText>  
+        </apex:column>
+        
+        <apex:column headerValue="Last Hours" width="5%" headerclass="header" >
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!e.LastHours__c}"/>
+            </apex:outputText>
+        </apex:column>  
+        
+        <apex:column headerValue="Last Hours Date" width="8%" headerclass="header" >
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!e.LastHoursDate__c}"/>
+            </apex:outputText>
+        </apex:column>
+        
+        <apex:column headerValue="Last MPI" width="5%"  headerclass="header">
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{! IF(Contains(e.AircraftEngineorAPUMode__c,'PW30'), e.Last_HSI__c, e.LastMPI__c)}"/>                         
+            </apex:outputText>
+        </apex:column>
+        
+        <apex:column headerValue="Last MPI Date" width="6%" headerclass="header" >  
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!IF(Contains(e.AircraftEngineorAPUMode__c,'PW30'), e.Last_HSI_Date__c, e.MPIDate__c)}"/>
+            </apex:outputText>  
+        </apex:column>
+        
+        <apex:column headerValue="MPI Interval" width="5%" headerclass="header" >
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!IF(Contains(e.AircraftEngineorAPUMode__c,'PW30'), e.HSI_Interval__c, e.MPIInterval__c)}"/>
+            </apex:outputText>
+        </apex:column>  
+        
+        <apex:column headerValue="Next MPI Date" width="8%" headerclass="header" >        
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!IF(Contains(e.AircraftEngineorAPUMode__c,'PW30'), e.Next_HSI_Date_TSN__c, e.Next_MPI_Date__c)}"/>
+            </apex:outputText>
+        </apex:column>
+        
+        <apex:column headerValue="Last CZI" width="5%"  headerclass="header">
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!IF(Contains(e.AircraftEngineorAPUMode__c,'PW30'), e.Last_O_H_Hours_TSN__c, e.LASTCZI__c)}"/>
+            </apex:outputText>
+        </apex:column>
+        
+        <apex:column headerValue="Last CZI Date" width="5%" headerclass="header" > 
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!IF(Contains(e.AircraftEngineorAPUMode__c,'PW30'), e.Last_O_H_Date_TSN__c, e.CZIDate__c)}"/>
+            </apex:outputText>                     
+        </apex:column>
+        
+        <apex:column headerValue="CZI Interval" width="5%" headerclass="header" >
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!IF(Contains(e.AircraftEngineorAPUMode__c,'PW30'), e.O_H_Interval__c, e.CZIINTVL__c)}"/>
+            </apex:outputText>
+        </apex:column> 
+        
+        <apex:column headerValue="Next CZI Date" width="8%" headerclass="header" >   
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!IF(Contains(e.AircraftEngineorAPUMode__c,'PW30'), e.Next_O_H_Date_TSN__c, e.Next_CZI_Date__c)}"/>
+            </apex:outputText>  
+        </apex:column>
+        
+        <apex:column headerValue="Interval Confirm" width="2%" headerclass="header" >    
+            {!e.Interval_Confirmed__c}              
+        </apex:column>  
+        
+    </apex:dataTable>
+    
+    <p></p> 
+    
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="MANAGED AIRCRAFT EQUIPMENT" styleClass="subtitle"/>
+    </apex:panelGrid>
+    
+    <apex:dataTable value="{!ManagedACEquipSum}" var="me" cellPadding="2" border="1" width="100%">
+        
+        <apex:column headerValue="Equipment Name" width="10%" headerclass="header"> 
+            {!me.name}
+        </apex:column>
+        <apex:column headerValue="Model" width="10%" headerclass="header" >
+            {!me.AircraftEngineorAPUMode__c}  
+        </apex:column>
+        
+        <apex:column headerValue="Aircraft" width="10%"  headerclass="header"> 
+            {!me.Aircraft_System_Name__c}  
+        </apex:column>
+        
+        <apex:column headerValue="MX Prgm" width="4%"  headerclass="header">        
+            {!me.MaintenancePrgmType__c}                 
+        </apex:column>
+        
+        <apex:column headerValue="AMH" width="4%" headerclass="header" > 
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!me.Average_Monthly_Hours__c}"/>
+            </apex:outputText>  
+        </apex:column>
+        
+        <apex:column headerValue="Last Hours" width="5%" headerclass="header" >
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!me.LastHours__c}"/>
+            </apex:outputText>
+        </apex:column>  
+        
+        <apex:column headerValue="Last Hours Date" width="8%" headerclass="header" >
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!me.LastHoursDate__c}"/>
+            </apex:outputText>
+        </apex:column>
+        
+        <apex:column headerValue="Last MPI" width="5%"  headerclass="header">
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{! IF(Contains(me.AircraftEngineorAPUMode__c,'PW30'), me.Last_HSI__c, me.LastMPI__c)}"/>                         
+            </apex:outputText>
+        </apex:column>
+        
+        <apex:column headerValue="Last MPI Date" width="6%" headerclass="header" >  
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!IF(Contains(me.AircraftEngineorAPUMode__c,'PW30'), me.Last_HSI_Date__c, me.MPIDate__c)}"/>
+            </apex:outputText>  
+        </apex:column>
+        
+        <apex:column headerValue="MPI Interval" width="5%" headerclass="header" >
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!IF(Contains(me.AircraftEngineorAPUMode__c,'PW30'), me.HSI_Interval__c, me.MPIInterval__c)}"/>
+            </apex:outputText>
+        </apex:column>  
+        
+        <apex:column headerValue="Next MPI Date" width="8%" headerclass="header" >        
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!IF(Contains(me.AircraftEngineorAPUMode__c,'PW30'), me.Next_HSI_Date_TSN__c, me.Next_MPI_Date__c)}"/>
+            </apex:outputText>
+        </apex:column>
+        
+        <apex:column headerValue="Last CZI" width="5%"  headerclass="header">
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!IF(Contains(me.AircraftEngineorAPUMode__c,'PW30'), me.Last_O_H_Hours_TSN__c, me.LASTCZI__c)}"/>
+            </apex:outputText>
+        </apex:column>
+        
+        <apex:column headerValue="Last CZI Date" width="5%" headerclass="header" > 
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!IF(Contains(me.AircraftEngineorAPUMode__c,'PW30'), me.Last_O_H_Date_TSN__c, me.CZIDate__c)}"/>
+            </apex:outputText>                     
+        </apex:column>
+        
+        <apex:column headerValue="CZI Interval" width="5%" headerclass="header" >
+            <apex:outputText value="{0,number,###,###,##0}">       
+                <apex:param value="{!IF(Contains(me.AircraftEngineorAPUMode__c,'PW30'), me.O_H_Interval__c, me.CZIINTVL__c)}"/>
+            </apex:outputText>
+        </apex:column> 
+        
+        <apex:column headerValue="Next CZI Date" width="8%" headerclass="header" >   
+            <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">   
+                <apex:param value="{!IF(Contains(me.AircraftEngineorAPUMode__c,'PW30'), me.Next_O_H_Date_TSN__c, me.Next_CZI_Date__c)}"/>
+            </apex:outputText>  
+        </apex:column>
+        
+        <apex:column headerValue="Interval Confirm" width="2%" headerclass="header" >    
+            {!me.Interval_Confirmed__c}              
+        </apex:column>  
+        
+    </apex:dataTable>
+    
+    <p></p>  
+    
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="OPPORTUNITIES - NEXT 2 YEARS" styleClass="subtitle"/>
+    </apex:panelGrid>
+    
+    <apex:dataTable value="{!OpptySum}" var="o" cellPadding="2" border="1" width="100%">
+        <apex:column headerValue="Opportunity Name" width="55%" headerclass="header">
+            {!o.name}
+        </apex:column>
+        
+        <apex:column headerValue="A/C Reg." width="5%" headerclass="header" >    
+            {!o.Aircraft_AC_Reg__c}           
+        </apex:column>
+        
+        <apex:column headerValue="Input Date" width="10%" headerclass="header" >        
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!o.InputDate__c}" /> 
+            </apex:outputText>                
+        </apex:column>
+        
+        <apex:column headerValue="Stage" width="10%"  headerclass="header">
+            {!o.stagename}                
+        </apex:column>
+        
+        <apex:column headerValue="Sub-Type" width="15%" headerclass="header" >    
+            {!o.SubType__c}           
+        </apex:column>   
+    </apex:dataTable>
+    
+    <p></p>
+    
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="MANAGED AIRCRAFT OPPORTUNITIES - NEXT 2 YEARS" styleClass="subtitle"/>
+    </apex:panelGrid>
+    
+    <apex:dataTable value="{!ManagedOpptySum}" var="mo" cellPadding="2" border="1" width="100%">
+        <apex:column headerValue="Opportunity Name" width="55%" headerclass="header">
+            {!mo.name}
+        </apex:column>
+        
+        <apex:column headerValue="A/C Reg." width="5%" headerclass="header" >    
+            {!mo.Aircraft_AC_Reg__c}           
+        </apex:column>
+        
+        <apex:column headerValue="Input Date" width="10%" headerclass="header" >        
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!mo.InputDate__c}" /> 
+            </apex:outputText>                
+        </apex:column>
+        
+        <apex:column headerValue="Stage" width="10%"  headerclass="header">
+            {!mo.stagename}                
+        </apex:column>
+        
+        <apex:column headerValue="Sub-Type" width="15%" headerclass="header" >    
+            {!mo.SubType__c}           
+        </apex:column>   
+    </apex:dataTable>
+    
+    <p></p>
+    
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="MST DISPATCHES" styleClass="subtitle"/>
+    </apex:panelGrid>
+
+    <apex:dataTable value="{!MST}" var="m" cellPadding="2" border="1" width="100%">
+        <apex:column headerValue="Aircraft Name" width="10%" headerclass="header">
+            {!m.Aircraft__r.Name}
+        </apex:column>
+        
+        <apex:column headerValue="Aircraft Reg" width="8%" headerclass="header" >
+            {!m.AC_Reg__c}               
+        </apex:column>
+        
+        <apex:column headerValue="MST Dispatch#" width="10%"  headerclass="header">
+            {!m.Name}              
+        </apex:column>
+        
+        <apex:column headerValue="Trip Type" width="10%" headerclass="header" >  
+            {!m.Trip_Type__c}
+        </apex:column>
+        
+        <apex:column headerValue="Dispatch Description" width="35%" headerclass="header" >  
+            {!m.Dispatch_Description__c}              
+        </apex:column>
+       
+        <apex:column headerValue="Start Date" width="10%" headerclass="header" >
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!m.Start_Date__c}" /> 
+            </apex:outputText>                      
+        </apex:column>
+        
+        <apex:column headerValue="End Date" width="10%" headerclass="header" >
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!m.End_Date__c}" /> 
+            </apex:outputText>                      
+        </apex:column>
+      
+        <apex:column headerValue="Contact" width="10%" headerclass="header" >  
+            {!m.Contact__r.Name}              
+        </apex:column>       
+    </apex:dataTable>
+    
+    <p></p>
+    
+    <apex:panelGrid columns="1" width="100%">
+        <apex:outputText value="CASES" styleClass="subtitle"/>
+    </apex:panelGrid>
+
+    <apex:dataTable value="{!Cases}" var="c" cellPadding="2" border="1" width="100%">
+        <apex:column headerValue="Case Number" width="10%" headerclass="header">
+            {!c.CaseNumber}
+        </apex:column>
+        
+        <apex:column headerValue="Description" width="35%" headerclass="header" >
+            {!c.Description}               
+        </apex:column>
+        
+        <apex:column headerValue="Contact" width="10%"  headerclass="header">
+            {!c.Case_Contact__c}              
+        </apex:column>
+        
+        <apex:column headerValue="Aircraft" width="10%" headerclass="header" >  
+            {!c.Aircraft__r.Name}
+        </apex:column>
+        
+        <apex:column headerValue="Contact" width="15%" headerclass="header" >  
+            {!c.Contact.Name}              
+        </apex:column>
+        
+        <apex:column headerValue="Status" width="15%" headerclass="header" >  
+            {!c.Status}              
+        </apex:column>
+       
+        <apex:column headerValue="Date/Time Opened" width="10%" headerclass="header" >
+            <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                <apex:param value="{!c.CreatedDate}" /> 
+            </apex:outputText>                      
+        </apex:column>            
+    </apex:dataTable>
+   
+    <p></p>          
+    <p></p>
+    <p></p>
+    
+    <apex:panelGrid columns="1" width="100%" >
+        <apex:outputText value="Notes and Next Steps:" styleClass="subtitle"/>
+        <p></p>
+        <p></p>
+    </apex:panelGrid>
+    
+</apex:page>

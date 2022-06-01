@@ -1,0 +1,53 @@
+<apex:page standardController="Aircraft__c" recordSetVar="Aircraft" tabStyle="Aircraft__c" lightningStylesheets="true">
+<apex:slds />
+<style type="text/css">
+.dateFormat{
+   visibility:hidden;
+}
+</style>
+    <apex:form >
+        <apex:pageBlock title="Edit Aircraft List" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+
+ 
+            <apex:pageblocktable value="{!selected}" var="AC" >
+            
+        
+                <apex:column value="{!AC.Name}" headervalue="Aircraft" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                   
+                  </apex:column>
+            <apex:column headerValue="Owner" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!AC.Ownerid}"/>
+                </apex:column>      
+            <apex:column headerValue="Account" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!AC.Account__c}"/>
+                </apex:column>
+            <apex:column headerValue="Management Company" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!AC.Management_Company__c}"/>
+                </apex:column> 
+            <apex:column headerValue="AMH" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!AC.Average_Monthly_Hours__c}"/>
+                </apex:column> 
+            <apex:column headerValue="Airport" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!AC.AirportLookup__c}"/>
+                </apex:column> 
+            <apex:column headerValue="Description" style="background-color:#E0FF0F8FFFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!AC.Description__c}" style="height:15px"/>
+                </apex:column>                  
+                   <!--<apex:column headerValue="Aircraft Trigger Update" style="background-color:#E0FF0F8FFFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!AC.Aircraft_Trigger_Update__c}" style="height:15px"/>
+                </apex:column>-->  
+                
+                
+            </apex:pageblocktable>    
+    
+          
+
+              
+        </apex:pageBlock>
+    </apex:form>
+    </apex:page>

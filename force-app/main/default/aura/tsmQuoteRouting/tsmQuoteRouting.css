@@ -1,0 +1,29 @@
+.THIS .slds-radio {  
+    display: inline !important;  
+}
+
+.THIS.slds-spinner_container {  
+  z-index: 10000;
+  position: fixed;   
+}
+
+.THIS .slds-textarea {
+    height: 10em !important;
+}
+
+.THIS .wrapper {
+    padding-left: 5px;
+}
+
+.THIS .wrapper > span {
+    font-family: "Salesforce Sans",Arial,sans-serif;
+    color: #3e3e3c;
+    font-size: .75rem;
+    padding-right: 10px;
+}
+
+.THIS .input-wrapper {
+    display: inline-block;
+    max-width: 99%;
+    margin-bottom: .75rem;
+}

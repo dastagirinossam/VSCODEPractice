@@ -1,0 +1,41 @@
+<aura:component  implements="lightning:availableForFlowScreens,force:lightningQuickActionWithOutHeader,force:hasRecordId"  access="global">
+    <aura:html tag="style">
+        .slds-modal__container {
+            min-width: 30vw;
+            max-width: 55rem !important;
+        }
+        
+        .cuf-content {
+            padding: 0 0rem !important;
+        }
+        
+        .slds-p-around--medium {
+            padding: 0rem !important;
+        } 
+        
+        .slds-modal__content{
+            height:unset !important;
+            max-height:unset !important;
+        }
+    </aura:html> 
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="recordId" type="String" />    
+    
+    <div class="slds-modal__header ">
+        <h2 class="slds-modal__title slds-hyphenate slds-text-heading--medium">
+            Contact Quick Update
+        </h2>
+    </div>
+    
+    <div class="script-container">
+        <div class="slds-card__header slds-grid slds-p-bottom_small slds-m-bottom_none">
+            <div class="slds-media slds-media_center slds-has-flexi-truncate" >
+                <div class="slds-media__body">
+                    <lightning:flow aura:id="flow" onstatuschange="{!c.statusChange}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

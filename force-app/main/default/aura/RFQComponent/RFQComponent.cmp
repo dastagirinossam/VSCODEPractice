@@ -1,0 +1,68 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="RFQController" >
+    
+    <aura:attribute name="disabled" type="Boolean" default="false" />    
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="Spinner" type="Boolean" default="true" />
+    <aura:attribute name="Recsub" type="Boolean" default="false" />
+    <aura:attribute name="reloadwim" type="Boolean" default="false" />
+    <aura:attribute name="Device" type="String"  />
+    <aura:attribute name="lastv" type="Boolean" default="false" />
+    <aura:attribute name="emailv" type="Boolean" default="false" />
+    <aura:attribute name="emailv1" type="Boolean" default="false" />
+    <aura:attribute name="discrpv" type="Boolean" default="false" />
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+   
+    <aura:if isTrue="{!v.Spinner}">
+        <lightning:spinner />
+    </aura:if>
+    
+    <aura:if isTrue="{!!v.saved}">        
+        <div class="slds-scrollable_y" border="1" aria-hidden="false">            
+            <lightning:recordEditForm  aura:id="RFQForm"
+                                      onload="{!c.handleLoad}"
+                                      onsubmit="{!c.handleSubmit}"
+                                      onsuccess="{!c.handleSuccess}"
+                                      objectApiName="Request_For_Quote__c">               
+                <lightning:messages />
+                <lightning:card variant="Narrow" iconName="custom:custom20" title="Request A Quote">          
+                    <div class="slds-scrollable_none">
+                        <fieldset>                            
+                            <lightning:inputField variant="label-stacked" aura:id="firstNameField" fieldName="First_Name__c" required="true"/>                           
+                            <lightning:inputField variant="label-stacked" aura:id="lastNameField" fieldName="Last_Name__c" required="true"/>                      
+                            <lightning:inputField variant="label-stacked" aura:id="emailField" fieldName="Email_Address__c" required="true"/>    
+                            <!--messageWhenPatternMismatch="Enter a valid email address" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"-->
+                            <lightning:inputField variant="label-stacked"  aura:id="company" fieldName="Company__c"/>
+                            <lightning:inputField variant="label-stacked" aura:id="phone" fieldName="Phone_Number__c"/>
+                            <lightning:inputField variant="label-stacked" aura:id="city" fieldName="City__c"/>
+                            <lightning:inputField variant="label-stacked" aura:id="state" fieldName="State__c"/>
+                            <lightning:inputField variant="label-stacked" aura:id="country" fieldName="Country__c"/>                            
+                            <lightning:inputField variant="label-stacked" aura:id="questionField" fieldName="Question_Request__c" required="true"/>                           
+                        </fieldset>                       
+                    </div> 
+                    
+                    <div class="slds-p-horizontal--x-small slds-m-top_medium">
+                        <lightning:button variant="brand" type="submit" name="Submit" label="Submit"  onclick="{!c.handleClick}"  />
+                        <lightning:button label="Cancel" onclick="{!c.closeModal}" />                       
+                    </div>
+                </lightning:card>
+            </lightning:recordEditForm>            
+        </div> 
+        
+        <aura:set attribute="else">
+            <div>
+                <lightning:card variant="Narrow" iconName="custom:custom20" title="Request A Quote" >  
+                    <div class="slds-p-horizontal--small">  
+                        <p>Your Request Has Successfully Been Submitted!</p>
+                        
+                        <div class="slds-m-top_medium">
+                            <lightning:button variant="brand" label="Return" onclick="{!c.closeModal}" />
+                        </div>
+                    </div>
+                </lightning:card>
+            </div>
+        </aura:set>
+    </aura:if>
+    
+</aura:component>

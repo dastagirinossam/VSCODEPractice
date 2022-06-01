@@ -1,0 +1,699 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithOutHeader" access="global" controller="AccountSummaryController" >
+     
+    <aura:html tag="style">
+        .slds-modal__container{
+        max-width: 90vw !important;
+        width:70vw !important;
+        }
+        .slds-modal__container .cuf-content {
+        padding:0 !important;
+        }
+        .slds-modal__container .slds-p-around--medium {
+        padding: 0rem !important;
+        }
+        .slds-modal__content {
+        height: unset !important;
+        max-height: unset !important;
+        border-bottom-left-radius: unset !important;
+        border-bottom-right-radius: unset !important;
+        }
+    </aura:html>
+    
+    <aura:attribute name="accWrapper" type="AccountSummaryWrapper"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name ="Loadif" type = "Boolean" default = "False"/>
+    <aura:attribute name="today" type="Date" />
+    
+    <ltng:require styles="{!$Resource.QuickActionModel}"/>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1,minimum-scale=1, maximum-scale=1, user-scalable=no"/> 
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    
+    <div style="height:40rem; max-height:40rem">
+    
+    <!--Account Name-->
+    <div class="slds-modal__header">
+        <h1 class="slds-truncate slds-page-header__title slds-align_absolute-center">
+            <b>{!v.accWrapper.acc.Name}</b>
+        </h1>
+    </div>
+    
+    <div class="slds-modal__content">
+        <ui:scrollerWrapper class="sWrapTest">
+            <!--Account Info-->
+            <div class="grid-container"> 
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                    <thead>
+                        <tr class="slds-text-title_caps">
+                            <th scope="col"><div class="slds-truncate" title="Account Owner">Account Owner</div> </th>
+                            <th scope="col"><div class="slds-truncate" title="Area">Area</div></th>
+                            <th scope="col"><div class="slds-truncate" title="Type">Type</div></th>
+                            <th scope="col"><div class="slds-truncate" title="Rating">Rating</div></th>
+                            <th scope="col"><div class="slds-truncate" title="Phone">Phone</div></th>
+                            <th scope="col"><div class="slds-truncate" title="Address">Address</div></th>
+                            <th scope="col"><div class="slds-truncate" title="Date Run">Date Run</div></th>
+                        </tr>
+                    </thead>   
+                    <tbody>        
+                        <tr class="slds-text-title_caps"  >
+                            <td><div class="slds-truncate" title="">{!v.accWrapper.acc.Owner.Name}</div></td>
+                            <td><div class="slds-truncate" title="">{!v.accWrapper.acc.Area__c}</div></td>
+                            <td><div class="slds-truncate" title="">{!v.accWrapper.acc.Type}</div></td>
+                            <td><div class="slds-truncate" title="">{!v.accWrapper.acc.Customer_Account_Rating__c}</div></td>
+                            <td><div class="slds-truncate" title="">{!v.accWrapper.acc.Phone}</div></td>
+                            <td>
+                                <div class="slds-truncate" title=""> 
+                                    {!v.accWrapper.acc.BillingStreet} ~ {!v.accWrapper.acc.BillingCity}, {! v.accWrapper.acc.BillingState} {!v.acc.accWrapper.BillingPostalCode} ~ {!v.accWrapper.acc.BillingCountry}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate" title="">
+                                    <lightning:formattedDateTime value="{!v.today}"/>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>  
+            
+            <!--Contacts-->
+            <div class="slds-p-vertical_small">
+                <div class="slds-panel__header">
+                    <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="CONTACTS">CONTACTS</h2>
+                </div>
+                
+                <div class="grid-container"> 
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col"> <div class="slds-truncate" title="Contact Name">Contact Name</div></th>
+                                <th scope="col"> <div class="slds-truncate" title="=Title">Title</div> </th>
+                                <th scope="col"> <div class="slds-truncate" title="Type">Type</div>  </th>
+                                <th scope="col"><div class="slds-truncate" title="Phone">Phone</div> </th>
+                                <th scope="col"><div class="slds-truncate" title="Hangar Phone">Hangar Phone</div> </th>
+                                <th scope="col"><div class="slds-truncate" title="Mobile Phone">Mobile Phone</div> </th>
+                                <th scope="col"> <div class="slds-truncate" title="Email">Email</div></th>
+                            </tr>
+                        </thead>   
+                        <tbody>        
+                            <aura:iteration items="{!v.accWrapper.getContactSum}" var="item" indexVar="index">
+                                <tr class="slds-text-title_caps"  >
+                                    <td><div class="slds-truncate" title="">{!item.Name} </div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Title}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.ContactType__c}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Phone}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.HangarPhone__c}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.MobilePhone}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Email}</div></td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!--Aircraft-->
+            <div class="slds-p-vertical_small">
+                <div class="slds-panel__header">
+                    <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="AIRCRAFT">AIRCRAFT</h2>
+                </div>
+                
+                <div class="grid-container"> 
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col"> <div class="slds-truncate" title="Aircraft Name">Aircraft Name</div> </th>
+                                <th scope="col"> <div class="slds-truncate" title="Aircraft Model">Aircraft Model</div> </th>
+                                <th scope="col"> <div class="slds-truncate" title="Registration">Registration</div>  </th>
+                                <th scope="col"><div class="slds-truncate" title="Delivery Date">Delivery Date</div> </th>
+                                <th scope="col"><div class="slds-truncate" title="Status">Status</div> </th>
+                                <th scope="col"><div class="slds-truncate" title="Last Hours">Last Hours</div> </th>
+                                <th scope="col"> <div class="slds-truncate" title="Last Hours Date">Last Hours Date</div></th>
+                                <th scope="col"> <div class="slds-truncate" title="AMH">AMH</div></th>
+                                <th scope="col"> <div class="slds-truncate" title="Last Hours Date">Airport</div></th>
+                                <th scope="col"> <div class="slds-truncate" title="Last Hours Date">MX Prgm</div></th>
+                                <th scope="col"> <div class="slds-truncate" title="Last Hours Date">Tracking Prgm</div></th>
+                                
+                            </tr>
+                        </thead>   
+                        <tbody>        
+                            <aura:iteration items="{!v.accWrapper.getACSum}" var="item" indexVar="index">
+                                <tr class="slds-text-title_caps"  >
+                                    <td><div class="slds-truncate" title="">{!item.Name}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Aircraft_Model_2011__c}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.ACReg__c}</div></td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <lightning:formattedDateTime value="{!item.AircraftDeliveryDate__c}"/>
+                                        </div>
+                                    </td>
+                                    <td><div class="slds-truncate" title="">{!item.Aircraft_Status__c}</div></td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <lightning:formattedNumber value="{!item.ACHRS__c}"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <lightning:formattedDateTime value="{!item.ACHRSDate__c}"/>
+                                        </div>
+                                    </td>
+                                    <td><div class="slds-truncate" title="">{!item.Average_Monthly_Hours__c}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Airport_Code__c}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Maintenance_Program__c} </div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Aircraft_Tracking_Program__c}</div></td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!--Managed Aircraft-->
+            <aura:if isTrue="{!not(empty(v.accWrapper.getManagedAC))}">
+                <div class="slds-p-vertical_small">     
+                    <div class="slds-panel__header">
+                        <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="MANAGED AIRCRAFT">MANAGED AIRCRAFT</h2>
+                    </div>
+                    
+                    <div class="grid-container"> 
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col"> <div class="slds-truncate" title="Aircraft Name">Aircraft Name</div> </th>
+                                    <th scope="col"> <div class="slds-truncate" title="Aircraft Model">Aircraft Model</div> </th>
+                                    <th scope="col"> <div class="slds-truncate" title="Registration">Registration</div>  </th>
+                                    <th scope="col"><div class="slds-truncate" title="Delivery Date">Delivery Date</div> </th>
+                                    <th scope="col"><div class="slds-truncate" title="Status">Status</div> </th>
+                                    <th scope="col"><div class="slds-truncate" title="Last Hours">Last Hours</div> </th>
+                                    <th scope="col"> <div class="slds-truncate" title="Last Hours Date">Last Hours Date</div></th>
+                                    <th scope="col"> <div class="slds-truncate" title="AMH">AMH</div></th>
+                                    <th scope="col"> <div class="slds-truncate" title="Last Hours Date">Airport</div></th>
+                                    <th scope="col"> <div class="slds-truncate" title="Last Hours Date">MX Prgm</div></th>
+                                    <th scope="col"> <div class="slds-truncate" title="Last Hours Date">Tracking Prgm</div></th>
+                                    
+                                </tr>
+                            </thead>   
+                            <tbody>        
+                                <aura:iteration items="{!v.accWrapper.getManagedAC}" var="item" indexVar="index">
+                                    <tr class="slds-text-title_caps"  >
+                                        <td><div class="slds-truncate" title="">{!item.Name}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Aircraft_Model_2011__c}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.ACReg__c}</div></td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedDateTime value="{!item.AircraftDeliveryDate__c}"/>
+                                            </div>
+                                        </td>
+                                        <td><div class="slds-truncate" title="">{!item.Aircraft_Status__c}</div></td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedNumber value="{!item.ACHRS__c}"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedDateTime value="{!item.ACHRSDate__c}"/>
+                                            </div>
+                                        </td>
+                                        <td><div class="slds-truncate" title="">{!item.Average_Monthly_Hours__c}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Airport_Code__c}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Maintenance_Program__c}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Aircraft_Tracking_Program__c}</div></td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </aura:if>
+            
+            <!--Equipment-->
+            <div class="slds-p-vertical_small"> 
+                <div class="slds-panel__header">
+                    <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="EQUIPMENT">EQUIPMENT</h2>
+                </div>
+                
+                <div class="grid-container"> 
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col"><div class="slds-truncate" title="Equipment Name">Equipment Name</div> </th>
+                                <th scope="col"><div class="slds-truncate" title="= Model">Model</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Aircraft">Aircraft</div></th>
+                                <th scope="col"><div class="slds-truncate" title="MX Prgm">MX Prgm</div></th>
+                                <th scope="col"><div class="slds-truncate" title="AMH">AMH</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Last Hours">Last Hours</div></th> 
+                                <th scope="col"><div class="slds-truncate" title="Last Hours Date">Last Hours Date</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Last MPI">Last MPI</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Last MPI Date">Last MPI Date</div></th>
+                                <th scope="col"><div class="slds-truncate" title="MPI Interval">MPI Interval</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Next MPI Date">Next MPI Date</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Last CZI">Last CZI</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Last CZI Date">Last CZI Date</div></th>
+                                <th scope="col"><div class="slds-truncate" title="CZI Interval">CZI Interval</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Next CZI Date">Next CZI Date</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Interval Confirm">Interval Confirmed</div></th>
+                            </tr>
+                        </thead>   
+                        <tbody>        
+                            <aura:iteration items="{!v.accWrapper.getEquipSum}" var="item" indexVar="index">
+                                <tr class="slds-text-title_caps"  >
+                                    <td><div class="slds-truncate" title="">{!item.Name}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Model__c}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Aircraft_System_Name__c}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.MaintenancePrgmType__c}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Average_Monthly_Hours__c}</div></td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <lightning:formattedNumber value="{!item.LastHours__c}"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <lightning:formattedDateTime value="{!item.LastHoursDate__c}"/>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                <lightning:formattedNumber value="{!item.Last_HSI__c}"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:formattedNumber value="{!item.LastMPI__c}"/>
+                                                </aura:set> 
+                                            </aura:if>   
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">   
+                                            <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                <lightning:formattedDateTime value="{!item.Last_HSI_Date__c}"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:formattedDateTime value="{!item.MPIDate__c}"/>
+                                                </aura:set> 
+                                            </aura:if>  
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                <lightning:formattedNumber value="{!item.HSI_Interval__c}"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:formattedNumber value="{!item.MPIInterval__c}"/>
+                                                </aura:set> 
+                                            </aura:if> 
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">   
+                                            <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                <lightning:formattedDateTime value="{!item.Next_HSI_Date_TSN__c}"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:formattedDateTime value="{!item.Next_MPI_Date__c}"/>
+                                                </aura:set> 
+                                            </aura:if>  
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title=""> 
+                                            <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                <lightning:formattedNumber value="{!item.Last_O_H_Hours_TSN__c}"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:formattedNumber value="{!item.LASTCZI__c}"/>
+                                                </aura:set> 
+                                            </aura:if> 
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title=""> 
+                                            <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                <lightning:formattedDateTime value="{!item.Last_O_H_Date_TSN__c}"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:formattedDateTime value="{!item.CZIDate__c}"/>
+                                                </aura:set> 
+                                            </aura:if>   
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                <lightning:formattedNumber value="{!item.O_H_Interval__c}"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:formattedNumber value="{!item.CZIINTVL__c}"/>
+                                                </aura:set> 
+                                            </aura:if> 
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                <lightning:formattedDateTime value="{!item.Next_O_H_Date_TSN__c}"/>
+                                                <aura:set attribute="else">
+                                                    <lightning:formattedDateTime value="{!item.Next_CZI_Date__c}"/>
+                                                </aura:set> 
+                                            </aura:if> 
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="slds-truncate" title="">{!item.Interval_Confirmed__c}</div>
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!--Managed Equipment-->
+            <aura:if isTrue="{!not(empty(v.accWrapper.getManagedACEquipSum))}">
+                <div class="slds-p-vertical_small">
+                    <div class="slds-panel__header">
+                        <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="MANAGED AIRCRAFT EQUIPMENT">MANAGED AIRCRAFT EQUIPMENT</h2>
+                    </div>
+                    
+                    <div class="grid-container"> 
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col"><div class="slds-truncate" title="Equipment Name">Equipment Name</div> </th>
+                                    <th scope="col"><div class="slds-truncate" title="= Model">Model</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Aircraft">Aircraft</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="MX Prgm">MX Prgm</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="AMH">AMH</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Last Hours">Last Hours</div></th> 
+                                    <th scope="col"><div class="slds-truncate" title="Last Hours Date">Last Hours Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Last MPI">Last MPI</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Last MPI Date">Last MPI Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="MPI Interval">MPI Interval</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Next MPI Date">Next MPI Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Last CZI">Last CZI</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Last CZI Date">Last CZI Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="CZI Interval">CZI Interval</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Next CZI Date">Next CZI Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Interval Confirm">Interval Confirmed</div></th>
+                                </tr>
+                            </thead>   
+                            <tbody>        
+                                <aura:iteration items="{!v.accWrapper.getManagedACEquipSum}" var="item" indexVar="index">     
+                                    <tr class="slds-text-title_caps"  >
+                                        <td><div class="slds-truncate" title="">{!item.Name}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Model__c}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Aircraft_System_Name__c}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.MaintenancePrgmType__c}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Average_Monthly_Hours__c}</div></td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedNumber value="{!item.LastHours__c}"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedDateTime value="{!item.LastHoursDate__c}"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                    <lightning:formattedNumber value="{!item.Last_HSI__c}"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:formattedNumber value="{!item.LastMPI__c}"/>
+                                                    </aura:set> 
+                                                </aura:if>   
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">   
+                                                <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                    <lightning:formattedDateTime value="{!item.Last_HSI_Date__c}"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:formattedDateTime value="{!item.MPIDate__c}"/>
+                                                    </aura:set> 
+                                                </aura:if>  
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                    <lightning:formattedNumber value="{!item.HSI_Interval__c}"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:formattedNumber value="{!item.MPIInterval__c}"/>
+                                                    </aura:set> 
+                                                </aura:if> 
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">   
+                                                <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                    <lightning:formattedDateTime value="{!item.Next_HSI_Date_TSN__c}"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:formattedDateTime value="{!item.Next_MPI_Date__c}"/>
+                                                    </aura:set> 
+                                                </aura:if>  
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title=""> 
+                                                <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                    <lightning:formattedNumber value="{!item.Last_O_H_Hours_TSN__c}"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:formattedNumber value="{!item.LASTCZI__c}"/>
+                                                    </aura:set> 
+                                                </aura:if> 
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title=""> 
+                                                <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                    <lightning:formattedDateTime value="{!item.Last_O_H_Date_TSN__c}"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:formattedDateTime value="{!item.CZIDate__c}"/>
+                                                    </aura:set> 
+                                                </aura:if>   
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                    <lightning:formattedNumber value="{!item.O_H_Interval__c}"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:formattedNumber value="{!item.CZIINTVL__c}"/>
+                                                    </aura:set> 
+                                                </aura:if> 
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <aura:if isTrue="{!(item.Equipment_Prefix__c == 'PW')}">  
+                                                    <lightning:formattedDateTime value="{!item.Next_O_H_Date_TSN__c}"/>
+                                                    <aura:set attribute="else">
+                                                        <lightning:formattedDateTime value="{!item.Next_CZI_Date__c}"/>
+                                                    </aura:set> 
+                                                </aura:if> 
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">{!item.Interval_Confirmed__c}</div>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </aura:if>
+            
+            <!--Opportunities-->
+            <div class="slds-p-vertical_small">
+                <div class="slds-panel__header">
+                    <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="OPPORTUNITIES - NEXT 2 YEARS">OPPORTUNITIES - NEXT 2 YEARS</h2>
+                </div>
+                <p></p>
+                <div class="grid-container"> 
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                        <thead>
+                            <tr class="slds-text-title_caps">
+                                <th scope="col"><div class="slds-truncate" title="Opportunity Name">Opportunity Name</div></th>
+                                <th scope="col"><div class="slds-truncate" title="A/C Reg.">A/C Reg.</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Input Date">Input Date</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Stage">Stage</div></th>
+                                <th scope="col"><div class="slds-truncate" title="Sub-Type">Sub-Type</div></th>
+                            </tr>
+                        </thead>   
+                        <tbody>        
+                            <aura:iteration items="{!v.accWrapper.getOpptySum}" var="item" indexVar="index">
+                                <tr class="slds-text-title_caps"  >
+                                    <td><div class="slds-truncate" title="">{!item.Name}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.Aircraft_AC_Reg__c}</div></td>
+                                    <td>
+                                        <div class="slds-truncate" title="">
+                                            <lightning:formattedDateTime value="{!item.InputDate__c}"/>
+                                        </div>
+                                    </td>
+                                    <td><div class="slds-truncate" title="">{!item.StageName}</div></td>
+                                    <td><div class="slds-truncate" title="">{!item.SubType__c}</div></td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!--Managed Opportunities--> 
+            <aura:if isTrue="{!not(empty(v.accWrapper.getManagedOpptySum))}">
+                <div class="slds-p-vertical_small"> 
+                    <div class="slds-panel__header">
+                        <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="MANAGED AIRCRAFT OPPORTUNITIES - NEXT 2 YEARS">MANAGED AIRCRAFT OPPORTUNITIES - NEXT 2 YEARS</h2>
+                    </div>
+                    
+                    <div class="grid-container"> 
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col"><div class="slds-truncate" title="Opportunity Name">Opportunity Name</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="A/C Reg.">A/C Reg.</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Input Date">Input Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Stage">Stage</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Sub-Type">Sub-Type</div></th>
+                                    
+                                </tr>
+                            </thead>   
+                            <tbody>        
+                                <aura:iteration items="{!v.accWrapper.getManagedOpptySum}" var="item" indexVar="index">
+                                    <tr class="slds-text-title_caps"  >
+                                        <td><div class="slds-truncate" title="">{!item.Name}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Aircraft_AC_Reg__c}</div></td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedDateTime value="{!item.InputDate__c}"/>
+                                            </div>
+                                        </td>
+                                        <td><div class="slds-truncate" title="">{!item.StageName}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.SubType__c}</div></td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </aura:if>
+            
+            <!--MST Dispatches-->
+            <aura:if isTrue="{!not(empty(v.accWrapper.getMST))}">
+                <div class="slds-p-vertical_small"> 
+                    <div class="slds-panel__header">
+                        <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="MST DISPATCHES">MST DISPATCHES</h2>
+                    </div>
+                    
+                    <div class="grid-container"> 
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col"><div class="slds-truncate" title="Aircraft Name">Aircraft Name</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Aircraft Reg">Aircraft Reg</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="MST Dispatch#">MST Dispatch#</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Trip Type">Trip Type</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Dispatch Description">Dispatch Description</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Start Date">Start Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="End Date">End Date</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Contact">Contact</div></th>
+                                </tr>
+                            </thead>   
+                            <tbody>        
+                                <aura:iteration items="{!v.accWrapper.getMST}" var="item" indexVar="index">
+                                    <tr class="slds-text-title_caps"  >
+                                        <td><div class="slds-truncate" title="">{!item.Aircraft__r.Name} </div></td>
+                                        <td><div class="slds-truncate" title="">{!item.AC_Reg__c}    </div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Name}   </div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Trip_Type__c}  </div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Dispatch_Description__c}    </div></td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedDateTime value="{!item.Start_Date__c}"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedDateTime value="{!item.End_Date__c}"/>
+                                            </div>
+                                        </td>
+                                        <td><div class="slds-truncate" title="">{!item.Contact__r.Name}</div></td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </aura:if>
+            
+            <!--Cases-->
+            <aura:if isTrue="{!not(empty(v.accWrapper.getCases))}">
+                <div class="slds-p-vertical_small">
+                    <div class="slds-panel__header">
+                        <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate" title="CASES">CASES</h2>
+                    </div>
+                    
+                    <div class="grid-container"> 
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer"> 
+                            <thead>
+                                <tr class="slds-text-title_caps">
+                                    <th scope="col"><div class="slds-truncate" title="Case Number">Aircraft Name</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Description">Description</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Contact">Contact</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Aircraft">Aircraft</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Contact">Contact</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Status">Status</div></th>
+                                    <th scope="col"><div class="slds-truncate" title="Date/Time Opened">Date/Time Opened</div></th>
+                                </tr>
+                            </thead>   
+                            <tbody>        
+                                <aura:iteration items="{!v.accWrapper.getCases}" var="item" indexVar="index">
+                                    <tr class="slds-text-title_caps"  >
+                                        <td><div class="slds-truncate" title="">{!item.CaseNumber}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Description}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Case_Contact__c}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Aircraft__r.Name}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Contact.Name}</div></td>
+                                        <td><div class="slds-truncate" title="">{!item.Status}</div></td>
+                                        <td>
+                                            <div class="slds-truncate" title="">
+                                                <lightning:formattedDateTime value="{!item.CreatedDate}"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </aura:iteration>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </aura:if>
+            
+            <!--Notes Area-->        
+            <div class="slds-p-vertical_small">
+                <div class="slds-panel__header">
+                    <h2 class="slds-panel__header-title slds-text-heading_small slds-truncate">Notes and Next Steps:</h2>
+                </div>
+                
+                <div class="slds-p-bottom_xx-large"> 
+                    <table class="slds-table">
+                        <thead>
+                            <tr/>
+                        </thead>
+                        <tbody>
+                            <tr/>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+        </ui:scrollerWrapper>
+    </div>
+
+    <div class="footer slds-modal__footer">              
+        <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Close</button>
+        <aura:if isTrue="{!$Browser.formFactor == 'DESKTOP'}">
+            <lightning:button variant="brand" label="Create PDF" onclick="{!c.savePDF }"/>
+        </aura:if>
+    </div>
+    </div>
+</aura:component>

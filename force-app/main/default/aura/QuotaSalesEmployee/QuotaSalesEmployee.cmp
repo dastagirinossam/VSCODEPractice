@@ -1,0 +1,808 @@
+<aura:component controller="QuotaController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="searchResult" type="List"/>
+    <aura:attribute name ="employeID" type= "ID"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="container">
+        <article class="slds-card">
+            <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                <span class="slds-truncate slds-p-horizontal_small" title="Section Title"><b>Quota Sales Employee Details</b></span>
+            </h3>
+        </article>
+    </div>
+    <aura:iteration items="{!v.searchResult}" var="emp" indexVar="count">
+        <div class="slds-section slds-is-open">
+            <div class="container">            
+                <div class="slds-section slds-is-open">
+                    <article class="slds-card">
+                        <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title"><b>Details</b></span>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota Sales Employee Name : </b> <ui:outputText value="{!emp.Name}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota Sales Region : </b> <ui:outputText value="{!emp.Quota_Sales_Region__r.Name}"/> 
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Year : </b> <ui:outputText value="{!emp.Year__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Leader : </b> <ui:outputText value="{!emp.Leader__c}"/>    
+                                </div>  
+                                <div class="slds-col slds-size_2-of-2 ">
+                                    <b>Description: </b><ui:outputText value="{!emp.Description__c}"/>    
+                                </div>  
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <p/>
+        <div class="slds-section slds-is-open">
+            <div class="container">            
+                <div class="slds-section slds-is-open">
+                    <article class="slds-card">
+                        <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title"><b>IC Measures</b></span>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Engines__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Engines__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Non_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Non-Engines: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Non_Engine__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_TPE_All__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - TPE (All): </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_TPE_All__c}"/>    
+                                </div>
+                            </div>                         
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <p/>
+        <div class="slds-section slds-is-open">
+            <div class="container">            
+                <div class="slds-section slds-is-open">
+                    <article class="slds-card">
+                        <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title"><b>Quotas - Total Performance</b></span>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Total: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Total: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Total: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Total: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Total: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Total: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Total: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Total: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Total: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Total__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Total: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Total__c}"/>    
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <p/>
+        <div class="slds-section slds-is-open">
+            <div class="container">            
+                <div class="slds-section slds-is-open">
+                    <article class="slds-card">
+                        <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title"><b>Quotas - Engine</b></span>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_TFE731__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - TFE731: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_TFE731__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_HTF__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - HTF: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_HTF__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_HTF_Rental__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - HTF Rental: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_HTF_Rental__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_PWC__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - PWC: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_PWC__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Other_Engine__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Other Engine: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Other_Engine__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - APU: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - APU: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - APU: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - APU: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - APU: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - APU: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - APU: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - APU: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - APU: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_APU__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - APU: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_APU__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Engine_Exchange__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Engine Exchange: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Engine_Exchange__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_CFE738__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - CFE738: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_CFE738__c}"/>    
+                                </div>
+                            </div>                                                       
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+        <p/>
+        <div class="slds-section slds-is-open">
+            <div class="container">            
+                <div class="slds-section slds-is-open">
+                    <article class="slds-card">
+                        <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title"><b>Quotas - Non-Engine</b></span>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Airframe__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Airframe: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Airframe__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Avionics__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Avionics: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Avionics__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Interior_Mods__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Interior Mods: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Interior_Mods__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_Paint__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - Paint: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_Paint__c}"/>    
+                                </div>
+                            </div>                        
+                        </div>                   
+                    </article>
+                </div>
+            </div>
+        </div>
+        <p/>
+        <div class="slds-section slds-is-open">
+            <div class="container">            
+                <div class="slds-section slds-is-open">
+                    <article class="slds-card">
+                        <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                            <span class="slds-truncate slds-p-horizontal_small" title="Section Title"><b>Quotas - Other Products (where applicable)</b></span>
+                        </h3>
+                        <div aria-hidden="false" class="slds-section__content">
+                            <div class="slds-grid slds-wrap">
+                                
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_AE3007__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - AE3007: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_AE3007__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_TPE331__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - TPE331: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_TPE331__c}"/>    
+                                </div>
+                            </div> 
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_PW300_Offload__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - PW300 Offload: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_PW300_Offload__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_ODA__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - ODA: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_ODA__c}"/>    
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - FY - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_FY_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - FY - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Margin_FY_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q1 - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q1_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q1 - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q1_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q2 - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q2_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q2 - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q2_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q3 - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q3_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q3 - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q3_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Revenue - Q4 - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Revenue_Q4_PPE__c}"/>    
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <b>Quota - Margin - Q4 - PPE: </b> <ui:outputCurrency value="{!emp.Quota_Margin_Q4_PPE__c}"/>    
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </article>
+                </div>
+            </div>
+        </div>
+    </aura:iteration>
+    
+</aura:component>

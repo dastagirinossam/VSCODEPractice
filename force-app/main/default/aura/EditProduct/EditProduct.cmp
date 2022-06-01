@@ -1,0 +1,33 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickActionWithoutheader,lightning:actionOverride" access="global" >
+    
+    <aura:attribute name="record" type="Object"
+                    description="The record object to be displayed"/>
+    <aura:attribute name="ProdRecord" type="Object"
+                    description="A simplified view record object to be displayed"/>
+    <aura:attribute name="recordError" type="String"
+                    description="An error message bound to force:recordData"/>
+    
+    <force:recordData aura:id="record"
+                      layoutType="FULL"
+                      recordId="{!v.recordId}"
+                      targetError="{!v.recordError}"
+                      targetRecord="{!v.record}"
+                      targetFields="{!v.ProdRecord }"
+                      mode="VIEW"/>
+    
+    <lightning:card title="{!v.ProdRecord.Name}" iconName="standard:product">
+        <aura:set attribute="actions">
+            <lightning:button class="slds-button slds-button--neutral" onclick="{!c.close}">Cancel</lightning:button>
+            <lightning:button class="slds-button slds-button--neutral slds-button--brand" onclick="{!c.save}">Save</lightning:button>
+        </aura:set>
+        
+        <force:recordEdit aura:id="edit" recordId="{!v.recordId}" onSaveSuccess="{!c.handleSaveSuccess}" />
+        
+        <div class="slds-align_absolute-center">
+            <lightning:button class="slds-button slds-button--neutral" onclick="{!c.close}">Cancel</lightning:button>
+            <lightning:button class="slds-button slds-button--neutral slds-button--brand" onclick="{!c.save}">Save</lightning:button>
+        </div>
+        
+    </lightning:card>
+    
+</aura:component>

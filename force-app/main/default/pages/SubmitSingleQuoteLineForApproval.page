@@ -1,0 +1,5 @@
+<apex:page standardController="SBQQ__QuoteLine__c" >
+    <flow:interview name="Submit_All_QuoteLines" finishLocation="{!URLFOR($Page.Squawk, null, [Id=SBQQ__QuoteLine__c.Id])}">
+        <apex:param name="varQuoteLine" value="{!SBQQ__QuoteLine__c.Id}" />
+    </flow:interview>
+</apex:page>

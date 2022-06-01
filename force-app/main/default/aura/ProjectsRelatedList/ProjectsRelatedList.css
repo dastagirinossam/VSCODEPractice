@@ -1,0 +1,19 @@
+.THIS .col-1 {
+    display: inline-block;
+  	overflow: hidden; 
+  	text-overflow: ellipsis;
+  	white-space: nowrap;
+    width: 100%;
+  	max-width:98%; 
+    position: absolute;  
+    left: 0; 
+    top:20%;
+}
+
+.THIS .uiScroller.native {
+    overflow: auto;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;
+}

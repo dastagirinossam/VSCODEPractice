@@ -1,0 +1,19 @@
+<apex:page sidebar="false" showHeader="false" lightningStylesheets="true">
+<apex:slds />
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Impact</h1>
+  <p></p>
+   Welcome to YOUR Impact
+   
+  
+   <p></p>
+   Still need to add "running rules" here; center and enlarge text; add an image
+    <p></p>
+    <p></p>
+   Success is one thing, Impact is another.
+   <p></p>
+   <p></p>
+    <p></p>
+   Don't select "Don't show this again" until testing is completed.
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

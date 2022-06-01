@@ -1,0 +1,2 @@
+<apex:page standardController="Aircraft__c" recordSetVar="v" extensions="ListViewPrinter" action="{!print}">
+</apex:page>

@@ -1,0 +1,22 @@
+<apex:page standardController="Product2" extensions="ProductCloneWithRelatedController" >
+<apex:slds ></apex:slds>
+
+<apex:pageMessages />
+<apex:form >
+    <apex:sectionHeader title="Cloning with Related Items" subtitle="{!Product2.Name}"/>
+    <apex:pageblock >
+        <apex:pageBlockSection title="Below are the details of the current record which you are about to clone"> 
+            <apex:outputField value="{!Product2.Family}"/>  
+            <apex:outputField value="{!Product2.ProductCode}"/>
+            <apex:outputField value="{!Product2.Condition__c}"/>
+            <apex:outputField value="{!Product2.Description}"/>
+
+        </apex:pageBlockSection>
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Cancel" action="{!onCancel}"/> 
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <apex:commandButton value="Clone" action="{!cloneWithItems}"/>
+        </apex:pageBlockButtons>
+    </apex:pageblock>
+</apex:form>
+</apex:page>

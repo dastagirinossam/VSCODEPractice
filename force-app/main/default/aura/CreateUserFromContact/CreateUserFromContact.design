@@ -1,0 +1,6 @@
+<design:component>
+	<design:attribute name="contactId" Label="User Id"/>
+      <design:attribute name="type" />
+    <design:attribute name="messageText" />
+
+</design:component>

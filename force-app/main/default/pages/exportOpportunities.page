@@ -1,0 +1,6 @@
+<apex:page controller="PipelineModelController" action="{!exportToExcel}" readOnly="true" contentType="application/vnd.ms-excel#{!$User.LastName}_PipelineModelReport_{!MONTH(TODAY())}-{!DAY(TODAY())}-{!YEAR(TODAY())}.csv" lightningStylesheets="true">
+{!header}
+<apex:repeat value="{!lstwrapper}" var="x">
+{!x.Name},{!x.Stage},{!x.Input_Date},{!x.Output_Date},{!x.Probability},{!x.SubType},{!x.Owner},{!x.Amount},{!x.Facility},{!x.Last_Hours},{!x.Last_Hours_Date},{!x.AMH},{!x.CZI_Int},{!x.MPI_Int},{!x.Model},{!x.Last_MPI},{!x.Last_CZI},{!x.Account_Area} 
+</apex:repeat>
+</apex:page>

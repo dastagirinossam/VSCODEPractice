@@ -1,0 +1,28 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{! $Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />  
+   
+    <aura:attribute name="recordId" type="String" default="{!recordId}"/>
+    <aura:attribute name="name" type="String"/> 
+    <aura:attribute name="version" type="String"/>
+    
+    <div class="slds-grid primaryFieldRow">
+    	<div class="slds-grid slds-col slds-has-flexi-truncate slds-media--center">
+    		<div class="profilePicWrapper slds-media slds-no-space slds-p-right_small">
+        		<lightning:icon iconName="standard:maintenance_plan" size="large"/>
+        	</div>
+        	<div class="slds-media__body">
+    			<p class="slds-text-heading--label slds-line-height--reset">SQUAWK DOCUMENT</p>
+    			<h2 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle">{!v.name}</h2>
+                <h6 class="slds-truncate slds-align-middle">Version: {!v.version}</h6>
+        	</div>
+		</div>
+    	<div class="slds-m-left--xx-small forceActionsContainer">
+        	<div class="slds-truncate">
+            	<button class="slds-button slds-button--neutral slds-truncate" onclick="" id="{!v.recordId}">View</button>        
+        	</div>  
+    	</div>
+	</div>
+    
+</aura:component>

@@ -1,0 +1,6 @@
+<apex:page showHeader="false" sidebar="false" standardController="Contact" extensions="EngageB2BActivityController" action="{!buildValues}" lightningStylesheets="true">
+    <apex:slds />
+    <!--<apex:outputText value="https://services.vtrenz.net/MashUps/RecentActivity/?crmOrgID={!crmOrgID}&crmSyncID={!crmSyncID}&extapp=Y"></apex:outputText>-->
+    <iframe id="activityFrame" height="525" frameborder="no" width="100%" scrolling="yes" title="Engage B2B Activity Insight ¿ Contact" src="https://services.vtrenz.net/MashUps/RecentActivity/?crmOrgID={!crmOrgID}&crmSyncID={!crmSyncID}&extapp=Y" name="activityFrame" marginwidth="0" marginheight="0">
+    </iframe>    
+</apex:page>

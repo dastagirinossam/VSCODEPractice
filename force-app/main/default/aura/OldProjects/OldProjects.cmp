@@ -1,0 +1,49 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="ProCom">
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="projects" type="MPM4_BASE__Milestone1_Project__c[]"/>
+   	<aura:attribute name="Message" type="boolean" default="false" description="use for display no record found message"/>
+   	<aura:attribute name="ErrorMessage" type="boolean" default="false" description="use for display no record found message"/>    
+    <aura:attribute name="searchResult" type="List" description="use for store and display squawk list return from server"/>
+   	<aura:attribute name="searchKeyword" type="String" description="use for store user search input"/>
+    
+    <div class="container">
+    	<div class="container forceRelatedListSingleContainer">
+            <article class="slds-card forceRelatedListCardDesktop">    
+        		<div class="slds-page-header" style="color:white; background-color: rgb(0, 114, 187);">
+        			<p class="slds-page-header__title slds-text-align--center" style="color:white; background-color: rgb(0, 114, 187);" title="My Projects"><h1>My Completed Projects</h1></p>
+                </div>
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                    <thead>
+                        <tr>
+                            <th><strong>Project Name</strong></th>
+                            <th><strong>Completed Date</strong></th>
+                            <th><strong>CPM</strong></th>
+                        </tr>
+                    </thead>
+		
+                    <tbody>            
+                        <aura:iteration items="{!v.projects}" var="proj">            
+                            <tr>   
+                                <td scope="row">                 
+                                    <div class="slds-truncate" title="{!proj.Name }">
+                                        <ui:outputURL value="{!'/Customer/s/project/'+ proj.Id}" label="{!proj.Name}" target="_new"/>
+                                    </div>
+                                </td>
+                                <td scope="row">                 
+                                    <ui:outputDate value="{!proj.MPM4_BASE__Deadline__c}"/>
+                                </td> 
+                                <td>
+                                    <div class="slds-truncate" title="{!proj.CPM__c }">
+                                        <ui:outputUrl value="{!'/Customer/s/detail/'+ proj.CPM__c}" label="{!proj.CPM__r.Name}" target="_new"/>
+                                    </div>
+                                </td>
+                            </tr> 
+                        </aura:iteration>
+                    </tbody>
+                </table>
+			</article>
+        </div>
+    </div>
+    
+</aura:component>

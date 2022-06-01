@@ -1,0 +1,83 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="quoteDoc" type="SBQQ__QuoteDocument__c"/>
+    <aura:attribute name="quoteDocSize" type="SBQQ__QuoteDocument__c"/> 
+	<aura:attribute name="quote" type="String"/>
+	<aura:attribute name="quoteName" type="String"/>
+    
+    <div class="slds-page-header--object-home slds-page-header slds-shrink-none test-headerRegion forceListViewManagerHeader">
+    	<div class="slds-media slds-no-space slds-grow">
+			<div class="slds-media__body slds-align-middle">
+        		<nav role="navigation" aria-label="Breadcrumbs">
+        			<ol class="slds-breadcrumb slds-list--horizontal">
+        				<li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+            				<a title="Squawk Quote" href="javascript:void(0);">
+        						<span class="uiOutputText">Squawk Quote</span>
+                			</a>
+        				</li>
+            			<li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+                			<a title="{!v.quoteName}" href="javascript:void(0);">
+                				<span class="uiOutputText" onclick="{!c.redirect}">{!v.quoteName}</span>
+                			</a>
+            			</li>
+        			</ol>
+    			</nav>
+        		<h1 class="slds-page-header__title slds-truncate">Squawk Quote Documents</h1>
+        		<p class="slds-text-body--small">
+                	<div class="test-listViewStatusInfo">
+                    	<span class="uiOutputText">{!v.quoteDocSize} items</span>
+                	</div>
+            	</p>
+        	</div>    
+    	</div>
+    </div>
+    <div>
+        <article class="forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+        	<div class="slds-grid listDisplays">
+        		<table class="slds-table slds-table--bordered slds-table--cell-buffer"> 
+        			<thead>
+						<tr>            	
+                    		<th class="slds-text-title slds-text-align--center" scope="col">
+                            	<div class="slds-truncate">Document Name</div>  
+       						</th>
+                            <th class="slds-text-title slds-text-align--center" scope="col">
+                            	<div class="slds-truncate">Created Date</div>  
+       						</th>
+                            <th class="slds-text-title slds-text-align--center" scope="col">
+                            	<div class="slds-truncate">Created By</div>  
+       						</th>
+                            <th class="slds-text-title slds-text-align--center" scope="col">
+                            	<div class="slds-truncate">Squawk Quote</div>  
+       						</th> 
+						</tr> 
+    				</thead>
+                    <tbody>
+                    	<aura:iteration items="{!v.quoteDoc}" var="qd">
+							<tr>				
+                				<td scope="row" class="slds-p-vertical--xx-small slds-text-align--center"> 
+                                    <a class="cuf-entityLink" href="{!'/Customer/s/squawk-document/'+qd.Id}" >
+                                        <span class="uiOutputText">{!qd.Name}</span>
+                                    </a>
+								</td>                                    
+								<td scope="row" class="slds-p-vertical--xx-small slds-text-align--center">
+                                	<ui:outputDateTime class="slds-truncate" value="{!qd.CreatedDate}"/>                                                                                                                     
+								</td>
+                                <td scope="row" class="slds-p-vertical--xx-small slds-text-align--center"> 
+                                    <ui:OutputText class="slds-truncate" value="{!qd.CreatedBy.Name}"/>
+								</td>
+                                <td scope="row" class="slds-p-vertical--xx-small slds-text-align--center"> 
+                                    <a class="cuf-entityLink" href="{!'/Customer/s/squawk-quote/'+qd.SBQQ__Quote__c}" >
+                                        <span class="uiOutputText">{!qd.SBQQ__Quote__r.Name}</span>
+                                    </a>
+								</td>    
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+        </article>        
+	</div> 
+       
+</aura:component>

@@ -1,0 +1,76 @@
+<apex:page standardController="MPM4_BASE__Milestone1_Project__c" Extensions="CPM_SquawkManagement" tabStyle="MPM4_BASE__Milestone1_Project__c">
+
+    <script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                 
+                for(var i=0; i<inputCheckBox.length; i++){         
+                    if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                    
+                        inputCheckBox[i].checked = obj.checked;
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .popupBackground {
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+            position: absolute;
+            cursor:wait;
+        }
+    </style>
+      
+    <apex:actionStatus id="spinnerStatus">
+        <apex:facet name="start">
+            <div>
+                <div class="popupBackground"/>
+            </div>
+        </apex:facet>
+    </apex:actionStatus>
+    
+    <apex:sectionHeader title="Squawks Pending Approval" subtitle="Project: {!MPM4_BASE__Milestone1_Project__c.Name}"/>
+    <apex:form id="mySquawks">   
+        <apex:pageBlock title="Squawks Pending Approval: {!MPM4_BASE__Milestone1_Project__c.Name}" mode="edit">
+      
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton status="spinnerStatus" value="Approve Squawks" action="{!ApproveSquawks}" reRender="mySquawks" oncomplete="window.location.reload()"/>
+                <apex:commandButton status="spinnerStatus" value="Reject Squawks" action="{!RejectSquawks}" reRender="mySquawks" oncomplete="window.location.reload()"/>
+                <apex:commandButton status="spinnerStatus" value="Recall Squawks" action="{!RecallSquawks}" reRender="mySquawks" oncomplete="window.location.reload()"/>
+                <apex:commandButton status="spinnerStatus" value="Defer Squawks" action="{!DeferSquawks}" reRender="mySquawks" oncomplete="window.location.reload()"/>
+                <apex:commandButton value="Return To Project" action="{!cancel}"/>               
+            </apex:pageBlockButtons>
+                       
+            <apex:pageMessages ></apex:pageMessages>
+            
+            <apex:pageBlockTable value="{!squawks}" var="ql" rendered="{!squawks.Size > 0}">           
+                <apex:column >
+                    <apex:facet name="header">Quote Line</apex:facet>
+                    <apex:outputLink value="/apex/Squawk?id={!ql.squawk.id}" target="_blank">{!ql.squawk.Name}</apex:outputLink>
+                </apex:column>
+                <apex:column value="{!ql.squawk.Job_Card__c}"/>
+                <apex:column value="{!ql.squawk.Job_Card_Description__c}"/>
+                <apex:column value="{!ql.squawk.Labor_Amount__c}"/>
+                <apex:column value="{!ql.squawk.Add_Work_Labor_Type__c}"/>                
+                <apex:column value="{!ql.squawk.Material_Amount__c}"/>
+                <apex:column value="{!ql.squawk.Material_Type__c}"/> 
+                <apex:column value="{!ql.squawk.Material_Type__c}"/>            
+                <apex:column >
+                     <apex:facet name="header">
+                        <apex:outputPanel layout="none">
+                            <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')"/>
+                            <apex:outputLabel value="Select Squawks"/>
+                        </apex:outputPanel> 
+                     </apex:facet>
+                     <apex:inputCheckbox value="{!ql.pendingSquawk}" id="inputId"/>
+                </apex:column> 
+            </apex:pageBlockTable>
+
+        </apex:pageBlock>    
+    </apex:form>    
+</apex:page>

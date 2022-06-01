@@ -1,0 +1,113 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="squawk" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="squawkSize" type="SBQQ__QuoteLine__c"/> 
+	<aura:attribute name="quote" type="String"/>
+	<aura:attribute name="quoteName" type="String"/> 
+    
+    <div class="slds-page-header--object-home slds-page-header slds-shrink-none test-headerRegion forceListViewManagerHeader">
+    	<div class="slds-media slds-no-space slds-grow">
+			<div class="slds-media__body slds-align-middle">
+        		<nav role="navigation" aria-label="Breadcrumbs">
+        			<ol class="slds-breadcrumb slds-list--horizontal">
+        				<li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+            				<a title="Squawk Quote" href="javascript:void(0);">
+        						<span class="uiOutputText">Squawk Quote</span>
+                			</a>
+        				</li>
+            			<li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+                			<a title="{!v.quoteName}" href="javascript:void(0);">
+                				<span class="uiOutputText" onclick="{!c.redirect}">{!v.quoteName}</span>
+                			</a>
+            			</li>
+        			</ol>
+    			</nav>
+        		<h1 class="slds-page-header__title slds-truncate">Squawks</h1>
+        		<p class="slds-text-body--small">
+                	<div class="test-listViewStatusInfo">
+                    	<span class="uiOutputText">{!v.squawkSize} items</span>
+                	</div>
+            	</p>
+        	</div>    
+    	</div>
+    </div>
+    <div>
+        <article class="forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+        	<div class="slds-grid listDisplays">
+        		<table class="slds-table slds-table--bordered slds-table--cell-buffer"> 
+        			<thead>
+						<tr>            	
+                    		<th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate slds-text-align--center">Squawk</div>  
+       						</th>
+                            <th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate slds-text-align--center">Status</div>  
+       						</th>
+                            <th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate">Squawk Description</div>  
+       						</th>
+                            <th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate slds-text-align--center">Est. Total Amount</div>  
+       						</th>
+                            <th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate slds-text-align--center">Material Amount</div>  
+       						</th> 
+                            <th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate slds-text-align--center">Material Type</div>  
+       						</th> 
+                            <th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate slds-text-align--center">Labor Amount</div>  
+       						</th> 
+                            <th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate slds-text-align--center">Labor Type</div>  
+       						</th> 
+                            <th class="slds-text-title" scope="col">
+                            	<div class="slds-truncate slds-text-align--center">Req. for RTS</div>  
+       						</th> 
+						</tr> 
+    				</thead>
+                    <tbody>
+                    	<aura:iteration items="{!v.squawk}" var="ql">
+							<tr>				
+                				<td scope="row" class="slds-p-vertical--xx-small"> 
+                                    <a class="cuf-entityLink" href="{!'/Customer/s/squawk/'+ql.Id}" >
+                                        <span class="uiOutputText">{!ql.Name}</span>
+                                    </a>
+								</td>   
+								<td scope="row" class="slds-p-vertical--xx-small">                                        
+                                    <div class="slds-truncate slds-text-align--center">{!ql.Add_Work_Status__c}</div>          	
+								</td>                                 
+								<td scope="row" class="slds-p-vertical--xx-small">
+									<div class="slds-truncate  slds-truncate slds-text-align--left col-1" title="{!ql.Job_Card_Description__c}">{!ql.Job_Card_Description__c}</div>                 
+								</td>
+                                <td scope="row" class="slds-p-vertical--xx-small">
+                    				<div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!ql.AddWork_Estimated_Total__c}</div>
+								</td>
+                                <td scope="row" class="slds-p-vertical--xx-small">
+                    				<div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!ql.Material_Amount__c}</div>
+								</td>
+                                <td scope="row" class="slds-p-vertical--xx-small">
+									<div class="slds-truncate slds-text-align--center">{!ql.Material_Type__c}</div>                 
+								</td>
+                                <td scope="row" class="slds-p-vertical--xx-small">
+                    				<div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!ql.Labor_Amount__c}</div>
+								</td>
+                                <td scope="row" class="slds-p-vertical--xx-small">
+									<div class="slds-truncate slds-text-align--center">{!ql.Add_Work_Labor_Type__c}</div>                 
+								</td>
+                                <td scope="row" class="slds-p-vertical--xx-small">
+                        			<div class="uiOutputCheckbox slds-text-align--center">
+                                        <ui:outputCheckbox value="{!ql.RTS__c}"/>
+                                    </div>
+                    			</td>   
+                            </tr>
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </div>
+        </article>        
+	</div> 
+       
+</aura:component>

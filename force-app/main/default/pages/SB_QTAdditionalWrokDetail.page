@@ -1,0 +1,180 @@
+<!--==============================================================================================================
+@Author - Krunal Pala
+@Date - 14/3/17
+@Purpose-  This page is used for displaying Proposal Detail Section for Quote Templates. (XSL-FO Based Custom Layout)
+==========================================================================================================-->
+<apex:page contentType="text/xml" showHeader="false" sidebar="false" cache="false" controller="SB_QTProposalDetailAndExecutiveSummary" lightningStylesheets="true">
+<apex:slds />
+    <block>
+        <table table-layout="fixed" width="100%" border-color="#000000" border-width="1px" border-style="solid">
+            
+            <table-column border-width="2px" border-style="solid" column-width="10%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="6%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="30%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="11%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="9%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="11%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="9%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="5%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="5%"></table-column>
+            <table-column border-width="2px" border-style="solid" column-width="4%"></table-column>
+             
+            <table-body>
+                <table-row font-size="0.9em"  font-weight="bold" text-align="center" color="#000000" >
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block> Job Card</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>Labor Code</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="18pt">
+                        <block>Job Description</block>
+                    </table-cell>
+                    <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="18pt">
+                        <block>Material</block>
+                    </table-cell>                      
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt">
+                            <block>Material Type</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="18pt">
+                            <block>Labor</block>
+                        </table-cell>                      
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt"  padding-left="2pt">
+                            <block>Labor Type</block>
+                        </table-cell>
+                        <table-cell border="1px solid black"  text-align="right" padding-left="8pt" padding-top="2pt">
+                            <block-container reference-orientation="90" >  
+                                <block font-size="8pt">Approved</block>
+                            </block-container>
+                        </table-cell>
+                        <table-cell border="1px solid black"  text-align="right" padding-left="8pt" padding-top="8pt">
+                            <block-container reference-orientation="90">
+                                <block font-size="8pt">Denied</block>
+                            </block-container>
+                        </table-cell>
+                        <table-cell border="1px solid black"  text-align="right" padding-left="7pt" padding-top="15pt">
+                            <block-container reference-orientation="90">
+                                <block font-size="8pt">RTS</block>
+                            </block-container>
+                        </table-cell>
+                    </table-row>
+                    
+                    <apex:repeat var="ql" value="{!quoteLineItemsAddWork}" >
+                        <table-row font-size="0.7em">
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{!HTMLENCODE(ql.Job_Card__c)}"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                                <block>
+                                    <apex:outputText value="{!HTMLENCODE(ql.Labor_Code__c)}"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                                <block>
+                                    <apex:outputText value="{!HTMLENCODE(ql.Job_Card_Description__c)}"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell border="1px solid black" text-align="right" margin="0pt" padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{0,number,currency}">
+                                        <apex:param value="{!ql.Material_Amount__c}"></apex:param>
+                                     </apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell border="1px solid black" text-align="center" margin="0pt" padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{!ql.IsFirmPriceMaterial__c}"></apex:outputText>
+                                 </block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" text-align="right" padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{0,number,currency}">
+                                        <apex:param value="{!ql.Labor_Amount__c}"></apex:param>
+                                    </apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" text-align="center" padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{!ql.IsFirmPriceLabour__c}"></apex:outputText>
+                                </block>
+                            </table-cell>                      
+                            <table-cell border="1px solid black" margin="0pt" text-align="center" padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{!ql.IsApproved__c}"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" text-align="center" padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{!ql.IsDenied__c}"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            <table-cell border="1px solid black" margin="0pt" text-align="center" padding="2pt" padding-left="2pt">
+                                <block>
+                                    <apex:outputText value="{!ql.IsRTS__c}"></apex:outputText>
+                                </block>
+                            </table-cell>                       
+                        </table-row>
+                    </apex:repeat>
+
+                    <table-row font-weight="bold" text-align="center" color="#000000" >
+                        <table-cell  number-columns-spanned="10" margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block>&nbsp;</block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <table-row font-size="0.9em"  font-weight="bold" text-align="right" color="#000000" >
+                        <table-cell  number-columns-spanned="5"  border="1px solid black"  margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> Estimated Total </block>
+                        </table-cell>
+                        <table-cell number-columns-spanned="5" text-align="center" border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> 
+                                <apex:outputText value="{0,number,currency}">
+                                    <apex:param value="{!additionalWorkAmount}"></apex:param>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+
+                    <table-row font-size="0.9em" font-weight="bold" text-align="center"  >
+                        <table-cell  number-columns-spanned="10"    margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block>&nbsp;</block>
+                        </table-cell>
+                    </table-row>
+
+                    <table-row font-size="0.7em"  text-align="center" color="#000000" >
+                        <table-cell number-columns-spanned="10" text-align="center" margin="0pt" padding="1pt" padding-left="1pt" >
+                            <block> The undersigned acknowledges that he or she is employed by the Customer in the capacity indicated below and is duly authorized to bind the Customer to this Amendment for Additional Work.</block>
+                        </table-cell>                           
+                    </table-row>
+
+                    <table-row font-size="0.9em" border ="1" font-weight="bold" text-align="center"  >
+                        <table-cell  number-columns-spanned="10"    margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block>&nbsp;</block>
+                        </table-cell>
+                    </table-row>
+
+                    <table-row font-size="0.9em" border ="1" font-weight="bold" text-align="center"  >
+                        <table-cell  number-columns-spanned="10" border="1px solid black"  text-align="left"   margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> Approver : {!HTMLENCODE(quoteSObj.Approver__c)} </block>                               
+                        </table-cell>
+                    </table-row>
+
+                    <table-row font-size="0.9em" border="1px solid black"  font-weight="bold" text-align="center" >
+                        <table-cell  number-columns-spanned="5" border="1px solid black"  text-align="left"   margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> Signature: </block>
+                        </table-cell>
+                    <table-cell  number-columns-spanned="5" border="1px solid black"  text-align="left"   margin="0pt" padding="2pt" padding-left="2pt" >
+                        <block> Date: 
+                            <apex:outputtext value="{0, date, MMMM d',' yyyy}">                                 
+                                <apex:param value="{!quoteSObj.Add_Work_Time_Stamp__c}"/>
+                            </apex:outputtext>
+                        </block>
+                    </table-cell>
+                </table-row>                      
+            </table-body>
+        </table>
+    </block>
+
+</apex:page>

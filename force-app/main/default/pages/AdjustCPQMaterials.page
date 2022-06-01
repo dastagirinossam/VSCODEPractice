@@ -1,0 +1,87 @@
+<apex:page standardController="Product2" extensions="ProductOptions" sidebar="false"> 
+<!--<flow:interview name="CloneProductBundle" interview="{!CloneProductBundle}" finishLocation="{!GotoProductOptions}"> </flow:interview>-->
+    <script type="text/javascript">
+        function selectAllCheckboxes(obj,receivedInputID){
+            var inputCheckBox = document.getElementsByTagName("input");                 
+                for(var i=0; i<inputCheckBox.length; i++){         
+                    if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                    
+                        inputCheckBox[i].checked = obj.checked;
+                    }
+                }
+            }
+    </script>
+      
+    <apex:sectionHeader title="Product Options Edit" subtitle="{!Product2.name}"/>     
+    <apex:form id="formId">      
+        <apex:pageBlock title="{!Product2.name}" mode="edit">
+            <!--<apex:pageMessages id="showmsg" escape="false"/>-->
+             
+            <apex:pageblockButtons >
+                <apex:outputPanel id="myButtons">
+                    <apex:commandButton action="{!Beginning}" title="Beginning" value="<<" disabled="{!disablePrevious}" reRender="myPanel,myButtons"/>
+                    <apex:commandButton action="{!Previous}" title="Previous" value="<" disabled="{!disablePrevious}" reRender="myPanel,myButtons"/>        
+                    <apex:commandButton action="{!Next}" title="Next" value=">" disabled="{!disableNext}" reRender="myPanel,myButtons"/>
+                    <apex:commandButton action="{!End}" title="End" value=">>" disabled="{!disableNext}" reRender="myPanel,myButtons"/>
+                    <apex:commandButton value="Add Material" action="{!AddProductOption}"/>
+                    <apex:commandButton value="Save" action="{!saveReturnToProduct}"/>
+                    <apex:commandButton value="Delete Selected" action="{!processSelected}" rerender="table"/>
+                    <apex:commandButton value="Clone Selected" action="{!cloneProductOptions}" rerender="table"/>
+                    <apex:commandButton value="Go Back To Product" action="{!BackToProduct}"/> 
+                </apex:outputPanel>    
+            </apex:pageblockButtons>
+           
+            <apex:repeat value="{!listprodWrap}" var="block">
+                <apex:outputPanel id="myPanel">
+                    <apex:pageBlockTable value="{!block.lpo}" var="poWrap" id="table">
+                        <apex:column headerValue="Number">
+                            <apex:inputtext id="resume" value="{!poWrap.po.SBQQ__Number__c}" style="width:35px !important;"/>
+                        </apex:column>
+                        <apex:column headerValue="Feature">
+                            <apex:outputtext value="{!poWrap.po.SBQQ__Feature__r.Name}"/>
+                        </apex:column>
+                            <apex:column headerValue="Product Code">
+                            <apex:outputtext value="{!poWrap.po.SBQQ__ProductCode__c}" title="{!poWrap.po.SBQQ__ProductCode__c}"/>
+                        </apex:column>
+                            <apex:column headerValue="Product Description">
+                            <apex:outputtext value="{!poWrap.po.Product_Description__c}" title="{!poWrap.po.Product_Description__c}"/>
+                        </apex:column>
+                            <apex:column headerValue="Quantity">
+                            <apex:inputField value="{!poWrap.po.SBQQ__Quantity__c}" style="width:70px !important;"/>
+                        </apex:column>
+                            <apex:column headerValue="Unit of Measure">               
+                            <apex:outputText value="{!poWrap.po.SBQQ__OptionalSKU__r.QuantityUnitOfMeasure}"/>
+                        </apex:column>    
+                            <apex:column headerValue="Quantity Editable">
+                            <apex:inputField value="{!poWrap.po.SBQQ__QuantityEditable__c}" style="width:35px !important;"/>
+                        </apex:column>
+                            <apex:column headerValue="Selected">
+                            <apex:inputField value="{!poWrap.po.SBQQ__Selected__c}" style="width:35px !important;"/>
+                        </apex:column>
+                        <apex:column headerValue="Table Value">
+                            <apex:inputtext value="{!poWrap.po.Table_Value__c}" style="width:300px !important;"/>
+                        </apex:column>
+                        <apex:column headerValue="TSM Notes">
+                            <apex:inputtext title="{!poWrap.po.TSM_Notes__c}" value="{!poWrap.po.TSM_Notes__c}" style="width:500px !important;"/>
+                        </apex:column>
+                        <apex:column headerValue="Product Pricing">
+                            <apex:inputField value="{!poWrap.po.Product_Pricing__c}" style="width:70px !important;"/>
+                        </apex:column>
+                        <apex:column headerValue="Warranty Prgm">
+                            <apex:inputField value="{!poWrap.po.Warranty_Program__c}" style="width:70px !important;"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">
+                                <apex:outputPanel layout="none">
+                                    <apex:outputLabel value="Delete/Clone"/>
+                                    <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')"/>
+                                </apex:outputPanel>                     
+                            </apex:facet>
+                            <apex:inputCheckbox value="{!poWrap.selected}" id="inputId" style="width:35px !important;"/>
+                        </apex:column>
+                    </apex:pageBlockTable> 
+                  </apex:outputPanel>
+            </apex:repeat>
+            <!--<apex:pageMessages id="showmsgbtm" escape="false"/>-->
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

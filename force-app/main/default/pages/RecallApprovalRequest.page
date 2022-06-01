@@ -1,0 +1,53 @@
+<apex:page standardController="SBQQ__QuoteLine__c" extensions="ReviseQuoteLine" sidebar="true">
+    <apex:includeScript value="{!$Resource.SBQQ__jQuery}"/>
+    
+    <script>
+        var jeet = $.noConflict();
+        jeet(document).ready(function(){
+            jeet('.actionLink').each(function(index){
+                var text = jeet(this).attr('href');
+                if(text)
+                	jeet(this).css('display', 'none');      
+  			});
+            jeet('.tertiaryPalette').css('background-color', 'rgb(132, 73, 73)');
+            jeet('.secondaryPalette').css('border-top', '3px solid rgb(132, 73, 73)');
+            jeet('.pShowMore').css('display', 'none');
+            jeet('.btn[name="piRemove"]').css('display', 'none');
+            jeet('.btn[name="piSubmit"]').css('display', 'none');
+        });
+    </script>
+    
+    <apex:form > 
+        <apex:sectionHeader title="Recall Approval Request" subtitle="{!SBQQ__QuoteLine__c.Name}"/>
+        <apex:pageblock title="Recall Approval Request">
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!RecallApproval}" value="Recall Approval Request" />  
+                <apex:commandButton action="{!CancelRecall}" value="Cancel" /> 
+            </apex:pageBlockButtons>
+            
+            <apex:pageblocksection >
+              
+                <table align="center" border="0" cellpadding="5">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <apex:outputtext label="Related To">                                                    
+                                	<a href="/apex/Squawk?id={!SBQQ__QuoteLine__c.Id}">{!SBQQ__QuoteLine__c.Name}</a>
+                            	</apex:outputtext>
+                            </td>                         
+                        </tr>
+                        <tr>
+                            <td>
+                                <apex:inputTextarea id="comments" value="{!comments}" cols="100" rows="3" label="Comments"/>                                
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </apex:pageblocksection>           
+        </apex:pageblock>        
+    </apex:form>
+
+    <apex:relatedList subject="{!SBQQ__QuoteLine__c}" title="Approval History" list="ProcessSteps" pageSize="100"/> 
+    
+</apex:page>

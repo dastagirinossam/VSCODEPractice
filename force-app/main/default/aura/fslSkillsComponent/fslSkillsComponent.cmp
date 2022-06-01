@@ -1,0 +1,20 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction"
+                access="global">
+    <div class="container">
+        <article class="slds-card">
+            <div class="slds-global-header slds-grid">
+                <div class="slds-global-header__item">
+                    <lightning:icon iconName="standard:resource_skill"/>
+                </div>
+                <div class="slds-global-header__item slds-grid_align-center">
+                    <ui:outputURL class="slds-text-heading_medium"
+                                  value="https://standardaero.my.salesforce.com/0C5?retURL=%2Ffieldservice%2FfieldServiceManagement.apexp%3FretURL%3D%252Fui%252Fsetup%252FSetup%253Fsetupid%253DCustomize%26setupid%3DFieldService&amp;setupid=FieldServiceSkillSettings" 
+                                  target="_blank" 
+                                  label="Field Service Skills" 
+                                  />
+                </div>
+            </div>
+            
+        </article>
+    </div>
+</aura:component>

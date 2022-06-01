@@ -1,0 +1,4 @@
+<aura:component implements="force:lightningQuickAction" access="GLOBAL" controller="LM_CommunityView">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	
+</aura:component>

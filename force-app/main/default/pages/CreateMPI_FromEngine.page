@@ -1,0 +1,8 @@
+<apex:page standardController="Equipment__c" showHeader="false" sidebar="false">
+    <script>
+        if(typeof sforce !== 'undefined' && sforce !== null && '{!$User.UIThemeDisplayed}' === 'Theme4d'){
+        } else {
+            window.top.location = '{!'/setup/ui/recordtypeselect.jsp?ent=Opportunity&retURL=%2F' & LEFT(Equipment__c.Account_ID__c,15) & '&save_new_url=%2F006%2Fe%3FretURL%3D%252F' & lEFT(Equipment__c.Id,15)}';
+        }
+    </script>
+</apex:page>

@@ -1,0 +1,90 @@
+<aura:component controller="StatusUpdateController" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global">
+    
+    <aura:html tag="style">
+        .slds-modal__container {
+        	min-width: 30vw;
+        	max-width: 55rem !important;
+        }
+        
+        .cuf-content {
+        	padding: 0 0rem !important;
+        }
+        
+        .slds-p-around--medium {
+        	padding: 0rem !important;
+        } 
+        
+        .slds-modal__content{      
+        	height:unset !important;
+        	max-height:unset !important; 
+        }
+    </aura:html> 
+    
+    <aura:attribute name="record" type="Map"/> 
+    <aura:attribute name="recordId" type="String" />    
+    
+    <aura:attribute name="newStatusUpdate" type="Object"/>
+    <aura:attribute name="simpleNewStatusUpdate" type="Object"/>
+    <aura:attribute name="newStatusUpdateError" type="String"/>
+    <aura:attribute name="open" type="Boolean" default="false"/>
+    
+    <aura:attribute name="selected" type="Map[]"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:handler name="selectedAttachmentsNotifyEvent" event="c:selectedAttachmentsNotifyEvent" action="{!c.selectedAction}"/>
+    
+    <force:recordData aura:id="statusUpdateCreator" 
+                      layoutType="FULL"
+                      targetRecord="{!v.newStatusUpdate}"
+                      targetFields="{!v.simpleNewStatusUpdate}"
+                      targetError="{!v.newStatusUpdateError}" />
+    
+    <div class="slds-modal__header slds-text-heading_large slds-m-vertical--large slds-grid--pull-padded-medium">
+        Status Update
+    </div>
+    
+    <div class="slds-modal__content slds-align_absolute-center" aura:id="modalbody" id="modalbody">                  
+        <div class="slds-p-horizontal--small">            
+            <lightning:layoutItem padding="around-small">
+                <lightning:select aura:id="statusUpdateField" label="Status Update Type" required="true" value="{!v.simpleNewStatusUpdate.Type__c}">
+                    <option value="">---Select Type---</option>
+                    <option value="Airframe">Airframe</option>
+                    <option value="Avionics">Avionics</option>
+                    <option value="Paint">Paint</option>
+                    <option value="Interior">Interior</option>
+                    <option value="Engine">Engine</option>
+                </lightning:select>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem padding="around-small">
+                <h2 class="header">Status Update</h2>
+                <lightning:inputRichText aura:id="statusUpdateField" label="Status Update" value="{!v.simpleNewStatusUpdate.Update__c}"></lightning:inputRichText>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem padding="around-small">
+                <h2 class="header">Selected Files</h2>
+                
+                <div class="slds-p-left_medium">
+                    <aura:iteration items="{!v.selected}" var="l">
+                        <li class="slds-listbox-item slds-truncate" role="presentation">
+                            <aura:if isTrue="{! v.selected}">
+                                <lightning:pill class="" label="{!l.Title}" name="{!l}" onremove="{!c.handleRemoveOnly }" href="{!'/'+(l.Id)}"/>
+                            </aura:if>
+                        </li>
+                    </aura:iteration>
+                </div>
+            </lightning:layoutItem>                       
+        </div>
+    </div>
+    
+    <div class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+        <button class="slds-button slds-button_brand" onclick="{!c.toOpenAttachments}">Attach Files</button>
+        <button class="slds-button slds-button_brand" onclick="{!c.saveStatusUpdate}">Save</button>
+    </div>
+    
+    <c:selectAttachments isOpen="{!v.open}" recordId="{!v.recordId}"/> 
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    
+</aura:component>

@@ -1,0 +1,350 @@
+<aura:component controller="rsmCloneOpportunity" implements="lightning:availableForFlowScreens,force:lightningQuickActionWithOutHeader,force:hasRecordId"  access="global">
+    <ltng:require styles="{!$Resource.SLDS252 + '/styles/salesforce-lightning-design-system.min.css'}" />
+    
+    <aura:html tag="style">
+        .slds-modal__container {
+        min-width: 55vw;
+        max-width: 75vw;
+        }
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        height:unset !important;
+        max-height:unset !important;
+        overflow: initial;
+        }
+    </aura:html>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="OppId" type="Id" />
+    <aura:attribute name="OppRec" type="Opportunity"/>
+    <aura:attribute name="OppRecTypes" type="Map"/>
+    
+    <aura:attribute name="acRec" type="Aircraft__c"/>
+    <aura:attribute name="engRec" type="Equipment__c"/>
+    <aura:attribute name="st2Rec" type="Sub_Type_2__c"/>
+    
+    <aura:attribute name="fac" type="List"/> 
+    
+    <aura:attribute name="listOfSt2SearchRecords" type="Sub_Type_2__c[]"/>
+    <aura:attribute name="listOfSearchRecords" type="Aircraft__c[]" description="Use,for store the list of search records which returns from apex class"/>
+    <aura:attribute name="listOfEngineSearchRecords" type="Equipment__c[]" description="Use,for store the list of search records which returns from apex class"/>
+    
+    <aura:attribute name="listOfSt2PerProductLine" type="Sub_Type_2__c[]"/>    
+    <aura:attribute name="listOfEquipPerAircraft" type="Equipment__c[]"/>
+    <aura:attribute name="listOfAircraftPerAccountRecords" type="Aircraft__c[]"/>
+    
+    <aura:attribute name="SearchKeyWord" type="string"/>
+    <aura:attribute name="EngineSearchKeyWord" type="string"/>
+    <aura:attribute name="St2SearchKeyWord" type="string"/>
+    
+    <aura:attribute name="Message" type="String" default="Search Result..."/>
+    <aura:attribute name="EngMessage" type="String" default="Search Result..."/>
+    <aura:attribute name="St2Message" type="String" default="Search Result..."/>
+    
+    <!--declare events hendlers-->  
+    <aura:handler name="oSelectedAircraftEvent" event="c:selectedAircraftEvent" action="{!c.handleAC_ComponentEvent}"/>
+    <aura:handler name="oSelectedEquipmentEvent" event="c:selectedEquipmentEvent" action="{!c.handleEng_ComponentEvent}"/>
+    <aura:handler name="oSelectedSubType2Event" event="c:selectedSt2Event" action="{!c.handleSt2_ComponentEvent}"/>
+  
+    <aura:attribute name="loading" type="Boolean" default="false" />
+    
+    <div class="slds-modal__content" style="overflow: initial;">    
+        <div class="slds-modal__header ">
+            <h2 class="slds-modal__title slds-hyphenate slds-text-heading--medium">
+                Clone Opportunity
+            </h2>
+        </div>
+      
+        <lightning:recordEditForm aura:id="myform" 
+                                  objectApiName = "Opportunity" 
+                                  onsuccess = "{!c.handleSuccess}"
+                                  onsubmit="{!c.onRecordSubmit}" 
+                                  onerror="{!c.handleError}"
+                                  onload="{!c.handleLoad}">       
+            <lightning:messages aura:id="OppMessage" />
+            <div class="slds-scrollable_y" style="height:70vh;">  
+            <div class="slds-grid slds-wrap slds-var-p-horizontal_medium">
+                <div class="slds-col slds-size_2-of-2 slds-p-vertical_xx-small">
+                    <h3 class="slds-section__title slds-theme--shade">
+                        <span class="section-header-title slds-p-horizontal--small slds-truncate">Sales Managers</span>
+                    </h3>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-var-p-horizontal_medium" >
+                    <lightning:inputField fieldName="OwnerId" value="{!v.OppRec.OwnerId}"/>
+                    <lightning:inputField fieldName="Lead_Sales_Manager__c" value="{!v.OppRec.Lead_Sales_Manager__c}"/>
+                    <lightning:inputField fieldName="RSM__c" value="{!v.OppRec.RSM__c}" required="true"/>
+                    <lightning:inputField fieldName="AFSM_Lookup__c" value="{!v.OppRec.AFSM_Lookup__c}"/>
+                </div>
+                <!--Defaulted Fields-->
+                
+            </div>
+            <div class="slds-grid slds-wrap slds-var-p-horizontal_medium">
+                <div class="slds-col slds-size_2-of-2 slds-p-vertical_xx-small">
+                    <h3 class="slds-section__title slds-theme--shade">
+                        <span class="section-header-title slds-p-horizontal--small slds-truncate">Opportunity Information</span>
+                    </h3>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-var-p-horizontal_medium" >
+                    <lightning:inputField fieldName="Name" value="{!v.OppRec.Name}"/>
+                    <lightning:inputField fieldName="Opportunity_Name_Details__c" value="{!v.OppRec.Opportunity_Name_Details__c}"/>
+                    <lightning:inputField fieldName="Opportunity_Name_Override__c" value="{!v.OppRec.Opportunity_Name_Override__c}"/>
+                    <lightning:inputField fieldName="AccountId" value="{!v.OppRec.AccountId}" required="true"/>
+
+                    <!--Aircraft-->
+                    <div class="slds-form_horizontal" required="true">  
+                        <div aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+                            <label class="slds-form-element__label" for="lookup-ac">
+                                <abbr class="slds-required" title="required">*</abbr>
+                                Aircraft
+                            </label>
+                            <!--This part is for display search bar for lookup-->  
+                            <div class="slds-form-element__control">
+                                <div class="slds-combobox__form-element">
+                                    
+                                    <!-- This markup is for when an record is selected -->
+                                    <div aura:id="lookup-pill" class="slds-pill-container slds-hide slds-input-has-icon slds-input-has-icon_left-right">
+                                        <lightning:icon class="slds-icon-custom-custom20 slds-icon_container slds-combobox__input-entity-icon" iconName="custom:custom20"/>
+                                        <div class="slds-input slds-combobox__input slds-combobox__input-value"> 
+                                            {!v.acRec.Name}  
+                                        </div>
+                                        <div class="slds-input__icon-group slds-input__icon-group_right">
+                                            <button title="Clear Selection" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.clear}">
+                                                <c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#close'}" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div aura:id="lookupField" class="slds-show slds-input-has-icon slds-input-has-icon_right">  
+                                        <ui:inputText updateOn="keyup" keyup="{!c.keyPressController}" class="slds-lookup__search-input slds-input" value="{!v.SearchKeyWord}" placeholder="Search Aircraft.."/>
+                                        <div aura:id="ac-SearchIcon" class="slds-show slds-input__icon-group slds-input__icon-group_right">
+                                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.searchAcController}">
+                                            	<c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#search'}" />
+                                            </button>
+                                        </div>
+                                        <div aura:id="ac-CloseIcon" class="slds-hide slds-input__icon-group slds-input__icon-group_right">
+                                            <button title="Close Aircraft Search" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.aircraftCloseSearch}">
+                                                <c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#close'}" />
+                                            </button>
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                            
+                            <!--This part is for Display typehead lookup result List-->  
+                            <div id="lookup-ac" aura:id="aircraftResults" class="slds-hide slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-dropdown_left" style="width: 21.5rem; left: 33%; right: auto;" role="listbox">
+                                <ul class="slds-listbox slds-listbox_vertical" role="group" aria-label="Search Results">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="presentation">
+                                            <h3 class="slds-listbox__option-header" role="presentation">{!v.Message}</h3>
+                                        </div>
+                                    </li>
+                                    <div class="slds-scrollable slds-grow" style="max-height:7rem;">
+                                        <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
+                                            <c:aircraftLookupResult oAircraft="{!singleRec}" />
+                                        </aura:iteration>
+                                    </div>
+                                </ul>
+                                <ul class="slds-listbox slds-listbox_vertical" role="group" aria-label="Aircraft Per Account">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div id="option0" class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="presentation">
+                                            <h3 class="slds-listbox__option-header" role="presentation">Aircraft Per Account</h3>
+                                        </div>
+                                    </li>
+                                    <div class="slds-scrollable slds-grow" style="max-height:7rem;">
+                                        <aura:iteration items="{!v.listOfAircraftPerAccountRecords}" var="singleRec">
+                                            <c:aircraftLookupResult oAircraft="{!singleRec}" />
+                                        </aura:iteration>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Equipment-->
+                    <div class="slds-form_horizontal">
+                        <div aura:id="searchEngRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+                            <label class="slds-form-element__label" for="lookup-eng" required="true">
+                                <abbr class="slds-required" title="required">*</abbr>
+                                Equipment
+                            </label>
+                            <!--This part is for display search bar for lookup-->  
+                            <div class="slds-form-element__control">
+                                <div class="slds-combobox__form-element">
+                                    
+                                    <!-- This markup is for when an record is selected -->
+                                    <div aura:id="eng-lookup-pill" class="slds-pill-container slds-hide slds-input-has-icon slds-input-has-icon_left-right">
+                                        <lightning:icon class="slds-icon-custom-custom67 slds-icon_container slds-combobox__input-entity-icon" iconName="custom:custom67"/>
+                                        <div class="slds-input slds-combobox__input slds-combobox__input-value"> 
+                                            {!v.engRec.Name}  
+                                        </div>
+                                        <div class="slds-input__icon-group slds-input__icon-group_right">
+                                            <button title="Clear Selection" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.EngClear}">
+                                                <c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#close'}" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div aura:id="eng-lookupField" class="slds-show slds-input-has-icon slds-input-has-icon_right">                            
+                                        <ui:inputText updateOn="keyup" keyup="{!c.keyPressEngController}" class="slds-lookup__search-input slds-input" value="{!v.EngineSearchKeyWord}" placeholder="Search Equipment..."/>
+                                        <div aura:id="eng-SearchIcon" class="slds-show slds-input__icon-group slds-input__icon-group_right">
+                                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.searchEngController}">
+                                                <c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#search'}" />
+                                            </button>
+                                        </div>
+                                        <div aura:id="eng-CloseIcon" class="slds-hide slds-input__icon-group slds-input__icon-group_right">
+                                            <button title="Close Engine Search" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.engineCloseSearch}">
+                                                <c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#close'}" />
+                                            </button>
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                            
+                            <!--This part is for Display typehead lookup result List-->  
+                            <div id="lookup-eng" aura:id="equipmentResults" class="slds-hide slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-dropdown_left" style="width: 21.5rem; left: 33%; right: auto;" role="listbox">
+                                <ul class="slds-listbox slds-listbox_vertical" role="group" aria-label="Search Results">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="presentation">
+                                            <h3 class="slds-listbox__option-header" role="presentation">{!v.EngMessage}</h3>
+                                        </div>
+                                    </li>
+                                    <div class="slds-scrollable slds-grow" style="max-height:7rem;">
+                                        <aura:iteration items="{!v.listOfEngineSearchRecords}" var="singleRec">
+                                            <c:equipmentLookupResult oEquipment="{!singleRec}" />
+                                        </aura:iteration>
+                                    </div>
+                                </ul>
+                                <ul class="slds-listbox slds-listbox_vertical" role="group" aria-label="Equipment Per Aircraft">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="presentation">
+                                            <h3 class="slds-listbox__option-header" role="presentation">Equipment Per Aircraft</h3>
+                                        </div>
+                                    </li>
+                                    <div class="slds-scrollable slds-grow" style="max-height:7rem;">
+                                        <aura:iteration items="{!v.listOfEquipPerAircraft}" var="singleRec">
+                                            <c:equipmentLookupResult oEquipment="{!singleRec}" />
+                                        </aura:iteration>
+                                    </div>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!--Contact Needs This To From Account-->
+                    <lightning:inputField fieldName="Contact__c" value="{!v.OppRec.Contact__c}"/>
+                    <lightning:inputField fieldName="Operator__c" value="{!v.OppRec.Operator__c}"/>
+                    <lightning:inputField fieldName="Product_Line__c" value="{!v.OppRec.Product_Line__c}"/>
+                    <lightning:inputField fieldName="Type" value="{!v.OppRec.Type}" required="true" aura:id="selectedType" onchange="{!c.resetST2}"/>
+                    <lightning:inputField fieldName="SubType__c" value="{!v.OppRec.SubType__c}" required="true" aura:id="selectedSubType" onchange="{!c.searchField}"/>
+                   
+                    <!--SubType2-->
+                    <div class="slds-form_horizontal">
+                        <div aura:id="searchSt2Res" class="slds-form-element slds-lookup slds-is-close" data-select="single">
+                            <label class="slds-form-element__label" for="lookup-st2">
+                                SubType2
+                            </label>
+                            <!--This part is for display search bar for lookup-->  
+                            <div class="slds-form-element__control">
+                                <div class="slds-combobox__form-element">
+                                    
+                                    <!-- This markup is for when an record is selected -->             
+                                    <div aura:id="st2-lookup-pill" class="slds-pill-container slds-hide slds-input-has-icon slds-input-has-icon_left-right">
+                                        <lightning:icon class="slds-icon-custom-custom55 slds-icon_container slds-combobox__input-entity-icon" iconName="custom:custom55"/>
+                                        <div class="slds-input slds-combobox__input slds-combobox__input-value"> 
+                                            <span class="slds-truncate">{!v.st2Rec.Name}</span>
+                                        </div>
+                                        <div class="slds-input__icon-group slds-input__icon-group_right">
+                                            <button title="Clear Selection" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.St2Clear}">
+                                                <c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#close'}" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div aura:id="st2-lookupField" class="slds-show slds-input-has-icon slds-input-has-icon_right">                            
+                                        <ui:inputText updateOn="keyup" keyup="{!c.keyPressSt2Controller}" class="slds-lookup__search-input slds-input" value="{!v.St2SearchKeyWord}" placeholder="Search SubType2..."/>
+                                        <div aura:id="st2-SearchIcon" class="slds-show slds-input__icon-group slds-input__icon-group_right">
+                                            <button class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.searchSt2Controller}" >
+                                                <c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#search'}" />
+                                            </button>
+                                        </div>
+                                        <div aura:id="st2-CloseIcon" class="slds-hide slds-input__icon-group slds-input__icon-group_right">
+                                            <button title="Close SubType2 Search" class="slds-button slds-button_icon slds-input__icon slds-input__icon_right" onclick="{!c.st2CloseSearch}">
+                                                <c:svg class="slds-button__icon" xlinkHref="{!$Resource.SLDS252 + '/icons/utility-sprite/svg/symbols.svg#close'}" />
+                                            </button>
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                            
+                            <!--This part is for Display typehead lookup result List-->  
+                            <div id="lookup-st2" aura:id="st2Results" class="slds-hide slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-dropdown_bottom" style="width: 21.5rem; left: auto; right: -33%;" role="listbox">
+                                <ul class="slds-listbox slds-listbox_vertical" role="group" aria-label="Search Results">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="presentation">
+                                            <h3 class="slds-listbox__option-header" role="presentation">{!v.St2Message}</h3>
+                                        </div>
+                                    </li>
+                                    <div class="slds-scrollable slds-grow" style="max-height:7rem;">
+                                        <aura:iteration items="{!v.listOfSt2SearchRecords}" var="singleRec">
+                                            <c:st2LookupResult oSubType2="{!singleRec}" />
+                                        </aura:iteration>
+                                    </div>
+                                </ul>
+                                <ul class="slds-listbox slds-listbox_vertical" role="group" aria-label="SubType2 Per Product Line">
+                                    <li role="presentation" class="slds-listbox__item">
+                                        <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_small" role="presentation">
+                                            <h3 class="slds-listbox__option-header" role="presentation">SubType2 Per Selected SubType</h3>
+                                        </div>
+                                    </li>
+                                    <div class="slds-scrollable slds-grow" style="max-height:7rem;">
+                                        <aura:iteration items="{!v.listOfSt2PerProductLine}" var="singleRec">
+                                            <c:st2LookupResult oSubType2="{!singleRec}" />
+                                        </aura:iteration>
+                                    </div>  
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <lightning:inputField fieldName="LeadSource" value="" required="true"/>                      
+                    
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-var-p-horizontal_medium">
+                    <div class="slds-form_horizontal">
+                        <lightning:select aura:id="selectedStage" name="selectStage" label="Stage" required="true">
+                            <option value="">--None--</option>
+                            <option value="New Opportunity">New Opportunity</option>
+                            <option value="Qualified Opportunity">Qualified Opportunity</option>
+                            <option value="RFQ Submitted">RFQ Submitted</option>
+                        </lightning:select>   
+                    </div>
+                    <lightning:inputField fieldName="Amount" value="{!v.OppRec.Amount}"/>
+                    <lightning:inputField fieldName="Probability" value="{!v.OppRec.Probability}"/>               
+                    <lightning:inputField fieldName="Probability_Grouping_Override__c" value="{!v.OppRec.Probability_Grouping_Override__c}"/>                
+                    
+                    <div class="slds-form_horizontal">
+                        <lightning:combobox name="Facility" label="Facility" value="{!v.OppRec.Facility__c}" placeholder="--None--" options="{!v.fac}" required="true"/>
+                    </div>
+                    
+                    <lightning:inputField fieldName="Tier_Level__c" value="{!v.OppRec.Tier_Level__c}" required="true"/>
+                    <lightning:inputField fieldName="CloseDate" value="{!v.OppRec.CloseDate}"/> 
+                    <lightning:inputField fieldName="InputDate__c" value="{!v.OppRec.InputDate__c}" required="true"/>
+                    <lightning:inputField fieldName="OutputDate__c" value="{!v.OppRec.OutputDate__c}" required="true"/>
+                    <lightning:inputField fieldName="Input_Date_Accuracy__c" value="{!v.OppRec.Input_Date_Accuracy__c}"/>
+                </div>        
+            </div>
+            </div>
+            <div class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+                <lightning:button type="submit" variant="brand" name="save" label="Save" />
+            </div>
+            <aura:if isTrue="{!v.loading}">
+                <lightning:spinner alternativeText="Loading" />
+            </aura:if>
+        </lightning:recordEditForm>
+    </div>
+    
+</aura:component>

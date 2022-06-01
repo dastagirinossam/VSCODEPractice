@@ -1,0 +1,8 @@
+<apex:page standardController="Request__c">
+
+<script>
+    window.location('/a0q/e');
+    alert('BANANAS');
+</script>
+
+</apex:page>

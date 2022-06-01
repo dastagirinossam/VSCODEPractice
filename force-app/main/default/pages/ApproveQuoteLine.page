@@ -1,0 +1,5 @@
+<apex:page standardController="SBQQ__QuoteLine__c" >
+    <flow:interview name="Approve_Quote_Line" finishLocation="{!URLFOR($Site.Prefix+'/apex/Approve_Quote_Line?id='+SBQQ__QuoteLine__c.id)}">
+        <apex:param name="varQuoteLine" value="{!SBQQ__QuoteLine__c.id}"/>
+    </flow:interview>
+</apex:page>

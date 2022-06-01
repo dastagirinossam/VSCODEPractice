@@ -1,0 +1,20 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" >
+    <div class="slds-p-bottom_xx-large">
+        <div class="slds-align_absolute-center" style="height:1rem">
+            Need Help?
+        </div>
+        <div class="slds-align_absolute-center" style="height:1rem">
+            Contact your Regional Sales Manager
+        </div>
+        <div class="slds-align_absolute-center" style="height:1rem">
+            Or:
+        </div>
+        <div class="slds-align_absolute-center" style="height:1rem">
+            Email: customercommunity@standardaero.com
+        </div>
+        <div class="slds-align_absolute-center" style="height:1rem">
+            Phone (Tech Support): Drew Chandler 1-706-469-7833      
+        </div>
+    </div>
+    
+</aura:component>

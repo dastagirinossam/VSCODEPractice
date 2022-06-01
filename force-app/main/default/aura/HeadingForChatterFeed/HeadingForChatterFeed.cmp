@@ -1,0 +1,13 @@
+<aura:component extends="forceCommunity:navigationMenuBase" implements="forceCommunity:availableForAllPageTypes">    
+    
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <div class="container">
+    	<article class="slds-card">    
+        	<div class="slds-page-header ChatterHeader" >
+            	<p class="slds-page-header__title slds-text-align_center backgroundHeaderModal"><h1>My Chatter Feed</h1></p>
+            </div>
+        </article>
+    </div>
+        
+</aura:component>

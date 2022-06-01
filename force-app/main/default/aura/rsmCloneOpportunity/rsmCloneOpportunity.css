@@ -1,0 +1,16 @@
+.THIS .slds-leftpad{
+	padding-left: 2rem;
+}
+
+.THIS .iconheight{
+    top: 65%;
+}
+
+.THIS .leftspace input {
+    padding-left:2rem;
+}
+
+.THIS .slds-dropdown-trigger .slds-dropdown {
+    height: 15rem;
+    overflow: auto;
+}

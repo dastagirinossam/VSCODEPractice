@@ -1,0 +1,177 @@
+<apex:page contentType="text/xml" showHeader="false" sidebar="false" cache="false" controller="SB_QTExecutiveSummaryInt">
+    
+    <block>
+        <table table-layout="fixed" width="100%">
+            
+            <table-column column-width="60%"></table-column>
+            <table-column column-width="9%"></table-column>
+            <table-column column-width="12%"></table-column>
+            <table-column column-width="12%"></table-column>
+            <table-column column-width="7%"></table-column>
+            
+            <table-body>
+                <table-row height="2em" vertical-align="middle">
+                    <table-cell number-columns-spanned="5" margin-left="2pt">
+                        <block>
+                            <apex:outputText value="EXECUTIVE PRICING SUMMARY"></apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+                
+                <table-row height="1.5em" border="1px solid black" >
+                    <table-cell padding="2pt" margin-left="2pt">
+                        <block vertical-align="middle" text-align="left">
+                            <apex:outputText value="Summary of Proposed Services">
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell padding="2pt">
+                        <block vertical-align="middle" text-align="right">
+                            <apex:outputText value="Labor Hours">
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell padding="2pt">
+                        <block vertical-align="middle" text-align="right">
+                            <apex:outputText value="Cost w/Warranty">
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell padding="2pt">
+                        <block vertical-align="middle" text-align="right">
+                            <apex:outputText value="Price w/Warranty">
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell padding="2pt" margin-right="2pt">
+                        <block vertical-align="middle" text-align="right">
+                            <apex:outputText value="Margin">
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+                
+                <apex:repeat var="outerExGroup" value="{!outerExGroupToReturn}" >
+                    <table-row background-color="lightgray" height="1.5em" border="1px solid black">
+                        <table-cell padding="2pt" margin-left="2pt">
+                            <block vertical-align="baseline">
+                                <apex:outputText value="{!outerExGroup.outerExGroupNumber} {!HTMLENCODE(outerExGroup.derivedOppTypOrEnginEquipmnt)}"></apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell padding="2pt">
+                            <block vertical-align="baseline" text-align="right">
+                                <apex:outputText value="{0,number}" >
+                                    <apex:param value="{!outerExGroup.totalLabor}"></apex:param>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell padding="2pt">
+                            <block vertical-align="baseline" text-align="right">
+                                <apex:outputText value="{0,number,currency}" >
+                                    <apex:param value="{!outerExGroup.totalCost}"></apex:param>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell padding="2pt">
+                            <block vertical-align="baseline" text-align="right">
+                                <apex:outputText value="{0,number,currency}" >
+                                    <apex:param value="{!outerExGroup.totalOfAll}"></apex:param>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell padding="2pt" margin-right="2pt">
+                            <block vertical-align="baseline" text-align="right">
+                                <apex:outputText rendered="{!outerExGroup.totalOfAll != 0}" value="{0, number, ###.0%}" >
+                                    <apex:param value="{!1-(outerExGroup.totalCost/outerExGroup.totalOfAll)}"></apex:param>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <apex:repeat var="outerKey" value="{!outerExGroup.bl_esgMapSortFinal}" >
+                        <apex:repeat value="{!outerExGroup.bl_esgMapSortFinal[outerKey]}" var="bundle" >
+                            <table-row height="1.5em" border="1px solid black">
+                                <table-cell padding="2pt" margin-left="10pt">
+                                    <block vertical-align="middle" text-align="left">
+                                        <apex:outputText value="{!HTMLENCODE(bundle)}"></apex:outputText>
+                                    </block>
+                                </table-cell>
+                                <table-cell padding="2pt">
+                                    <block vertical-align="middle" text-align="right">
+                                        <apex:outputText value="{0, number}">
+                                            <apex:param value="{!outerExGroup.bl_esgCategoryMap[bundle]['labor']}" ></apex:param>
+                                        </apex:outputText>
+                                    </block>
+                                </table-cell>
+                                <table-cell padding="2pt">
+                                    <block vertical-align="middle" text-align="right">
+                                        <apex:outputText value="{0, number, currency}">
+                                            <apex:param value="{!outerExGroup.bl_esgCategoryMap[bundle]['cost']}" ></apex:param>
+                                        </apex:outputText>
+                                    </block>
+                                </table-cell>
+                                <table-cell padding="2pt">
+                                    <block vertical-align="middle" text-align="right">
+                                        <apex:outputText value="{0, number, currency}">
+                                            <apex:param value="{!outerExGroup.bl_esgCategoryMap[bundle]['sell']}" ></apex:param>
+                                        </apex:outputText>
+                                    </block>
+                                </table-cell>
+                                <table-cell padding="2pt" margin-right="2pt">
+                                    <block vertical-align="middle"  text-align="right">
+                                        <apex:outputText rendered="{!outerExGroup.bl_esgCategoryMap[bundle]['sell'] != 0}" value="{0, number, ###.0%}">
+                                            <apex:param value="{!(1-(outerExGroup.bl_esgCategoryMap[bundle]['cost'] / outerExGroup.bl_esgCategoryMap[bundle]['sell']))}" ></apex:param>
+                                        </apex:outputText>
+                                    </block>
+                                </table-cell>
+                            </table-row>
+                            
+                        </apex:repeat>
+                    </apex:repeat>
+                </apex:repeat>
+                
+                <table-row background-color="lightgray" height="1.5em" border="1px solid black">
+                    <table-cell padding="2pt" margin-left="2pt">
+                        <block vertical-align="middle" text-align="left" >
+                            <apex:outputText rendered="{!hasOptions == true}" value="Grand Total (Excludes Optional Items)" />
+                            <apex:outputText rendered="{!hasOptions == false}" value="Grand Total" />
+                        </block>
+                    </table-cell>
+                    <table-cell padding="2pt">
+                        <block vertical-align="middle" text-align="right">
+                            <apex:outputText value="{0,number}" >
+                                <apex:param value="{!propDetailToReturn.totalLabor}" ></apex:param>
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell padding="2pt">
+                        <block vertical-align="middle" text-align="right">
+                            <apex:outputText value="{0,number,currency}" >
+                                <apex:param value="{!propDetailToReturn.totalCost}" ></apex:param>
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell padding="2pt">
+                        <block vertical-align="middle" text-align="right">
+                            <apex:outputText value="{0,number,currency}" >
+                                <apex:param value="{!propDetailToReturn.totalOfAll}" ></apex:param>
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell padding="2pt">
+                        <block vertical-align="middle" text-align="right">
+                            <apex:outputText rendered="{!propDetailToReturn.totalOfAll != 0}" value="{0, number, ###.0%}" >
+                                <apex:param value="{!(1-(propDetailToReturn.totalCost/propDetailToReturn.totalOfAll))}" ></apex:param>
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+    </block>
+    
+    <block white-space-treatment="preserve">
+        
+    </block>
+    
+</apex:page>

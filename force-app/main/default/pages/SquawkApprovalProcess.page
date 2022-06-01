@@ -1,0 +1,14 @@
+<apex:page StandardController="SBQQ__QuoteLine__c" showHeader="false"  tabStyle="SBQQ__QuoteLine__c">
+    <style>
+         input.btn[name="piSubmit"] {
+            display: none;
+         }
+         .odd(0) {
+    background: #f3f7f5;
+  }  
+
+    </style>
+
+    <apex:relatedList list="ProcessSteps"/>
+    
+</apex:page>

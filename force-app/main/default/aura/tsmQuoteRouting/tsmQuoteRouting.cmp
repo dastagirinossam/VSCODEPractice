@@ -1,0 +1,580 @@
+<aura:component access="global" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" controller="tsmQuoteRoutingController">
+    <aura:html tag="style">
+        .slds-modal__container {
+        min-width: 55vw;
+        max-width: 80rem !important;
+        }
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        
+        height:unset !important;
+        max-height:unset !important;
+        
+        }
+    </aura:html> 
+    
+    <ltng:require styles="{!$Resource.MOdalWidthCssOfTsm}"/>    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!--<aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>-->
+    <aura:handler name="selectedAttachmentsNotifyEvent" event="c:selectedAttachmentsNotifyEvent" action="{!c.selectedAction}"/>
+    
+    <aura:attribute name="selected" type="Map[]"/>  
+    
+    <aura:attribute name="value" type="String" default="false"/>
+    
+    <aura:attribute name="engRadioValue" type="String" default="false"/>
+    <aura:attribute name="afRadioValue" type="String" default="false"/>
+    <aura:attribute name="avRadioValue" type="String" default="false"/>
+    <aura:attribute name="selTcValue" type="String" default="false"/>
+    <aura:attribute name="X1mlValue" type="String" default="false"/>
+    <aura:attribute name="X5mlValue" type="String" default="false"/>
+    <aura:attribute name="mstValue" type="String" default="no"/>
+    
+    <aura:attribute name="afRadioOptions" type="List" default="[
+                                                               {'label': 'Yes', 'value': 'true'},
+                                                               {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="avRadioOptions" type="List" default="[
+                                                               {'label': 'Yes', 'value': 'true'},
+                                                               {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="engRadioOptions" type="List" default="[
+                                                                {'label': 'Yes', 'value': 'true'},
+                                                                {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="selTc" type="List" default="[
+                                                       {'label': 'Yes', 'value': 'true'},
+                                                       {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="x3rdPartyRadioOptions" type="List" default="[
+                                                                      {'label': 'Yes', 'value': 'true'},
+                                                                      {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="govControlRadioOptions" type="List" default="[
+                                                                       {'label': 'Yes', 'value': 'true'},
+                                                                       {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="legalRadioOptions" type="List" default="[
+                                                                  {'label': 'Yes', 'value': 'true'},
+                                                                  {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="frmlRadioOptions" type="List" default="[
+                                                                 {'label': 'Yes', 'value': 'true'},
+                                                                 {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="X1mlRadioOptions" type="List" default="[
+                                                                 {'label': 'Yes', 'value': 'true'},
+                                                                 {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="X5mlRadioOptions" type="List" default="[
+                                                                 {'label': 'Yes', 'value': 'true'},
+                                                                 {'label': 'No', 'value': 'false'} ]"/>
+    
+    <aura:attribute name="mstRadioOptions" type="List" default="[
+                                                                {'label': 'No', 'value': 'no'},
+                                                                {'label': 'Yes, East', 'value': 'east'},
+                                                                {'label': 'Yes, West', 'value': 'west'}]"/>
+    
+    <aura:attribute name="oppOwner" type="String"/>
+    <aura:attribute name="oppRSD" type="String"/>
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="quoteId" type="String"/>
+    <aura:attribute name="facFields" type="Map"/>
+    
+    <aura:attribute name="facility" type="String"/>
+    <aura:attribute name="president" type="Map"/>
+    <aura:attribute name="vp" type="String"/>
+    <aura:attribute name="vpf" type="String"/>
+    <aura:attribute name="doqs" type="String"/>
+    
+    <aura:attribute name="afPlanMargin" type="String"/>
+    <aura:attribute name="airframeQuotedMargin" type="String"/>
+    <aura:attribute name="airframeShopDirector" type="String" default="NA"/>
+    <aura:attribute name="airframeApprover" type="String" default="NA"/>
+    <aura:attribute name="airframeScheduler" type="String" default="NA"/>
+    
+    <aura:attribute name="avPlanMargin" type="String"/>
+    <aura:attribute name="avionicsQuotedMargin" type="String"/>
+    <aura:attribute name="avionicsApprover" type="String" default="NA"/>
+    <aura:attribute name="avionicsScheduler" type="String"/>
+    
+    <aura:attribute name="engineScheduler" type="String" default="NA"/>
+    <aura:attribute name="engineShopDirector" type="String" default="NA"/>
+    
+    <aura:attribute name="vpgm" type="String"/>
+    
+    <!--Approvers-->
+    <aura:attribute name="tradecompliance" type="Map"/>
+    <aura:attribute name="antiCorruption" type="Map"/>
+    <aura:attribute name="government" type="Map"/>
+    <aura:attribute name="legal" type="Map"/>
+    <aura:attribute name="frMatLab" type="Map"/>
+    
+    <aura:attribute name="tfePlanMargin" type="String"/>
+    <aura:attribute name="tfeQuotedMargin" type="String"/>
+    <aura:attribute name="tfeApprover" type="String" default="NA"/>
+    
+    <aura:attribute name="cfePlanMargin" type="String"/>
+    <aura:attribute name="cfeQuotedMargin" type="String"/>
+    <aura:attribute name="cfeApprover" type="String" default="NA"/>
+    
+    <aura:attribute name="htfPlanMargin" type="String"/>
+    <aura:attribute name="htfQuotedMargin" type="String"/>
+    <aura:attribute name="htfApprover" type="String" default="NA"/>
+    
+    <aura:attribute name="apuPlanMargin" type="String"/>
+    <aura:attribute name="apuQuotedMargin" type="String"/>
+    <aura:attribute name="apuApprover" type="String" default="NA"/>
+    
+    <aura:attribute name="paintPlanMargin" type="String"/>
+    <aura:attribute name="paintQuotedMargin" type="String"/>
+    <aura:attribute name="paintApprover" type="String" default="NA"/>
+    
+    <aura:attribute name="intPlanMargin" type="String"/>
+    <aura:attribute name="interiorQuotedMargin" type="String"/>
+    <aura:attribute name="interiorApprover" type="String" default="NA"/>
+    
+    <aura:attribute name="otherPlanMargin" type="String"/>
+    <aura:attribute name="otherQuotedMargin" type="String"/>
+    <aura:attribute name="otherApprover" type="String" default="NA"/>
+    
+    <aura:attribute name="caPicklist" type="String[]" /> 
+    <aura:attribute name="Type" type="String" default="Type" access="global"/>
+    
+    <aura:attribute name="x3rdPartyValue" type="String" default="false"/>
+    <aura:attribute name="govControlValue" type="String" default="false"/>
+    <aura:attribute name="legalValue" type="String" default="false"/>
+    <aura:attribute name="frmlValue" type="String" default="false"/>
+    
+    <aura:attribute name="Competitor" type="String"/>
+    <aura:attribute name="Quoted_Downtime" type="String"/>
+    <aura:attribute name="InputDate" type="String"/>
+    <aura:attribute name="ExpectedRevenue" type="String"/>
+    <aura:attribute name="EstimatedMarginPercent" type="String"/>
+    <aura:attribute name="EstimatedHours" type="String"/>
+    
+    <aura:attribute name="selCA" type="String"/>
+    <aura:attribute name="CreditAnalyst" type="Map"/>
+    
+    <aura:attribute name="MST" type="String"/>
+    <aura:attribute name="mstLead" type="Map"/>
+    
+    <aura:attribute name="directors" type="Map"/>
+    
+    <aura:attribute name="Approvers" type="Map"/>
+    
+    <aura:attribute name="Email" type="String[]"/>
+    <aura:attribute name="EmailList" type="String"/>
+    <aura:attribute name="CC" type="String[]"/>
+    <aura:attribute name="ccList" type="String"/>
+    
+    <aura:attribute name="email1" type="String" default=""/>
+    <aura:attribute name="email2" type="String" default=""/>
+    
+    <aura:attribute name="email3" type="String" default=""/>
+    
+    <aura:attribute name="notes" type="String" default=""/>
+    
+    <aura:attribute name="prodTypes" type="String"/>
+    
+    <aura:attribute name="spinner" type="Boolean" default="false"/>
+    <aura:attribute name="open" type="Boolean" default="false"/>  
+    
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <aura:if isTrue="{!!v.open}">
+        <div class="slds-modal__header slds-text-heading_medium slds-theme_alert-texture" style="background-color: rgb(1, 115, 199); color:white;">
+            <h2><b>TSM Approver Matrix</b></h2>
+        </div>
+        
+        <!-- Displays a radio button group to enter the customer’s response -->
+        <div class="slds-modal__content  slds-align_absolute-center" aura:id="modalbody" id="modalbody">
+            <table class="slds-table slds-table_cell-buffer" style="table-layout: fixed; padding-top: 20px; width: 95%">
+                <tr>
+                    <td width="50% !important">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right slds-p-top_small">                          
+                            <tr>
+                                <td width="20% !important" cellpadding="2px" cellspacing="2px" border="1px" style="text-align: left; vertical-align: middle;">
+                                    <lightning:radioGroup aura:id="afWork" 
+                                                          name="afWork"
+                                                          label="Contains Airframe Work?"
+                                                          options="{!v.afRadioOptions}"
+                                                          value="{!v.afRadioValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>
+                            </tr>
+                            <tr >
+                                <td width="20% !important" cellpadding="2px" cellspacing="2px" border="1px" style="text-align: left; vertical-align: middle;">
+                                    <lightning:radioGroup aura:id="avWork" 
+                                                          name="avWork"
+                                                          label="Contains Avionics Work?"
+                                                          options="{!v.avRadioOptions}"
+                                                          value="{!v.avRadioValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>    
+                            </tr>
+                            <tr >
+                                <td width="20% !important" cellpadding="2px" cellspacing="2px" border="1px" style="text-align: left; vertical-align: middle;">
+                                    <lightning:radioGroup aura:id="engWork" 
+                                                          name="engWork"
+                                                          label="Contains Engine Work?"
+                                                          options="{!v.engRadioOptions}"
+                                                          value="{!v.engRadioValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td> 
+                            </tr>          
+                            <tr>
+                                <td width="20% !important" cellpadding="2px" cellspacing="2px" border="1px" style="text-align: left; vertical-align: middle;">
+                                    <lightning:select aura:id="selectCA" 
+                                                      name="selectCA"
+                                                      value="{!v.selCA}" 
+                                                      label="Bill To State, Country, or Account for Credit Analyst"
+                                                      onchange="{!c.showCreditAnalyst}">
+                                        <option value="">--None--</option>
+                                        <aura:iteration items="{!v.caPicklist}" var="val">
+                                            <option value="{!val}">{!val}</option>
+                                        </aura:iteration>
+                                    </lightning:select>
+                                </td>                                    
+                            </tr>
+                            <tr>
+                                <td width="20% !important" cellpadding="2px" cellspacing="2px" border="1px" style="text-align: left; vertical-align: middle;">
+                                    <lightning:radioGroup aura:id="TC" 
+                                                          name="TC"
+                                                          label="Trade Compliance Required"
+                                                          options="{!v.selTc}"
+                                                          value="{!v.selTcValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>
+                            </tr>  
+                            <tr>                               
+                                <td width="20% !important" cellpadding="2px" cellspacing="2px" border="1px" style="text-align: left; vertical-align: middle;">
+                                    <lightning:radioGroup aura:id="x3rdParty" 
+                                                          name="x3rdParty"
+                                                          label="Is a 3rd party receiving anything of value?"
+                                                          options="{!v.x3rdPartyRadioOptions}" 
+                                                          value="{!v.x3rdPartyValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>                                                             
+                            </tr>
+                            <tr>                                
+                                <td width="20% !important" cellpadding="2px" cellspacing="2px" border="1px" style="text-align: left; vertical-align: middle;">
+                                    <lightning:radioGroup aura:id="govControl" 
+                                                          name="govControl"
+                                                          label="Government, Military, or ITAR Controlled?"
+                                                          options="{!v.govControlRadioOptions}" 
+                                                          value="{!v.govControlValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>                                                              
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; vertical-align: middle; width=:20% !important; cellpadding:2px; cellspacing:2px; border:1px;">
+                                    <lightning:radioGroup aura:id="legalTC" 
+                                                          name="legalTC"
+                                                          label="Any changes to the standard quote template legal T&amp;Cs?"
+                                                          options="{!v.legalRadioOptions}" 
+                                                          value="{!v.legalValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; vertical-align: middle; width=:20% !important; cellpadding:2px; cellspacing:2px; border:1px;">
+                                    <lightning:radioGroup aura:id="flatRateML"
+                                                          name="flatRateML"
+                                                          label="Is discrepancy labor or material covered by a flat rate?"
+                                                          options="{!v.frmlRadioOptions}" 
+                                                          value="{!v.frmlValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; vertical-align: middle; width=:20% !important; cellpadding:2px; cellspacing:2px; border:1px;">
+                                    <lightning:radioGroup aura:id="1ML"
+                                                          name="1ML"
+                                                          label="Any single opportunity $1M+ and less than 2/3 plan margin?"
+                                                          options="{!v.X1mlRadioOptions}" 
+                                                          value="{!v.X1mlValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; vertical-align: middle; width=:20% !important; cellpadding:2px; cellspacing:2px; border:1px;">
+                                    <lightning:radioGroup aura:id="5ML"
+                                                          name="5ML"
+                                                          label="Any single opportunity $5M+ or has term greater than 1 yr?"
+                                                          options="{!v.X5mlRadioOptions}" 
+                                                          value="{!v.X5mlValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleChange}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left; vertical-align: middle; width=:20% !important; cellpadding:2px; cellspacing:2px; border:1px;">
+                                    <lightning:radioGroup aura:id="mst"
+                                                          name="mst"
+                                                          label="Include MST?"
+                                                          options="{!v.mstRadioOptions}" 
+                                                          value="{!v.mstValue}"
+                                                          type="radio"
+                                                          onchange="{!c.handleMST}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    
+                    <td width="50% !important"> 
+                        <tr>
+                            <div>
+                                <h2 class="slds-text-heading_small slds-truncate" style="text-align: center;" colspan="4"><b>{!v.facFields.Name} Pricing Approval Matrix</b></h2>
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-border_left slds-border_right">
+                                    <tr class="slds-border_bottom">
+                                        <th class="slds-border_bottom" colspan="2" style="text-align: center; vertical-align: middle;">Plan Margin &#37;</th> 
+                                        <th class="slds-border_bottom" style="text-align: center; vertical-align: middle;">Quoted &#37;</th>
+                                        <th class="slds-border_bottom" style="text-align: center; vertical-align: middle;">Approver</th>
+                                    </tr>
+                                    <tr>
+                                        
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">Airframe</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">{!v.facFields.Airframe_Plan_Margin__c}&#37;</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.airframeQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.airframeApprover}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">Avionics</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">{!v.facFields.Avionics_Plan_Margin__c}&#37;</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.avionicsQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.avionicsApprover}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">Interior</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">{!v.facFields.Interior_Plan_Margin__c}&#37;</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.interiorQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.interiorApprover}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">Paint</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">{!v.facFields.Paint_Plan_Margin__c}&#37;</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.paintQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.paintApprover}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">APU</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">{!v.facFields.APU_Plan_Margin__c}&#37;</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.apuQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.apuApprover}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">HTF</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">{!v.facFields.HTF_Plan_Marign__c}&#37;</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.htfQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.htfApprover}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">TFE</td>
+                                        <td  class="slds-border_bottom" style="text-align: center; vertical-align: middle;">{!v.facFields.TFE_Plan_Margin__c}&#37;</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.tfeQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.tfeApprover}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">CFE</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">{!v.facFields.CFE_Plan_Margin__c}&#37;</td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.cfeQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td class="slds-border_bottom" style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.cfeApprover}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center; vertical-align: middle;">Other</td>
+                                        <td style="text-align: center; vertical-align: middle;">{!v.facFields.Other_Plan_Margin__c}&#37;</td>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <lightning:formattedNumber value="{!v.otherQuotedMargin}" style="percent"/>
+                                        </td>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <ui:outputText value="{!v.otherApprover}"/>
+                                        </td>
+                                    </tr>  
+                                </table>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div style="padding-top: 15px;">
+                                <h2 class="slds-text-heading_small slds-truncate" style="text-align: center;" colspan="4"><b>Info-Block For Routing</b></h2>
+                                <table border="1" style="border-collapse: collapse" cellpadding="10">            
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Regional Sales Manager</td>
+                                        <td style="background-color: rgb(252, 255, 153);">{!v.oppOwner}</td>
+                                    </tr>               
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Product Type(s)</td>
+                                        <td style="background-color: rgb(252, 255, 153);">{!v.prodTypes}</td>
+                                    </tr>               
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Facility</td>
+                                        <td style="background-color: rgb(252, 255, 153);">{!v.facility}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Total Revenue</td>
+                                        <td style="background-color: rgb(252, 255, 153);">
+                                            $<lightning:formattedNumber value="{!v.ExpectedRevenue}" maximumFractionDigits="2"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Total OM%</td>
+                                        <td style="currency; background-color: rgb(252, 255, 153);">
+                                            <lightning:formattedNumber value="{!v.EstimatedMarginPercent}" maximumFractionDigits="1"/> %
+                                        </td>
+                                    </tr>   
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Total Man Hours</td>
+                                        <td style="background-color: rgb(252, 255, 153);">
+                                            <lightning:formattedNumber value="{!v.EstimatedHours}" maximumFractionDigits="1"/>
+                                        </td>
+                                    </tr>        
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Input Date</td>
+                                        <td style="currency; background-color: rgb(252, 255, 153);">
+                                            <ui:outputDate value="{!v.InputDate}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Quote Downtime</td>
+                                        <td style="currency; background-color: rgb(252, 255, 153);">{!v.Quoted_Downtime} Days</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="background-color: rgb(252, 213, 180);">Competitor</td>
+                                        <td style="currency; background-color: rgb(252, 255, 153);">{!v.Competitor}</td>
+                                    </tr>        
+                                </table>
+                            </div>
+                        </tr>
+                    </td>
+                </tr>           
+            </table>
+        </div>
+        <div class="slds-m-around_medium slds-grid slds-wrap slds-grid--align-center slds-grid--pull-padded slds-align_absolute-center slds-scrollable-y">
+            <table style="table-layout: fixed; padding-top: 15px; width: 95%">
+                <tr>
+                    <td>
+                        <h2 class="slds-text-heading_small slds-truncate" style="text-align: center;"><b>Additional Email Addresses</b></h2> 
+                        <div class="wrapper">
+                            <span>1.</span>
+                            <div class="input-wrapper">
+                                <lightning:input type="email" value="{!v.email1}" label =" " onchange="{!c.handleChange}"/>
+                            </div>
+                        </div>
+                        <div class="wrapper">
+                            <span>2.</span>
+                            <div class="input-wrapper">
+                                <lightning:input type="email" value="{!v.email2}" label =" " onchange="{!c.handleChange}"/> 
+                            </div>
+                        </div>
+                        <div class="wrapper">
+                            <span>3.</span>
+                            <div class="input-wrapper">
+                                <lightning:input type="email" value="{!v.email3}" label =" " onchange="{!c.handleChange}"/>  
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width: 50%;">
+                        <h2 class="slds-text-heading_small slds-truncate" style="text-align: center;"><b>Notes</b></h2>                                     
+                        <lightning:textarea aura:id='filterFieldName' name="myText" value="{!v.notes}"/>                           
+                    </td>
+                    <td>
+                        <h2 class="slds-text-heading_small slds-truncate" style="text-align: center;"><b>Selected Files</b></h2>
+                        <lightning:layoutItem padding="around-small">                    
+                            <div class="slds-p-left_medium">
+                                <aura:iteration items="{!v.selected}" var="l">
+                                    <li class="slds-listbox-item slds-truncate" role="presentation">
+                                        <aura:if isTrue="{! v.selected}">
+                                            <lightning:pill class="" label="{!l.Title}" name="{!l}" onremove="{!c.handleRemoveOnly }" href="{!'/'+(l.Id)}"/>
+                                        </aura:if>
+                                    </li>
+                                </aura:iteration>
+                            </div>
+                        </lightning:layoutItem>           
+                    </td>
+                </tr>
+            </table>
+            <tr style="max-width: 95%">
+                <div class="slds-panel__header_align-center">
+                    <h2 class="slds-text-heading_small slds-truncate" style="text-align: center;"><b>Email List</b></h2>
+                </div>
+                <div class="slds-box slds-grid slds-wrap slds-grid--pull-padded slds-align_absolute-center">
+                    <div class="slds-p-horizontal--small slds-grid--vertical-stretch slds-size--1-of-1 slds-text-align_left slds-text-body_regular slds-hyphenate">
+                        <div>
+                            <b>To : </b><ui:outputText value="{!v.EmailList}"/>
+                        </div>                            
+                    </div>                      
+                    <div class="slds-p-horizontal--small slds-grid--vertical-stretch slds-size--1-of-1 slds-text-align_left slds-text-body_regular slds-hyphenate slds-p-top_small" >
+                        <div>
+                            <b>CC : </b><ui:outputText value="{!v.ccList}"/>
+                        </div>                           
+                    </div>
+                </div>
+            </tr>
+        </div>
+        <div class="slds-modal__footer">              
+            <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+            <button class="slds-button slds-button_brand" onclick="{!c.toOpenAttachments}">Attach Files</button>
+            <button class="slds-button slds-button_brand" onclick="{!c.sendQuote}">Send Request</button>
+        </div>
+    </aura:if>
+    
+    <c:selectAttachments isOpen="{!v.open}" recordId="{!v.recordId}"/> 
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    
+</aura:component>

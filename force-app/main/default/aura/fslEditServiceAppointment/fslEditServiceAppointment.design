@@ -1,0 +1,4 @@
+<design:component>
+    <design:attribute name="WorkOrderId" label="woId" />
+    <design:attribute name="ServiceAppointmentId" label="saId"/>
+</design:component>

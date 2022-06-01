@@ -1,0 +1,5 @@
+<apex:page standardController="Product_Line__c" >
+    <flow:interview name="NumberOfEngines" finishLocation="/{!Product_Line__c.Id}">
+        <apex:param name="varProductLine" value="{!Product_Line__c.Id}" />
+    </flow:interview>
+</apex:page>

@@ -1,0 +1,27 @@
+<apex:page standardController="Opportunity">
+    <style type="text/css">
+        .FlowDropdown{
+            color: rgb(0, 0, 225);
+            font-family:arial;
+            font-size:160%;
+            white-space: nowrap           
+        }
+        .FlowRadio{
+            color: rgb(0, 0, 225);
+            font-family:arial;
+            font-size:160%;
+            white-space: nowrap
+        }
+    </style>
+
+    <apex:sectionHeader title="Create Master Opportunity" subtitle="{!Opportunity.Account.Name} - CPQ Master"/>
+  
+    <flow:interview name="Create_Master_Opportunity" finishLocation="{!URLFOR('/006?fcf=00B70000007QB0h')}" buttonLocation="bottom" >
+        <apex:param name="varOpportunityId" value="{!Opportunity.Id}"/>
+    </flow:interview>
+    
+    <apex:form >
+        <apex:commandLink value="Cancel" action="{!cancel}"/>  
+    </apex:form> 
+    
+</apex:page>

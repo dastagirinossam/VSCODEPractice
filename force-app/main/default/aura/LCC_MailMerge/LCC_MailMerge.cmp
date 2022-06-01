@@ -1,0 +1,5 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId,force:hasSObjectName"  controller="LM_mailMerge">
+  <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="sobjecttype" type="String" default="{!v.sObjectName}"/>
+</aura:component>

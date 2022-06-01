@@ -1,0 +1,110 @@
+.THIS .approveButton{
+   background-color: rgb(37, 116, 169);
+   border-radius: 4px;
+   display: inline-block;
+   border: none;
+   color: #fff; 
+   font-size: 14px; 
+   width: 145px;
+   height: 33px;
+   text-align: center; 
+}
+
+.THIS .approveButton:hover {
+	background-color: rgb(19, 95, 144);
+}
+
+.THIS .rtsModal {
+	background-color: rgb(211, 211, 211);
+}
+
+.THIS .legal {
+	font-size:xx-small;
+}
+
+.THIS .approveModal {
+	background-color: rgb(37, 116, 169);
+    color: #fff;    
+}
+
+.THIS .rejectModal{
+    background-color: rgb(191, 62, 57);
+    color: #fff; 
+}
+
+.THIS .rejectButton{
+   background-color: rgb(191, 62, 57);
+   border-radius: 4px;
+   display: inline-block;
+   border: none;
+   color: #fff; 
+   font-size: 14px;
+   width: 125px;
+   height: 33px;
+   text-align: center; 
+}
+
+.THIS .squawkOutlineTop{
+   background-color: rgb(240,248,255);
+   border-width: 3px;
+   border-top-style: solid;
+   border-color: rgb(0,0,255);
+}
+
+.THIS .squawkHeader{
+   background-color: rgb(255,250,217);
+}
+
+.THIS .badge{
+   background-color: rgb(225,225,225);
+}
+
+.THIS.squawkContainer {
+	margin: 5px;
+	border-color: rgb(211,211,211);
+	border-width: .5px;
+    background-color: rgb(255,250,217);
+    border-right-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-top-style: solid;
+}
+
+.THIS .rejectButton:hover {
+	background-color: rgb(188, 0, 10);
+}
+
+.THIS.toggle {
+    display: none;
+}
+
+.THIS .col-4 {
+    line-height: 1.5em;
+    height: 3em;
+  	overflow: hidden; 
+  	text-overflow: ellipsis;
+  	white-space: pre-wrap;
+    width: 100%;
+    max-width: 98%;
+    position: relative;
+}
+
+.THIS .col-1 {
+    display: inline-block;
+  	overflow: hidden; 
+  	text-overflow: ellipsis;
+  	white-space: nowrap;
+    width: 100%;
+  	max-width:98%; 
+    position: absolute;  
+    left: 0; 
+    top:20%;
+}
+
+.THIS .uiScroller.native {
+    overflow: auto;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;
+}

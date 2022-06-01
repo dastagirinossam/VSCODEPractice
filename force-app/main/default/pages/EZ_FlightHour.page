@@ -1,0 +1,10 @@
+<apex:page standardController="Equipment__c" tabStyle="Equipment__c" lightningStylesheets="true">
+<apex:slds />     
+    <apex:sectionHeader title="Quick Create Flight Hour Record" subtitle="Engine: {!Equipment__c.Name}"/>  
+    <flow:interview name="Quick_Create_Flight_Hour" finishLocation="/{!Equipment__c.Id}" buttonLocation="bottom">
+        <apex:param name="EquipmentID" value="{!Equipment__c.Id}"/>
+    </flow:interview>
+    <apex:form >
+        <apex:commandLink value="Cancel" action="{!cancel}"/>   
+    </apex:form>      
+</apex:page>

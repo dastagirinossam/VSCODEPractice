@@ -1,0 +1,9 @@
+<aura:component implements="lightning:isUrlAddressable,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:actionOverride">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
+    
+    <lightning:card title="Create Work Orders" >
+        <div class="slds-m-around_medium">
+            <lightning:flow aura:id="flow" onstatuschange="{!c.statusChange}"/>
+        </div>
+    </lightning:card>
+</aura:component>

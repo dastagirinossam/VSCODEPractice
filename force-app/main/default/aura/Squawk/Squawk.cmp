@@ -1,0 +1,238 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.updateStatus}" action="{!c.navigate}"/>
+    
+    <aura:attribute name="recordId" type="String" default="{!recordId}" />
+    <aura:attribute name="ProjType" type="String" />
+    <aura:attribute name="name" type="String" />
+    <aura:attribute name="isRTS" type="String" />
+    <aura:attribute name="status" type="String" />
+    <aura:attribute name="updateStatus" type="Boolean" default="false" />
+    <aura:attribute name="Spinner" type="Boolean" default="false" />
+    
+    <c:DeferToBuyerComponent aura:id="DeferToBuyer" />
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <div class="slds">
+        <div
+             aria-hidden="true"
+             role="dialog"
+             tabindex="-1"
+             aria-labelledby="header43"
+             class="slds-modal slds-fade-in-hide"
+             aura:id="approvedModal"
+             >
+            <div class="slds-modal__container">
+                <div
+                     class="slds-modal__header slds-theme--error slds-theme--alert-texture"
+                     >
+                    <button
+                            class="slds-button slds-modal__close slds-button--icon-inverse"
+                            title="Close"
+                            >
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium"
+                        >Squawk Already Approved</h2
+                        >
+                </div>
+                <div
+                     class="slds-modal__content slds-p-around--medium slds-text-align--center"
+                     >
+                    <p
+                       >This Squawk is has already been Approved. Please contact your
+                        Project Manager if you have any questions regarding this.</p
+                        >
+                </div>
+                <div class="slds-modal__footer">
+                    <button
+                            onclick="{!c.hideNotPendingModal}"
+                            class="slds-button slds-button--brand"
+                            id="Approved"
+                            >Ok</button
+                        >
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Approve Modal-->
+    <div class="slds">
+        <div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="approveModal">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header approveModal slds-theme--alert-texture">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium">Approve</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread">
+                    <div class="slds-m-right-xx-small slds-text-align_center">
+                        Are you sure you want to approve this squawk?
+                    </div>
+                    <div class="slds-m-left-xx-small forceActionsContainer">                                                            
+                        <div class="slds-truncate">
+                            <button onclick="{!c.hideApproveModal}" class="slds-button slds-button--neutral">Cancel</button>
+                            <button onclick="{!c.approveSquawk}" class="slds-button slds-button_brand">Approve</button>
+                        </div>
+                    </div>        
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-text-align--left slds-align-bottom legal">
+                        You are bound to these
+                        <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank">conditions</a>
+                        upon approval of squawk. By clicking "Approve Squawk" you agree to these terms.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reject Modal -->
+    <div class="slds">
+        <div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="rejectModal">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header rejectModal slds-theme--alert-texture">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium">Reject</h2>
+                </div>
+                
+                <div class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread">
+                    <div class="slds-m-right-xx-small slds-text-align_center">
+                        Are you sure you want to approve this squawk?
+                    </div>
+                    <div class="slds-m-left-xx-small forceActionsContainer">                                                            
+                        <div class="slds-truncate">
+                            <button onclick="{!c.hideRejectModal}" class="slds-button slds-button--neutral">Cancel</button>                            
+                            <button onclick="{!c.rejectSquawk}" class="slds-button slds-button_destructive">Reject</button>
+                        </div>
+                    </div>        
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-text-align--left slds-align-bottom legal">
+                        You are bound to these
+                        <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank">conditions</a>
+                        upon rejection of squawk. By clicking "Reject Squawk" you agree to these terms.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Defer Modal-->
+    <div class="slds">
+        <div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="deferModal">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header deferModal slds-theme--alert-texture">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium">Defer to Buyer</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread">
+                    <div class="slds-m-right-xx-small slds-text-align_center">
+                        Are you sure you want to Defer this squawk to Buyer?
+                    </div>
+                    <div class="slds-m-left-xx-small forceActionsContainer">                                                            
+                        <div class="slds-truncate">
+                            <button onclick="{!c.hideDeferModal}" class="slds-button slds-button--neutral">Cancel</button>                            
+                            <button onclick="{!c.deferSquawk}" class="slds-button deferButton"><p class="slds-p-horizontal_medium">Defer to Buyer</p></button>
+                        </div>
+                    </div>        
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-text-align--left slds-align-bottom legal">
+                        You are bound to these
+                        <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank">conditions</a>
+                        upon rejection of squawk. By clicking "Defer To Buyer" you agree to
+                        these terms.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--RTS Modal-->
+    <div class="slds">
+        <div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="rejectRtsModal">
+            <div class="slds-modal__container">
+                <div class="slds-modal__header slds-theme--error slds-theme--alert-texture">
+                    <button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium">Return To Service Squawk Denied</h2>
+                </div>
+                <div class="slds-modal__content slds-p-around--medium slds-text-align--center">
+                    <p>
+                        You have declined a squawk that is mandatory for RTS (Return to
+                        Service). Declining this squawk could result in delaying your
+                        project or requiring a written acknowledgement of the open
+                        discrepancy on the aircraft release from StandardAero. Are you sure
+                        you want to decline this squawk?
+                    </p>
+                </div>
+                <div class="slds-modal__footer">
+                    <button onclick="{!c.hideRejectRtsModal}" class="slds-button slds-button--neutral">Cancel</button>
+                    <button onclick="{!c.showRejectModalRts}" class="slds-button rejectButton">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Backdrop Modal-->
+    <div class="slds-backdrop slds-backdrop--hide" aura:id="backdrop"></div>
+    
+    <!--Title and Buttons For Squawk Header-->
+    <div class="slds-grid primaryFieldRow">
+        <div class="slds-grid slds-col slds-has-flexi-truncate slds-media--center">
+            <div class="slds-media slds-no-space slds-p-right_small">
+                <lightning:icon iconName="standard:custom" size="medium" />
+            </div>
+            <div class="slds-media__body">
+                <div class="slds-page-header__name">
+                    <div class="slds-page-header__name-title">
+                        <h1>
+                            <span class="slds-page-header__title slds-truncate" title="Squawk">Squawk No.</span>
+                        </h1>
+                    </div>
+                </div>
+                <h2>{!v.name}</h2>
+            </div>
+        </div>
+        
+        <div class="slds-m-left-xx-small forceActionsContainer">      
+            <div class="slds-truncate">
+                <aura:if isTrue="{!v.status != 'Pending'}">
+                    This Squawk Has Been {!v.status}
+                </aura:if>
+                <aura:if isTrue="{!v.status == 'Pending'}">
+                    <button class="slds-button slds-truncate slds-button_brand" onclick="{!c.showApprovalmodal}" id="{!v.status}">
+                        Approve
+                    </button>
+                    <button class="slds-button slds-truncate slds-button_destructive" onclick="{!c.showRejectmodal}" id="{!v.status + v.isRTS}">
+                        Reject
+                    </button>
+                    <aura:if isTrue="{!v.ProjType == 'Seller'}"> 
+                        <button class="slds-button slds-truncate deferButton" onclick="{!c.showDefermodal}" id="{!v.status}">
+                            <p class="slds-p-horizontal_medium">Defer to Buyer</p>                    
+                        </button>
+                    </aura:if>                                         
+                </aura:if>
+            </div>
+        </div>
+    </div>
+       
+</aura:component>

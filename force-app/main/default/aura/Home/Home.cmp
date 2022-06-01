@@ -1,0 +1,13 @@
+<aura:component >
+ 
+<div class="bootstrap-sfi">
+    <div class="container">
+    	<form>
+        	<fieldset>    
+                <ui:button label="Save"/>
+			</fieldset>
+		</form>
+	</div>
+</div>
+    
+</aura:component>

@@ -1,0 +1,29 @@
+<aura:component extends="forceCommunity:navigationMenuBase" 
+                implements="forceCommunity:availableForAllPageTypes,force:appHostable,force:hasRecordId" 
+                access="global"  controller="CreateUserHandler" >
+    
+    <aura:attribute name="contactList" type="Boolean" default="false"/>
+    <aura:attribute name="mydata" type="Contact[]"/>
+    <aura:attribute name="mycolumns" type="List"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:if isTrue="{!v.contactList}">
+        <p>The list below contains customers that are waiting for RSVP confirmation</p>
+        <div class="Confirm RSVP"> 
+            <lightning:card variant="Narrow" iconName="custom:custom56" title="Confirm Customers RSVP" >           
+                <div class="slds-p-horizontal--small">  
+                    <lightning:datatable data="{!v.mydata}" 
+                                         columns="{!v.mycolumns}" 
+                                         keyField="Id"
+                                         hideCheckboxColumn="true"/>
+                </div>
+                <!--<aura:set attribute="else">
+                    <p>There are no contacts to confirm at this time...</p>
+                </aura:set>-->
+                
+                
+            </lightning:card>
+        </div>
+    </aura:if>
+    
+</aura:component>

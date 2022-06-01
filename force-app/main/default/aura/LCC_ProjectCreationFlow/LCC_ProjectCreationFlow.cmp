@@ -1,0 +1,8 @@
+<aura:component implements="lightning:isUrlAddressable,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:actionOverride">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <article class="slds-card">
+		<lightning:flow aura:id="flow" onstatuschange="{!c.statusChange}"/>               
+    </article>
+  
+</aura:component>

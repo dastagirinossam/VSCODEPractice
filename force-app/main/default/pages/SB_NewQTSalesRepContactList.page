@@ -1,0 +1,64 @@
+<apex:page contentType="text/xml" showHeader="false" sidebar="false" cache="false"
+ controller="SB_QTSalesRepSectionProcessor">
+
+    
+        <table margin-left="10%" margin-right="10%" border="0"  table-layout="auto">
+            <table-column column-width="33%"> </table-column>
+            <table-column column-width="33%"> </table-column>
+            <table-column column-width="33%"> </table-column>
+        <table-body>
+            <table-row keep-with-next.within-page="auto">
+                <table-cell border-style="solid" margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="1">
+                    <block font-weight="bold" font-style="Arial" text-align="justify" linefeed-treatment="preserve" white-space-collapse="false" font-size="9pt" >
+                        <apex:outputText value="SALES PERSON" escape="false"></apex:outputText>
+                    </block>
+                </table-cell>
+
+                <table-cell border-style="solid" margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="1">
+                    <block font-weight="bold" font-style="Arial" text-align="justify" linefeed-treatment="preserve" white-space-collapse="false" font-size="9pt" >
+                        <apex:outputText value="MOBILE NUMBER" escape="false"></apex:outputText>
+                    </block>
+                </table-cell>
+
+                <table-cell border-style="solid" margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="1">
+                    <block font-weight="bold" font-style="Arial" text-align="justify" linefeed-treatment="preserve" white-space-collapse="false" font-size="9pt" >
+                        <apex:outputText value="EMAIL" escape="false"></apex:outputText>
+                    </block>
+                </table-cell>
+            </table-row>
+        </table-body>
+    </table>       
+
+    <block>
+        <apex:repeat var="salesRepGroup" value="{!salesRepDepWiseToReturnList}" >
+            <block white-space-treatment="preserve">
+            </block>
+            <block font-weight="bold">
+                <inline border-after-width="1pt" border-after-style="solid">
+                    <apex:outputText value="{!HTMLENCODE(salesRepGroup.derivedOppTypOrEnginEquipmnt)} " >           
+                    </apex:outputText>
+                </inline>
+            
+            </block> 
+            
+                <apex:repeat var="salesRepDetail" value="{!salesRepGroup.salesRepDetailList}" >
+                <block >
+                    <apex:outputText value="{!HTMLENCODE(salesRepDetail.salesRepName)} , {!HTMLENCODE(salesRepDetail.designation)}" >
+                    </apex:outputText>
+                </block> 
+                <block >
+                <apex:outputText value="{!HTMLENCODE(salesRepDetail.mobileNumber)} " >
+                </apex:outputText>
+                </block> 
+        
+            
+            </apex:repeat>
+        </apex:repeat>
+        
+    </block>
+
+        
+
+        
+
+</apex:page>

@@ -1,0 +1,119 @@
+<aura:component implements="lightning:availableForFlowScreens,force:appHostable,force:lightningQuickAction,lightning:isUrlAddressable,force:hasSObjectName" 
+                access="global" 
+                controller="FSLCreateWorkOrderController">
+     <aura:attribute name="sObjectName" type="string"/>        
+    <aura:attribute name="Aircraft" type="String" default="" access="global"/>
+    <aura:attribute name="woAircraft" type="Aircraft__c[]" default="" access="global"/>
+    <aura:attribute name="woEquipment" type="Equipment__c[]"/>
+    <aura:attribute name="WorkOrder" type="WorkOrder[]" default="" access="global"/>
+    <aura:attribute name="WorkTypeId" type="String" />   
+    <aura:attribute name="CaseId" type="String" /> 
+    <aura:attribute name="ServiceTerritoryId" type="String" />
+	<aura:attribute name="AirportLocationId" type="String" />    
+    <aura:attribute name="AccountId" type="String" />
+    <aura:attribute name="ContactId" type="String" />       
+    <aura:attribute name="StartDate" type="String" />        
+    <aura:attribute name="EndDate" type="String" />
+    <aura:attribute name="Status" type="String" />        
+    <aura:attribute name="Priority" type="String" />        
+    <aura:attribute name="Subject" type="String" />        
+    <aura:attribute name="Description" type="String" />        
+    <aura:attribute name="City" type="String" />        
+    <aura:attribute name="State" type="String" />        
+    <aura:attribute name="Country" type="String" />       
+    <aura:attribute name="PostalCode" type="String" />        
+    <aura:attribute name="Street" type="String" />
+    <aura:attribute name="Equipment1" type="String" />  
+    <aura:attribute name="Equipment2" type="String" />  
+    <aura:attribute name="Equipment3" type="String" /> 
+    <aura:attribute name="APU" type="String" />     
+    <aura:attribute name="inputCrewSize" type="Decimal"/>
+    <aura:attribute name="MSTDispatch" type="String" />  
+    <aura:attribute name="recordId" type="String" /> 
+	<aura:attribute name="Part_91_135_121" type="String" />
+    <aura:attribute name="RII_Required" type="Boolean" default="false"/>
+    <aura:attribute name="System_po" type="String" /> 
+    <aura:attribute name="Dispatch_Notes" type="String" /> 
+    
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div>
+        <div class="container">
+            <article class="slds-card">
+                <div class="slds-page-header backgroundHeaderModal">
+                    <p class="slds-page-header__title slds-text-align_center backgroundHeaderModal">
+                        <h1>Create Work Orders</h1>
+                    </p>
+                </div>
+                
+                <div class="c-container">
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-resizable" role="grid">
+                        <thead>
+                            <tr>
+                                <th><strong>Work Order</strong></th>
+                                <th><strong>Aircraft</strong></th>                      
+                                <th><strong>Crew Size</strong></th>                                         
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <aura:iteration items="{!v.woAircraft}" var="wo">
+                                <tr>
+                                    <td scope="row">
+                                        <ui:outputText value="1"/>
+                                    </td>                                   
+                                    <td scope="row">
+                                        <ui:outputText value="{!wo.Name}"/>
+                                        <ui:outputText class="slds-is-collapsed slds-hidden" aura:id="aircraftId" value="{!wo.Id}"/>
+                                    </td>
+                                    <td scope="row">
+                                        <ui:inputNumber aura:id="crewSize" value="{!v.inputCrewSize}"  keyup="{!c.maxCrewSize}"  updateOn="keyup" required="true"/>  
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="c-container">
+                    <table class="slds-table slds-table--bordered slds-table--cell-buffer slds-resizable" role="grid">
+                        <thead>
+                            <tr>
+                                <th><strong>Work Order Line Item</strong></th>
+                                <th><strong>Engine</strong></th>                      
+                                <th><strong>PO#</strong></th>                                         
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <aura:iteration items="{!v.woEquipment}" var="woli" indexVar="index">
+                                <tr>
+                                    <td scope="row">
+                                        <ui:outputNumber value="{!index + 1}"/>
+                                    </td>                                   
+                                    <td scope="row">
+                                        <ui:outputText value="{!woli.Name}"/>
+                                        <ui:outputText class="slds-is-collapsed slds-hidden" aura:id="equipmentId" value="{!woli.Id}"/>
+                                    </td>
+                                    <td scope="row">
+                                        <ui:inputText aura:id="PONumbers" value=""/> 
+                                    </td>
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div> 
+                
+                <footer class="slds-card__footer slds-p-bottom_x-large">
+                    <div class="slds-no-flex slds-float_right">
+                        <lightning:button aura:id="BACK" label="Previous" variant="neutral" onclick="{!c.onButtonPressed}"/>
+                        <lightning:button class="slds-button slds-button_brand" aura:id="woc" value="{!v.woEquipment.length - 1}" onclick="{!c.createWorkOrder}" label="Create Work Order"/>              
+                    	<lightning:spinner aura:id="mySpinner" alternativeText="Processing.." title="Processing.." variant="brand" size="large" class="slds-hide"/>
+                    </div>
+                </footer>
+            
+            </article>
+        </div>
+    </div>
+</aura:component>

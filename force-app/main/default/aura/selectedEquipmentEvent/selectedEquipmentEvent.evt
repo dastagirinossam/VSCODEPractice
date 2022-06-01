@@ -1,0 +1,3 @@
+<aura:event type="COMPONENT" description="by this event we are pass the selected equipment in the parent component">
+    <aura:attribute name="equipmentByEvent" type="Equipment__c"/>
+</aura:event>

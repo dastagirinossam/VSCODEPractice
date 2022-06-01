@@ -1,0 +1,18 @@
+<aura:component extends="forceCommunity:navigationMenuBase" implements="forceCommunity:availableForAllPageTypes,force:appHostable" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:attribute name="projDoc" type="String"/>
+    
+    <aura:if isTrue="{!$Browser.formFactor != 'DESKTOP'}">
+        <lightning:card iconName="standard:service_crew" title="Coming Soon" >          
+            <div class="slds-p-horizontal--small">  
+                
+                <div>Please check back soon!</div>
+                <img src="{!v.projDoc}" />
+                <div class="slds-m-top_medium">
+                    <lightning:button label="Return" onclick="{!c.handleCancel}" />
+                </div>
+            </div>
+        </lightning:card>
+    </aura:if>
+    
+</aura:component>

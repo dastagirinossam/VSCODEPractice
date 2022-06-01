@@ -1,0 +1,232 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" default="{!recordId}"/>
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="quoteLine" type="String[]"/>
+    <aura:attribute name="quoteLineSize" type="String"/>
+    <aura:attribute name="quoteDoc" type="String[]"/>
+    <aura:attribute name="quoteDocSize" type="String"/>
+    <aura:attribute name="files" type="String[]"/>
+    <aura:attribute name="files2" type="String[]"/>
+    <aura:attribute name="filesSize" type="String"/> 
+    
+   	<aura:if isTrue="{!v.Spinner}">
+    	<div aura:id="spinnerId" class="slds-spinner_container">
+       		<div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-fixed" role="alert">
+         		<span class="slds-assistive-text">Loading</span>
+         		<div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+       		</div>
+    	</div>
+ 	</aura:if>
+    
+    <div class="container">
+    	<div class="container slds-p-top_medium forceRelatedListSingleContainer">
+        	<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+            	<div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    	<div class="slds-media__figure">
+                        	<span class="uiImage">
+                            	<lightning:icon iconName="standard:custom" size="small"/>
+                        	</span>
+                    	</div>
+                        <div class="slds-media__body">
+                        	<h2 class="slds-text-heading--small slds-truncate">Squawks ({!v.quoteLineSize})</h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body--inner">
+        			<table class="slds-table slds-table--cell-buffer slds-table_bordered"> 
+        				<thead>
+							<tr class="slds-text-title_caps">            	
+                    			<th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Squawk</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Status</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Squawk Description</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Estimated Total</div>  
+       							</th>          
+							</tr> 
+    					</thead>
+                        <tbody>
+                        	<aura:iteration items="{!v.quoteLine}" var="ql">
+								<tr>				
+                					<td scope="row" class="slds-p-vertical--xx-small"> 
+                                        <div class="slds-text-align--center">
+                                            <a class="cuf-entityLink" href="{!'/Customer/s/squawk/'+ql.Id}" >
+                                                <span class="uiOutputText">{!ql.fxSquawkNo__c}</span>
+                                            </a>
+                                    	</div>
+									</td>   
+									<td scope="row" class="slds-p-vertical--xx-small">                                        
+                                    	<div class="slds-truncate slds-text-align--center">{!ql.Add_Work_Status__c}</div>          	
+									</td>                                 
+									<td scope="row" class="slds-p-vertical--xx-small">
+										<div class="slds-truncate slds-text-align--center">{!ql.Job_Card_Description_Section__c}</div>                 
+									</td>
+                                    <td scope="row" class="slds-p-vertical--xx-small">
+                    					<div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!ql.AddWork_Estimated_Total__c}</div>
+									</td> 
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="slds-card__footer">
+                	<a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/squawkQuote-squawks?id='+v.recordId}" >
+                    	<span class="view-all-label">View All</span>
+                    </a>
+                </div>
+            </article>        
+        </div>  
+        
+    	<div class="container slds-p-top_medium forceRelatedListSingleContainer">
+        	<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+            	<div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    	<div class="slds-media__figure">
+                        	<span class="uiImage">
+                            	<lightning:icon iconName="standard:file" size="small"/>
+                        	</span>
+                    	</div>
+                        <div class="slds-media__body">
+                        	<h2 class="slds-text-heading--small slds-truncate">Notes and Attachments ({!v.filesSize})</h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body--inner">
+        			<table class="slds-table slds-table--cell-buffer">
+                        <thead/>
+                        <tbody>
+                            <div class="slds-grid">
+                        		<div class="slds-col slds-size--1-of-2">
+                                    <aura:iteration items="{!v.files}" var="f">
+                                        <p class="slds-table--bordered slds-border_right slds-border_left">
+                                            <td class="slds-cell-buffer_left">
+                                                <div class="thumbnailContainer" title="{!f.ContentDocument.Title}">
+                                                	<img class="slds-p-top_small slds-p-bottom_small" src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB120BY90&amp;versionId='+ f.ContentDocument.LatestPublishedVersionId}"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                <ui:OutputText class="itemTitle" value="{!f.ContentDocument.Title}" title="{!f.ContentDocument.Title}"/>
+                                                </div>
+                                                <div>
+                                                    <ui:OutputDate class="slds-m-around--none secondaryFields slds-text-body--small slds-truncate" value="{!f.ContentDocument.LastModifiedDate}"/>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-buffer_left slds-grid_vertical-align-center">
+                                                <lightning:button class="slds-button slds-float" onclick="{!c.viewDoc}"  label="View" value="{!f.Id}"/>
+                                            </td>
+                                        </p>                                
+                                    </aura:iteration>
+                                </div>
+                                <div class="slds-col slds-size--1-of-2">
+                                    <aura:iteration items="{!v.files2}" var="f2">
+                                        <p class="slds-table--bordered slds-border_right slds-border_left">
+                                            <td class="slds-cell-buffer_left">
+                                                <div class="thumbnailContainer" title="{!f2.ContentDocument.Title}">
+                                                	<img class="slds-p-top_small slds-p-bottom_small" src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB120BY90&amp;versionId='+ f2.ContentDocument.LatestPublishedVersionId}"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                <ui:OutputText class="itemTitle" value="{!f2.ContentDocument.Title}" title="{!f2.ContentDocument.Title}"/>
+                                                </div>
+                                                <div>
+                                                    <ui:OutputDate class="slds-m-around--none secondaryFields slds-text-body--small slds-truncate" value="{!f2.ContentDocument.LastModifiedDate}"/>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-buffer_left slds-grid_vertical-align-center">
+                                                <lightning:button class="slds-button slds-float" onclick="{!c.viewDoc}"  label="View" value="{!f2.Id}"/>
+                                            </td>
+                                        </p>                                
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                    	</tbody>
+                    </table>
+                </div>
+                <div class="slds-card__footer">
+                    <a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/squawkQuote-notes-and-attachments?id='+v.recordId}" >                      
+                    	<span class="view-all-label">View All</span>
+                    </a>
+                </div>
+            </article>        
+        </div>
+        
+        <div class="container slds-p-top_medium forceRelatedListSingleContainer">
+        	<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+            	<div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    	<div class="slds-media__figure">
+                        	<span class="uiImage">
+                            	<lightning:icon iconName="standard:maintenance_asset" size="small"/>
+                        	</span>
+                    	</div>
+                        <div class="slds-media__body">
+                        	<h2 class="slds-text-heading--small slds-truncate">Squawk Documents ({!v.quoteDocSize})</h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body--inner">
+        			<table class="slds-table slds-size_4-of-4 slds-table--cell-buffer slds-table_bordered"> 
+        				<thead>
+							<tr class="slds-text-title_caps">            	
+                    			<th class="slds-text-title slds-size_1-of-4" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Document Name</div>  
+       							</th>
+                                <th class="slds-text-title slds-size_1-of-4" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Created Date</div>  
+       							</th>
+                                <th class="slds-text-title slds-size_1-of-4" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Created By</div>  
+       							</th>
+                                <th class="slds-text-title slds-size_1-of-4" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Squawk Quote</div>  
+       							</th>          
+							</tr> 
+    					</thead>
+                        <tbody>
+                        	<aura:iteration items="{!v.quoteDoc}" var="qd">
+								<tr>				
+                					<td scope="row" class="slds-p-vertical--xx-small"> 
+                                        <div class="slds-text-align--center">
+                                            <a class="cuf-entityLink" href="{!'/Customer/s/squawk-document/'+qd.Id}" >
+                                                <span class="uiOutputText slds-truncate col-1">{!qd.Name}</span>
+                                            </a>
+                                        </div>
+									</td>   
+									<td scope="row" class="slds-p-vertical--xx-small"> 
+                                        <div class="slds-text-align--center">
+                                    		<ui:outputDateTime class="slds-truncate" value="{!qd.CreatedDate}"/>
+                                        </div>
+									</td>                                 
+									<td scope="row" class="slds-p-vertical--xx-small">
+										<div class="slds-truncate slds-text-align--center">{!qd.CreatedBy.Name}</div>                 
+									</td>
+                                    <td scope="row" class="slds-p-vertical--xx-small">
+                    					<div class="slds-truncate slds-text-align--center">{!qd.SBQQ__Quote__r.Name}</div>
+									</td> 
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="slds-card__footer">
+                	<a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/squawkQuote-documents?id='+v.recordId}" >
+                    	<span class="view-all-label">View All</span>
+                    </a>
+                </div>
+            </article>        
+        </div>
+    </div>
+       
+</aura:component>

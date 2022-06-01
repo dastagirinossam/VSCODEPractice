@@ -1,0 +1,89 @@
+<!--==============================================================================================================
+@Author - Krunal Pala
+@Date - 14/3/17
+@Purpose-  This page is used for displaying Executive Pricing Summary for Quote Templates. (XSL-FO Based Custom Layout)
+==========================================================================================================-->
+
+<apex:page contentType="text/xml" showHeader="false" sidebar="false" cache="false"
+ controller="SB_QTProposalDetailAndExecutiveSummary">
+    
+
+    
+ <block>
+        <table table-layout="fixed" width="100%" >
+            
+            <table-column 
+              column-width="60%"> </table-column>
+              <table-column 
+              column-width="20%"> </table-column>
+            <table-column 
+              column-width="20%"> </table-column>
+              
+            <table-body>
+
+            <table-row font-size="7pt">
+                        <table-cell  margin="0pt" padding="5pt" padding-left="5pt" >
+                          <block font-weight="bold" font-size="9pt"> 
+                          Summary of Proposed Services
+                          </block>
+                        </table-cell>
+                         <table-cell number-columns-spanned="2"  text-align="right" margin="0pt" padding="5pt" padding-left="5pt" padding-right="5pt" >
+                        <block text-align="right"  font-weight="bold" font-size="9pt" >  
+                            Prices
+                        </block>
+                        </table-cell>
+                   
+                    </table-row>
+            <apex:repeat var="outerExGroup" value="{!outerExGroupToReturn}" >
+
+                <table-row font-size="9pt">
+                        <table-cell border-bottom="1px solid" margin="0pt" padding="5pt" padding-left="5pt" >
+                          <block> 
+                            <apex:outputText value="{!outerExGroup.outerExGroupNumber} . {!outerExGroup.derivedOppTypOrEnginEquipmnt}" >
+                            </apex:outputText>
+                          </block>
+                        </table-cell>
+                         <table-cell border-bottom="1px solid"  text-align="right" margin="0pt" padding="5pt" padding-left="5pt" >
+                        
+                         
+                        <block text-align="right" >  
+                            Subtotal
+                        </block>
+                        </table-cell>
+                        <table-cell text-align="right" border-bottom="1px solid" margin="0pt" padding="5pt" padding-left="5pt" >
+                        <block>  
+                        <apex:outputText value="{0,number,currency}" >
+                            <apex:param value="{!outerExGroup.totalOfAll}" ></apex:param>
+                        </apex:outputText></block>
+                        </table-cell>
+                   
+                    </table-row>
+
+                
+           </apex:repeat>
+
+                 <table-row font-size="10pt">
+                 <table-cell number-columns-spanned="2" border-bottom="1px solid"  text-align="right" margin="0pt" padding="5pt" padding-left="5pt" >
+                        
+                         
+                        <block text-align="right" >  
+                            Customer Net Total:
+                        </block>
+                        </table-cell>
+                    <table-cell border-bottom="1px solid" text-align="right" font-weight="bold"     margin="0pt" padding="5pt" padding-left="5pt" >
+                        <block>   
+                        <apex:outputText value="{0,number,currency}" >
+                            <apex:param value="{!quoteSObj.fxNet_Amount__c}" ></apex:param>
+                        </apex:outputText></block>
+                    </table-cell>
+                   
+                </table-row>
+            </table-body>
+        </table> 
+    </block>
+
+    <block white-space-treatment="preserve">
+
+    </block> 
+
+</apex:page>

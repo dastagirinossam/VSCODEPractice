@@ -1,0 +1,30 @@
+<aura:component implements="lightning:isUrlAddressable,force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,lightning:actionOverride">
+    
+    <aura:html tag="style">
+        .slds-modal__container {
+        min-width: 55vw;
+        max-width: 75vw;
+        }
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        height:unset !important;
+        max-height:unset !important;
+        overflow: initial;
+        }
+    </aura:html>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-modal__content" style="overflow: initial;">
+        <lightning:card title="Create Work Orders">
+            <div class="slds-m-around_medium">
+                <lightning:flow aura:id="flow" onstatuschange="{!c.statusChange}"/>
+            </div>
+        </lightning:card>
+    </div>
+</aura:component>

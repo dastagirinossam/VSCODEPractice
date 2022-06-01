@@ -1,0 +1,36 @@
+<apex:page showheader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+
+<ion-tabs class="tabs-icon-top tabs-color-active-positive">
+
+  <!-- Dashboard Tab -->
+  <ion-tab title="Home" icon-off="ion-home" icon-on="ion-home" href="#/tab/home">
+    <ion-nav-view name="tab-home"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Airframe -->
+  <ion-tab title="Airframe" icon-off="ion-android-plane" icon-on="ion-android-plane" href="#/tab/airframe">
+    <ion-nav-view name="tab-airframe"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Avionics Tab -->
+  <ion-tab title="Avionics" icon-off="ion-radio-waves" icon-on="ion-radio-waves" href="#/tab/avionics">
+    <ion-nav-view name="tab-avionics"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Engines Tab -->
+  <ion-tab title="Engines" icon-off="ion-ios-gear" icon-on="ion-ios-gear" href="#/tab/engines">
+    <ion-nav-view name="tab-engines"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Paint Tab -->
+  <ion-tab title="Paint" icon-off="ion-paintbrush" icon-on="ion-paintbrush" href="#/tab/paint">
+    <ion-nav-view name="tab-paint"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Interior Tab -->
+  <ion-tab title="Interior" icon-off="ion-social-tux" icon-on="ion-social-tux" href="#/tab/interior">
+    <ion-nav-view name="tab-interior"></ion-nav-view>
+  </ion-tab>
+
+</ion-tabs>
+</apex:page>

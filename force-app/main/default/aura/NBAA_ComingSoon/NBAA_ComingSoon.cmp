@@ -1,0 +1,48 @@
+<aura:component implements="flexipage:availableForAllPageTypes,forceCommunity:availableForAllPageTypes" access="global" controller="CreateUserHandler">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="NBAA" Type="String"/>
+    <aura:attribute name="files" type="List" />
+    <aura:attribute name="firstPart" type="String" />
+    <aura:attribute name="lastPart" type="String" />
+    
+    <div class="slds-p-around_medium">              
+        <article class="slds-card">
+            <header class="slds-card__header slds-grid">
+                <lightning:icon size="large" iconName="custom:custom20" disableAutoRefresh="false" disableAutoScroll="false" class="slds-carousel__pane"/>
+                <div class="slds-media slds-media--center slds-has-flexi-truncate slds-p-left_x-small">
+                    <div class="slds-media__figure">                            
+                        <h1>
+                            <span>Welcome to</span>
+                        </h1>
+                        <h2>
+                            <span class="slds-text-heading--small">NBAA 2019!</span>
+                        </h2>
+                    </div>
+                </div>
+            </header>         
+            <div class="slds-p-around_small">                 
+                <img src="{!v.NBAA}" />
+            </div>
+            
+            
+            <!--
+<lightning:carousel class="slds-p-around_medium">
+                <aura:iteration items="{!v.files}" var="file">
+                    <lightning:carouselImage width="10px" height="10px" 
+                                             class="slds-carousel__image"
+                                             src = "{!v.firstPart}" 
+                                             header = "{!file.ContentDocument.Title}"
+                                             onclick="{!c.viewDoc}" id="{!file.ContentDocumentId}">
+                    </lightning:carouselImage>
+                </aura:iteration>  
+            </lightning:carousel>
+            
+            <div class="slds-p-vertical_medium">
+                <lightning:button label="Return" onclick="{!c.handleCancel}" />
+            </div> 
+-->
+        </article>
+    </div>
+    
+    
+</aura:component>

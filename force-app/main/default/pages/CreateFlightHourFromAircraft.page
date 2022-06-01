@@ -1,0 +1,10 @@
+<apex:page standardController="Aircraft__c" tabStyle="Aircraft__c" lightningStylesheets="true">  
+<apex:slds />    
+    <apex:sectionHeader title="Create Flight Hour" subtitle="Aircraft: {!Aircraft__c.Name}"/>  
+    <flow:interview name="AircraftCreateFlightHour" finishLocation="/{!Aircraft__c.Id}" buttonLocation="bottom">
+        <apex:param name="varAircraftId" value="{!Aircraft__c.Id}"/>
+    </flow:interview>
+    <apex:form >
+        <apex:commandLink value="Cancel" action="{!cancel}"/>   
+    </apex:form>      
+</apex:page>

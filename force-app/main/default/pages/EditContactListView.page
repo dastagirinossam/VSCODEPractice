@@ -1,0 +1,44 @@
+<apex:page standardController="Contact" recordSetVar="Contacts" tabStyle="Contact" lightningStylesheets="true">
+<apex:slds />
+<style type="text/css">
+.dateFormat{
+   visibility:hidden;
+}
+</style>
+    <apex:form >
+        <apex:pageBlock title="Edit Contact List" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+
+ 
+            <apex:pageblocktable value="{!selected}" var="c" >
+            
+            <apex:column headerValue="Name" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!c.NAme}"/>
+                </apex:column>
+            
+            <apex:column headerValue="Owner" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!c.ownerid}"/>
+                </apex:column>
+            <apex:column headerValue="Account" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!c.accountid}"/>
+                </apex:column>    
+         <apex:column headerValue="Type" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!c.ContactType__c}"/>
+                </apex:column> 
+             
+                              
+           
+                
+                
+            </apex:pageblocktable>    
+    
+          
+
+              
+        </apex:pageBlock>
+    </apex:form>
+    </apex:page>

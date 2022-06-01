@@ -1,0 +1,49 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="ProCom">
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="projects" type="MPM4_BASE__Milestone1_Project__c[]"/>
+    <aura:attribute name="Message" type="boolean" default="false" description="no record found message"/> 
+    
+    <div class="container">
+        <div class="container forceRelatedListSingleContainer">
+            <article class="slds-card forceRelatedListCardDesktop">    
+                <div class="slds-page-header" style="color:white; background-color: rgb(0, 114, 187);">
+                    <p class="slds-page-header__title slds-text-align--center" style="color:white; background-color: rgb(0, 114, 187);" title="My Projects"><h1>My Active Projects</h1></p>
+                </div>
+                <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                    <thead>
+                        <tr>
+                            <th><strong>Project Name</strong></th>
+                            <th><strong>Completion Date</strong></th>
+                            <th><strong>CPM</strong></th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody> 
+                        <tr> 
+                            <td scope="row" colspan="3">                 
+                                <aura:if isTrue="{!v.Message}">
+                                    <div class="slds-text-color--error"><b>You Have No Active Projects At This Time...</b></div>
+                                </aura:if> 
+                            </td>
+                        </tr>
+                        <aura:iteration items="{!v.projects}" var="proj"> 
+                            <tr>   
+                                <td scope="row">
+                                    <ui:outputURL value="{!'/Customer/s/project/'+ proj.Id}" label="{!proj.Name}" target="_new"/>
+                                </td>
+                                <td>
+                                    <ui:outputDate value="{!proj.MPM4_BASE__Deadline__c}"/>
+                                </td>
+                                <td>
+                                    <ui:outputURL value="{!'/Customer/s/detail/'+ proj.CPM__c}" label="{!proj.CPM__r.Name}" target="_new"/>
+                                </td>
+                            </tr> 
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </article>
+        </div>
+    </div>
+</aura:component>

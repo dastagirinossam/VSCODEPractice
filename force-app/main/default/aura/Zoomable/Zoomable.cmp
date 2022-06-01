@@ -1,0 +1,48 @@
+<aura:component
+  extends="forceCommunity:navigationMenuBase"
+  implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:appHostable,force:hasRecordId"
+  access="global"
+>
+        <aura:attribute name="url" type="String"/>
+    <aura:attribute name="pageReference" type="Object"/>
+        <aura:attribute name="nbaaInviteBack" type="String"/>
+    <aura:attribute name="imageRendition" type="String"/>
+    
+        <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+<div class="imagez">
+   <img src="{!v.nbaaInviteBack}" onclick="{!c.backInvite}"/>
+    </div>
+
+  
+    <lightning:navigation aura:id="navService"/>
+  <aura:attribute name="source" type="String" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+  <ltng:require
+    styles="{!join(',', 
+                          $Resource.zoomple + '/styles.css', 
+                          $Resource.zoomple + '/zoomple.css')}"
+    scripts="{!join(',', 
+                           $Resource.zoomple + '/jquery-3.3.1.min.js', $Resource.zoomple + '/jquery-migrate-1.4.1.min.js', 
+                           $Resource.zoomple + '/zoomple.js')}"
+    afterScriptsLoaded="{!c.scriptsLoaded}"
+  />
+    
+  <div id="wrapper">
+    <div class="section section5">
+      <div class="section">
+        <a
+          href="{!v.ImageRendition}" 
+          class="zoomple">
+          <img 
+            src="{!v.ImageRendition}" style="height:100px;width:200px;"
+            />
+            <!--  -->
+          
+        </a>
+      </div>
+
+      <!--<a href="{!$Resource.zoomple + '/DSC_8488.jpg'}" class="zoomplecross"><img src="{!$Resource.zoomple + '/DSC_8488.jpg'}" style="height:100px;width;100px" /></a> -->
+    </div>
+  </div>
+</aura:component>

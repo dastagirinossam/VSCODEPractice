@@ -1,0 +1,22 @@
+.THIS .postButton{
+   background-color: rgb(37, 116, 169);
+   border-radius: 4px;
+   display: inline-block;
+   border: none;
+   color: #fff; 
+   font-size: 14px; 
+   height: 33px;
+   text-align: center;
+}
+
+.THIS .postButton:hover {
+	background-color: rgb(19, 95, 144);
+}
+
+.THIS .bottomBar {
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    margin-top: .5rem;
+}

@@ -1,0 +1,43 @@
+<aura:component extends="forceCommunity:navigationMenuBase" implements="forceCommunity:availableForAllPageTypes,force:appHostable,force:hasRecordId" access="global" controller="CreateUserHandler">
+    
+    <aura:attribute name="hide" type="string" default="false"/>
+    
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="recordError" type="String"/>
+    
+    <aura:attribute name="recordInfo" type="Object" />
+    <aura:attribute name="simpleRecord" type="Object"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <force:recordData aura:id="recordLoader"
+                      recordId="{!v.recordId}"
+                      layoutType="FULL"
+                      targetRecord="{!v.recordInfo}"
+                      targetFields="{!v.simpleRecord}"
+                      targetError="{!v.recordError}"/>
+    
+    <!-- Display a lightning card with details about the record -->
+    <div class="Create Contact"> 
+        <lightning:card variant="Narrow" iconName="custom:custom20" title="RSVP to StandardAero's NBAA - 2019 Party" >          
+            <div class="slds-p-horizontal--small">  
+                <lightning:recordEditForm recordId="{!v.recordId}" objectApiName="Contact">
+                    <ui:inputCheckbox aura:id="checkbox" label="Additional Guests?" change="{!c.onCheck}"/>
+                    <aura:if isTrue="{!v.hide}">                
+                        <ui:outputText value="{!v.simpleRecord.Number_of_Guests__c}" aura:id="numberGuests"/>
+                        <ui:outputText value="{!v.simpleRecord.Guest_Details__c}" aura:id="guestDetails"/>
+                    </aura:if>
+                    <lightning:button label="Cancel" onclick="{!c.handleCancel}" class="slds-m-top_medium" />
+                    <lightning:button label="RSVP" class="slds-m-top_medium" variant="brand" onclick="{!c.handleRSVP}"/>
+                </lightning:recordEditForm>
+            </div>
+        </lightning:card>
+    </div>
+    
+    <!-- Display Lightning Data Service errors, if any -->
+    <aura:if isTrue="{!not(empty(v.recordError))}">
+        <div class="recordError">
+            {!v.recordError}</div>
+    </aura:if>
+    
+</aura:component>

@@ -1,0 +1,24 @@
+<aura:component >
+    <aura:attribute name="oEquipment" type="Equipment__c" />
+    <!--Register the component level event-->
+    <aura:registerEvent name="oSelectedEquipmentEvent" type="c:selectedEquipmentEvent"/>
+    
+    <li class="slds-listbox__item" role="presentation">
+        
+        <span class="slds-media slds-listbox__option slds-media_center slds-listbox__option_entity" role="option">
+            <span class="slds-media__figure slds-listbox__option-icon">
+                <lightning:icon class="slds-icon-custom-custom67 slds-icon_container" iconName="custom:custom67"/>
+            </span>
+            <span class="slds-media__body">
+                <a onclick="{!c.selectEquipment}">
+                    <span class="slds-listbox__option-text slds-listbox__option-text_entity">
+                        <div class="slds-lookup__result-text slds-truncate">{!v.oEquipment.Name}</div>
+                    </span>
+                    <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">
+                        <span class="slds-truncate">{!v.oEquipment.Aircraft__r.Name}</span>
+                    </span>
+                </a>
+            </span>   
+        </span>
+    </li>
+</aura:component>

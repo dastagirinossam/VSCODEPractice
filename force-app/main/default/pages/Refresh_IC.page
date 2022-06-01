@@ -1,0 +1,6 @@
+<apex:page standardController="Performance__c" lightningStylesheets="true">
+<apex:slds />
+    <flow:interview name="IC_Update_New" finishLocation="/{!Performance__c.Id}">
+        <apex:param name="varPerformanceUser" value="{!Performance__c.Id}" />
+    </flow:interview>
+</apex:page>

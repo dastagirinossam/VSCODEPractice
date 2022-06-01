@@ -1,0 +1,30 @@
+<design:component >
+    <design:attribute name="Aircraft" label="Aircraft" /> 
+    <design:attribute name="ServiceTerritoryId" label="ServiceTerritoryId" /> 
+    <design:attribute name="AirportLocationId" label="AirportLocationId" /> 
+    <design:attribute name="AccountId" label="AccountId" />
+    <design:attribute name="ContactId" label="ContactId" />      
+    <design:attribute name="StartDate" label="StartDate" />        
+    <design:attribute name="EndDate" label="EndDate" />
+    <design:attribute name="Status" label="Status" />        
+    <design:attribute name="Priority" label="Priority" />        
+    <design:attribute name="Subject" label="Subject" />        
+    <design:attribute name="Description" label="Description" />        
+    <design:attribute name="City" label="City" />        
+    <design:attribute name="State" label="State" />        
+    <design:attribute name="Country" label="Country" />       
+    <design:attribute name="PostalCode" label="PostalCode" />        
+    <design:attribute name="Street" label="Street" />
+    <design:attribute name="Equipment1" label="Equipment1" />  
+    <design:attribute name="Equipment2" label="Equipment2" />  
+    <design:attribute name="Equipment3" label="Equipment3" />
+    <design:attribute name="APU" label="APU" />    
+    <design:attribute name="MSTDispatch" label="MSTDispatch" /> 
+    <design:attribute name="CaseId" label="CaseId" /> 
+    <design:attribute name="WorkTypeId" label="WorkTypeId" />    
+    <design:attribute name="recordId" label="recordId" /> 
+    <design:attribute name="Part_91_135_121" label="Part_91_135_121" /> 
+	<design:attribute name="System_po" label="System_po" /> 
+    <design:attribute name="Dispatch_Notes" label="Dispatch_Notes" />
+    <design:attribute name="RII_Required" label="RII_Required" />
+</design:component>

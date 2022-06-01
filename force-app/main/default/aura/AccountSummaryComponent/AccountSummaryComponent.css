@@ -1,0 +1,28 @@
+.THIS.body {
+    font-family: Arial Unicode MS; 
+    font-size:11px;
+    date:0,date,yyyy     
+}
+
+.THIS.title{
+    font-weight:bold;
+    font-size:19px;
+    color:red
+}
+
+.THIS.header{
+    font-size:13px;
+    font-weight:bold;
+    background-color:#C0C0C0
+}
+
+.THIS.subtitle{
+    font-weight:bold;
+    font-size:15px
+}
+
+.THIS .footer {
+    position:sticky;
+    bottom:0;
+    z-index:2
+}

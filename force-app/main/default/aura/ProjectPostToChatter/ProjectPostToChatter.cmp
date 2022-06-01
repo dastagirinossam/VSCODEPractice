@@ -1,0 +1,15 @@
+<aura:component controller="CommunityChatter" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{! $Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+    
+	<div class="slds-clearfix">
+  		<div class="slds-clearfix">
+            <div class="slds-form--inline slds-form--horizontal">
+            	<div class="slds-form-element__control slds-p-right_xx-small">
+                	<ui:inputText aura:id="chatterPost" class="slds-textarea" placeholder="Post To Chatter"/>                		
+                </div>                   
+				<button type="button" class="slds-button slds-button--brand" onclick="{!c.PostToChatter}">Post</button>
+    		</div>
+    	</div>
+    </div>
+    
+</aura:component>

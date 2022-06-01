@@ -1,0 +1,6 @@
+<apex:page standardController="Opportunity" lightningstylesheets="false" showheader="false" lightningStylesheets="true">
+    <flow:interview name="TEST_Update_Opportunity" finishLocation="/{!Opportunity.ID}">
+       <apex:param name="OpportunityID" value="{!Opportunity.ID}"/>
+       <apex:param name="UserID" value="{!$User.Id}"/>
+    </flow:interview>
+</apex:page>

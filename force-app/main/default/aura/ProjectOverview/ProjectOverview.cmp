@@ -1,0 +1,1082 @@
+<aura:component extends="forceCommunity:navigationMenuBase" implements="forceCommunity:availableForAllPageTypes,force:appHostable" controller="SquawkApproval" access="global">
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <lightning:notificationsLibrary aura:id="notifLib" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:attribute name="openModal" type="boolean" default="false" />
+    <aura:attribute name="openBigModal" type="boolean" default="false" />
+    <aura:attribute name="projects" type="SBQQ__QuoteLine__c[]" />
+    <aura:attribute name="status" type="String" />
+    <aura:attribute
+                    name="Message"
+                    type="boolean"
+                    default="false"
+                    description="no record found message"
+                    />
+    <aura:attribute
+                    name="SquawkMessage"
+                    type="boolean"
+                    default="false"
+                    description="no record found message"
+                    />
+    <aura:attribute
+                    name="ErrorMessage"
+                    type="boolean"
+                    default="false"
+                    description="use for display no value entered"
+                    />
+    <aura:attribute
+                    name="searchKeyword"
+                    type="String"
+                    description="use for store user search input"
+                    />
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="AddWorkStatus" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="EstTotal" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="dApprover" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="dApproverId" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="RTS" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="jcdesc" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="labAmount" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="matAmount" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="labType" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="matType" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="Project" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="createdBy" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="createdById" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="cpm" type="String" />
+    <aura:attribute name="cpmId" type="String" />
+    <aura:attribute name="quote" type="String" />
+    <aura:attribute name="quoteId" type="String" />
+    <aura:attribute name="ProjId" type="String" />
+    <aura:attribute name="ProjName" type="String" />
+    <aura:attribute name="ProjType" type="String" />
+    <aura:attribute name="projMaxAmount" type="Decimal" />
+    <aura:attribute name="projAppTotal" type="Decimal" />
+    <aura:attribute name="squawk" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="squawkName" type="SBQQ__QuoteLine__c" />
+    <aura:attribute name="squawks" type="SBQQ__QuoteLine__c[]" />
+    <aura:attribute name="searchCount" type="integer" default="0" />
+    <aura:attribute name="selectedCount" type="integer" default="0" />
+    <aura:attribute name="selectAll" type="boolean" default="false" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <aura:attribute name="projRecordsId" type="List" access="public" />
+    <aura:attribute name="showELH" type="boolean" default="false" />
+    <aura:attribute name="isBroker" type="boolean" default="false" />
+    <aura:attribute name="isBSSquawk" type="boolean" default="false" />
+    <aura:attribute name="allSquawksBS" type="SBQQ__QuoteLine__c[]" />
+    <aura:attribute
+                    name="displayModal"
+                    type="Boolean"
+                    default="false"
+                    access="public"
+                    />
+    <aura:attribute name="currentProject" type="String[]" />
+    <aura:attribute name="checkedSquawks" type="String[]" />
+    <aura:attribute name="MasterCheckbox" type="Boolean" default="true" />
+    <aura:attribute name="returnSize" type="string" default="height: 100%;" />
+    <aura:attribute
+                    name="searchResult"
+                    type="List"
+                    description="use for store and display squawk list return from server"
+                    />
+    <aura:attribute
+                    name="numberOfRecord"
+                    type="integer"
+                    default="0"
+                    description="use for display Number of records"
+                    />
+    
+    <aura:attribute
+                    name="arrowDirection"
+                    type="string"
+                    default="arrowup"
+                    description="Use for change arrow sign direction on header based on click"
+                    />
+    <aura:attribute
+                    name="isAsc"
+                    type="boolean"
+                    default="true"
+                    description="boolean flag for pass sorting condition to apex class"
+                    />
+    <aura:attribute
+                    name="selectedTabsoft"
+                    type="string"
+                    default="Squawk No"
+                    description="Use for show/hide arrow sign on header based on conditions"
+                    />
+    
+    <c:DeferToBuyerComponent aura:id="DeferToBuyer" />
+    
+    <aura:if isTrue="{!v.Spinner}">
+        <lightning:spinner />
+    </aura:if>
+    
+    <aura:if isTrue="{!$Browser.formFactor == 'PHONE'}">
+        <div>
+            <h3 class="slds-modal__header backgroundHeaderModal">My Active Projects</h3>
+        </div>
+        
+        <aura:iteration items="{!v.projects}" var="proj">            
+            <article class="slds-card">
+                <div class="slds-media__figure">
+                    <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">                
+                        <h3 class="slds-tile__title slds-truncate">
+                            <a href="{!'/Customer/s/project/'+ proj.Id}">{!proj.Name}</a>
+                        </h3>                   
+                    </div>
+                </div>
+                
+                <div class="slds-media__body">         
+                    <aura:if
+                             isTrue="{!or(proj.Pending_Squawks__c == 0, proj.Pending_Squawks__c == null)}"
+                             >
+                        <div class="slds-shrink-none">
+                            <td colspan="2" scope="row" class="slds-p-vertical--xx-small">
+                                <div class="slds-text-color--error">
+                                    <ui:outputText value="No Pending Approvals At This Time..." />
+                                </div>
+                            </td>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!proj.Pending_Squawks__c > 0}">
+                        <td>
+                            <form class="slds-form--inline">
+                                <label class="slds-checkbox_toggle slds-grid">
+                                    <strong class="slds-float_left slds-p-right_x-small">View {!proj.Pending_Squawks__c} Pending Squawks :</strong>
+                                    <ui:inputcheckbox
+                                                      class="slds-p-horizontal--small slds-float_left"
+                                                      name="checkbox"
+                                                      text="{!proj.Id}"
+                                                      aura:id="projPack"
+                                                      change="{!c.getSquawks}"
+                                                      />
+                                    <span
+                                          id="toggle-desc"
+                                          class="slds-checkbox--faux_container"
+                                          aria-live="assertive"
+                                          title="Click Here To View Pending Squawks"
+                                          >
+                                        <span class="slds-checkbox--faux"></span>
+                                        <span class="slds-checkbox--on">Viewing</span>
+                                        <span class="slds-checkbox--off">Click to View</span>
+                                    </span>
+                                </label>
+                            </form>
+                        </td>
+                    </aura:if>
+                    <div class="slds-shrink-none">
+                        <ui:outputURL
+                                      value="{!'/Customer/s/profile/'+ proj.CPM__c}"
+                                      label="{!'CPM : ' + proj.CPM__r.Name}"
+                                      target="_new"
+                                      />
+                    </div>
+                </div>
+            </article>
+        </aura:iteration>      
+    </aura:if>
+    <aura:if isTrue="{!$Browser.formFactor != 'PHONE'}">
+        <div class="container">
+            <article class="slds-card">
+                <div class="slds-page-header backgroundHeaderModal">
+                    <p class="slds-page-header__title slds-text-align_center backgroundHeaderModal">
+                        <h1>My Active Projects</h1>
+                    </p>
+                </div>
+            </article>
+        </div>
+        <div class="c-container">
+            <table
+                   class="slds-table slds-table--bordered slds-table--cell-buffer slds-resizable"
+                   role="grid"
+                   >
+                <thead>
+                    <tr>
+                        <th><strong>Project Name</strong></th>
+                        <th><strong>Manage Pending Squawks</strong></th>
+                        <th><strong># of Pending Approvals</strong></th>                        
+                        <th><strong>Current Completion Date</strong></th>                        
+                        <th><strong>CPM</strong></th>
+                        <th><strong>View All Squawks</strong></th>                   
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <aura:iteration items="{!v.projects}" var="proj">
+                        <tr>
+                            <td scope="row">
+                                <ui:outputURL
+                                              value="{!'/Customer/s/project/'+ proj.Id}"
+                                              label="{!proj.Name}"
+                                              target="_new"
+                                              />
+                            </td>
+                            <aura:if isTrue="{!or(proj.Pending_Squawks__c == 0, proj.Pending_Squawks__c == null)}">
+                                <td colspan="2" scope="row" class="slds-p-vertical--xx-small">
+                                    <div class="slds-text-color--error">
+                                        <ui:outputText value="No Pending Approvals At This Time..."/>
+                                    </div>
+                                </td>
+                            </aura:if>
+                            <aura:if isTrue="{!proj.Pending_Squawks__c > 0}">
+                                <td>
+                                    <form class="slds-form--inline">
+                                        <label class="slds-checkbox--toggle slds-grid slds-grid_vertical-align-center">
+                                            <ui:inputcheckbox
+                                                              name="checkbox"
+                                                              text="{!proj.Id}"
+                                                              aura:id="projPack"
+                                                              change="{!c.getSquawks}"
+                                                              />
+                                            <span
+                                                  id="toggle-desc"
+                                                  class="slds-checkbox--faux_container"
+                                                  aria-live="assertive"
+                                                  title="Click Here To View Pending Squawks"
+                                                  >
+                                                <span class="slds-checkbox--faux"></span>
+                                                <span class="slds-checkbox--on">Viewing</span>
+                                                <span class="slds-checkbox--off">Click to View Pending Squawks</span>
+                                            </span>
+                                        </label>
+                                    </form>
+                                </td>
+                                <td>
+                                    <ui:outputText
+                                                   value="{!proj.Pending_Squawks__c}"
+                                                   aura:id="{!proj.Id}"
+                                                   />
+                                </td>
+                            </aura:if>
+                            
+                            <td scope="row">
+                                <ui:OutputDate value="{!proj.MPM4_BASE__Deadline__c}" />
+                            </td>
+                            <aura:if isTrue="{!$Browser.formFactor != 'PHONE'}">
+                                <td scope="row">
+                                    <ui:outputURL
+                                                  value="{!'/Customer/s/profile/'+ proj.CPM__c}"
+                                                  label="{!proj.CPM__r.Name}"
+                                                  target="_new"
+                                                  />
+                                </td>
+                            </aura:if>
+                            
+                            <td scope="row">
+                                <form class="slds-form--inline">
+                                    <label class="slds-checkbox--toggle slds-grid slds-grid_vertical-align-center">
+                                        
+                                        
+                                        <lightning:button
+                                                          class="slds-button slds-button--brand"
+                                                          value="{!proj.Id}"
+                                                          label="View All Squawks"
+                                                          title="View All Squawks"
+                                                          onclick="{!c.viewAllSquawks}"
+                                                          />
+                                        <aura:if isTrue="{! proj.Project_Type__c != 'Pre-Buy'}">
+                                        </aura:if>
+                                        
+                                    </label>
+                                    
+                                </form>
+                            </td>
+                            
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        </div>
+    </aura:if>
+    
+    <!--No Squawks Selected-->
+    <div class="slds">
+        <div
+             aria-hidden="true"
+             role="dialog"
+             tabindex="-1"
+             aria-labelledby="header43"
+             class="slds-modal slds-fade-in-hide"
+             aura:id="noneSelectedModal"
+             >
+            <div class="slds-modal__container">
+                <div
+                     class="slds-modal__header slds-theme--error slds-theme--alert-texture"
+                     >
+                    <button
+                            class="slds-button slds-modal__close slds-button--icon-inverse"
+                            title="Close"
+                            >
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium"
+                        >No Squawks Were Selected</h2
+                        >
+                </div>
+                <div
+                     class="slds-modal__content slds-p-around--medium slds-text-align--center"
+                     >
+                    <p
+                       >No Squawks Were Selected. Please Select Squawks To Approve or
+                        Reject.</p
+                        >
+                </div>
+                <div class="slds-modal__footer">
+                    <button
+                            onclick="{!c.hideNoneSelectedModal}"
+                            class="slds-button slds-button--brand"
+                            >Ok</button
+                        >
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--RTS Message-->
+    <div class="slds">
+        <div
+             aria-hidden="true"
+             role="dialog"
+             tabindex="-1"
+             aria-labelledby="header43"
+             class="slds-modal slds-fade-in-hide"
+             aura:id="RtsSelectedModal"
+             >
+            <div class="slds-modal__container">
+                <div
+                     class="slds-modal__header slds-theme--error slds-theme--alert-texture"
+                     >
+                    <button
+                            class="slds-button slds-modal__close slds-button--icon-inverse"
+                            title="Close"
+                            >
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium"
+                        >Return To Service Squawk Denied</h2
+                        >
+                </div>
+                <div
+                     class="slds-modal__content slds-p-around--medium slds-text-align--center"
+                     >
+                    <p
+                       >You have declined a squawk that is mandatory for RTS (Return to
+                        Service). Declining this squawk could result in delaying your
+                        project or requiring a written acknowledgement of the open
+                        discrepancy on the aircraft release from StandardAero. Are you sure
+                        you want to decline this squawk?</p
+                        >
+                </div>
+                <div class="slds-modal__footer">
+                    <button
+                            onclick="{!c.hideRtsSelectedModal}"
+                            class="slds-button cancelButton"
+                            >Cancel</button
+                        >
+                    <button
+                            onclick="{!c.showRejectRtsModal}"
+                            class="slds-button rejectButton"
+                            >Ok</button
+                        >
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Approval Modal-->
+    <div class="slds">
+        <div
+             aria-hidden="true"
+             role="dialog"
+             tabindex="-1"
+             aria-labelledby="header43"
+             class="slds-modal slds-fade-in-hide"
+             aura:id="approveModal"
+             >
+            <div class="slds-modal__container">
+                <div class="slds-modal__header approveModal slds-theme--alert-texture">
+                    <button
+                            class="slds-button slds-modal__close slds-button--icon-inverse"
+                            title="Close"
+                            >
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium"
+                        >Approve Selected Squawks</h2
+                        >
+                </div>
+                <div
+                     class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread slds-wrap"
+                     >
+                    <div class="slds-col slds-align_absolute-center slds-p-bottom_small"
+                         >Are you sure you want to approve these {!v.selectedCount}
+                        squawks?</div
+                        >
+                    <div
+                         class="slds-col slds-no-flex slds-grid slds-align_absolute-center"
+                         >
+                        <div>
+                            <button
+                                    onclick="{!c.hideApproveModal}"
+                                    class="slds-button slds-button_neutral"
+                                    >Cancel</button
+                                >
+                            
+                            <button
+                                    onclick="{!c.approveSelected}"
+                                    class="slds-button approveButton"
+                                    >Approve Squawks</button
+                                >
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-text-align--left slds-align-bottom legal"
+                         >You are bound to these
+                        <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank"
+                           >conditions</a
+                            >
+                        upon approval of selected squawks. By clicking "Approve Squawks" you
+                        agree to these terms.</div
+                        >
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Rejection Modal-->
+    <div class="slds">
+        <div
+             aria-hidden="true"
+             role="dialog"
+             tabindex="-1"
+             aria-labelledby="header43"
+             class="slds-modal slds-fade-in-hide"
+             aura:id="rejectModal"
+             >
+            <div class="slds-modal__container" style="overflow:hidden">
+                <div class="slds-modal__header rejectModal slds-theme--alert-texture">
+                    <button
+                            class="slds-button slds-modal__close slds-button--icon-inverse"
+                            title="Close"
+                            >
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium"
+                        >Reject Selected Squawks</h2
+                        >
+                </div>
+                <div
+                     class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread slds-wrap"
+                     >
+                    <div class="slds-col slds-align_absolute-center slds-p-bottom_small"
+                         >Are you sure you want to reject these {!v.selectedCount}
+                        squawks?</div
+                        >
+                    <div
+                         class="slds-col slds-no-flex slds-grid slds-align_absolute-center"
+                         >
+                        <div>
+                            <button
+                                    onclick="{!c.hideRejectModal}"
+                                    class="slds-button slds-button_neutral"
+                                    >Cancel</button
+                                >
+                            <button
+                                    onclick="{!c.rejectSelected}"
+                                    class="slds-button rejectButton"
+                                    style="width: 125px;"
+                                    >Reject Squawks</button
+                                >
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-text-align--left slds-align-bottom legal"
+                         >You are bound to these
+                        <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank"
+                           >conditions</a
+                            >
+                        upon rejection of selected squawks. By clicking "Reject Squawks" you
+                        agree to these terms.</div
+                        >
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!--Defer Modal-->
+    <div class="slds">
+        <div
+             aria-hidden="true"
+             role="dialog"
+             tabindex="-1"
+             aria-labelledby="header43"
+             class="slds-modal slds-fade-in-hide"
+             aura:id="deferModal"
+             >
+            <div class="slds-modal__container" style="overflow:hidden">
+                <div class="slds-modal__header deferModal slds-theme--alert-texture">
+                    <button
+                            class="slds-button slds-modal__close slds-button--icon-inverse"
+                            title="Close"
+                            >
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="header43" class="slds-text-heading--medium"
+                        >Defer Selected Squawks</h2
+                        >
+                </div>
+                <div
+                     class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread slds-wrap"
+                     >
+                    <div class="slds-col slds-align_absolute-center slds-p-bottom_small"
+                         >Are you sure you want to defer these {!v.selectedCount}
+                        squawks to the buyer?</div
+                        >
+                    <div
+                         class="slds-col slds-no-flex slds-grid slds-align_absolute-center"
+                         >
+                        <div>
+                            <button
+                                    onclick="{!c.hideDeferModal}"
+                                    class="slds-button slds-button_neutral"
+                                    >Cancel</button
+                                >
+                            <button
+                                    onclick="{!c.deferSelected}"
+                                    class="slds-button deferButton"
+                                    style = "width: 125px;"
+                                    >Defer to Buyer</button
+                                >
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <div class="slds-text-align--left slds-align-bottom legal"
+                         >You are bound to these
+                        <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank"
+                           >conditions</a
+                            >
+                        upon rejection of selected squawks. By clicking "Defer to Buyer" you
+                        agree to these terms.</div
+                        >
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="slds-backdrop slds-backdrop--hide" aura:id="backdrop"/>
+    <aura:if isTrue="{!$Browser.formFactor == 'PHONE'}">
+        <div class="slds">
+            <div
+                 aria-hidden="true"
+                 role="dialog"
+                 tabindex="-1"
+                 aria-labelledby="header43"
+                 class="slds-modal slds-modal--large slds-fade-in-hide slds-box"
+                 aura:id="squawkModal"
+                 >
+                <header class="slds-modal__header backgroundHeaderModal">
+                    <div>
+                        <lightning:buttonIcon
+                                              class="slds-float_right icon"
+                                              iconName="utility:close"
+                                              variant="bare"
+                                              onclick="{!c.handleCloseSquawksModal}"
+                                              alternativeText="Close"
+                                              />
+                    </div>
+                    <h3 class="slds-hyphenate">
+                        Pending Squawks
+                    </h3>
+                </header>
+                <div
+                     class="slds-modal__content slds-p-around_xx-small"
+                     style="background-color: rgb(255,250,217);"
+                     >
+                    <div class="slds-grid">
+                        <div class="slds-col slds-has-flexi-truncate ">
+                            <div class="slds-media slds-no-space slds-grow">
+                                <div class="slds-media__body">
+                                    <div>
+                                        <h6>&nbsp;&nbsp;Pending Squawks List</h6>
+                                    </div>
+                                    <aura:if isTrue ="{! not(v.isBroker)}">
+                                        <div>                                       
+                                            <span class="slds-badge badge slds-m-right--small slds-align-middle slds-truncate">
+                                                Selected Squawks:{!v.selectedCount}
+                                            </span>                                 
+                                            <div class="slds-p-left_x-large slds-truncate slds-text-align--left slds-float_right">
+                                                <strong>Select All :</strong> &nbsp;
+                                                <ui:inputCheckbox
+                                                                  class="slds-p-horizontal_xx-small slds-float_right"
+                                                                  aura:id="box3"
+                                                                  value="{!v.selectAll}"
+                                                                  change="{!c.selectAll}"
+                                                                  />
+                                            </div>
+                                        </div>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-modal__content slds-card__body slds-scrollable--y"
+                         style="background-color: rgb(255,250,217); height:25em">
+                        <aura:iteration items="{!v.squawks}" var="currentSquawks">
+                            <div>
+                                <article class="slds-card slds-card_boundary slds-p-bottom_x-small slds-p-top_x-small">
+                                    <div class="slds-media__figure">
+                                        <div class="slds-grid slds-grid_align-spread slds-has-flexi-truncate">                
+                                            <h3 class="slds-tile__title slds-truncate">
+                                                <strong> Squawk No :</strong> &nbsp;
+                                                <aura:if isTrue ="{! not(v.isBroker)}">
+                                                    <a href="{'/squawk/'+currentSquawks.Id}" target="_blank">
+                                                        {!currentSquawks.fxSquawkNo__c}
+                                                    </a>
+                                                </aura:if>
+                                                <aura:if isTrue ="{! (v.isBroker)}">
+                                                    {!currentSquawks.fxSquawkNo__c}
+                                                </aura:if>
+                                            </h3>                   
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="slds-media__body">                                    
+                                        <div class="slds-text-align--left slds-cell-wrap slds-p-bottom_xx-small">
+                                            <strong>Description :</strong> &nbsp;
+                                            {!currentSquawks.Job_Card_Description__c}
+                                        </div>
+                                        <aura:if isTrue ="{! not(v.isBroker)}">
+                                            <strong>Labor Cost :</strong> &nbsp;
+                                            <ui:outputCurrency value="{!currentSquawks.Labor_Amount__c}"/>
+                                        </aura:if>
+                                        <div class="slds-truncate slds-text-align--left">
+                                            <strong>Labor Type :</strong> &nbsp;
+                                            <ui:OutputText value="{!currentSquawks.IsFirmPriceLabour__c}"/>
+                                        </div>
+                                        <aura:if isTrue ="{! not(v.isBroker)}">
+                                            <div class="slds-truncate slds-text-align--left">
+                                                <strong>Material Cost :</strong> &nbsp;
+                                                <ui:outputCurrency value="{!currentSquawks.Material_Amount__c}"/>
+                                            </div>
+                                        </aura:if>
+                                        <div class="slds-truncate slds-text-align--left">
+                                            <strong>Material Type :</strong> &nbsp;
+                                            <ui:OutputText value="{!currentSquawks.IsFirmPriceMaterial__c}"/>
+                                        </div>
+                                        <aura:if isTrue="{!v.showELH}">
+                                            <div class="slds-truncate slds-text-align--left">
+                                                <strong>Est Labor Hrs :</strong> &nbsp;
+                                                <ui:OutputText value="{!currentSquawks.Estimated_Labor_Hours__c}"/>
+                                            </div>                                                                                                                      
+                                        </aura:if>                                        
+                                        <div class="slds-truncate slds-text-align--left">
+                                            <strong>Req. for RTSs :</strong> &nbsp;
+                                            <ui:OutputText value="{!currentSquawks.IsRTS__c}" />
+                                        </div>
+                                        
+                                        <p/>
+                                        <aura:if isTrue ="{! not(v.isBroker)}">
+                                            <div class="slds-truncate slds-text-align--left">
+                                                
+                                                <ui:inputCheckbox
+                                                                  class="slds-p-horizontal--small slds-float_right"
+                                                                  text="{!currentSquawks.Id}"
+                                                                  aura:id="boxPack"
+                                                                  change="{!c.checkboxSelect}"
+                                                                  />
+                                                <strong class="slds-float_right slds-p-right_x-small">Select to Approve/Reject :</strong>
+                                            </div>
+                                        </aura:if>
+                                    </div>
+                                </article>
+                            </div>
+                        </aura:iteration>
+                    </div>
+                    <aura:if isTrue ="{! not(v.isBroker)}">
+                        <div class="slds-grid slds-align_absolute-center slds-card__footer">
+                            <div
+                                 class="slds-col slds-no-flex slds-grid slds-align-middle"
+                                 role="alert"
+                                 >
+                                <div>
+                                    <aura:if isTrue="{!v.ProjType == 'Seller'}">
+                                        <button class="slds-button approveButton"
+                                                onclick="{!c.showApprovalmodal}"
+                                                >
+                                            Approve Squawks
+                                        </button>
+                                        <button class="slds-button rejectButton"
+                                                onclick="{!c.rtsInRejectedSelection}"                                             
+                                                >
+                                            Reject
+                                        </button>
+                                        <button class="slds-button deferButton"
+                                                onclick="{!c.showDefermodal}"
+                                                >
+                                            Defer to Buyer
+                                        </button>
+                                        <aura:set attribute="else">
+                                            <button class="slds-button approveButton"
+                                                    onclick="{!c.showApprovalmodal}"
+                                                    >
+                                                Approve Squawks
+                                            </button>
+                                            <button class="slds-button rejectButton"
+                                                    onclick="{!c.rtsInRejectedSelection}"
+                                                    style="width: 125px;"
+                                                    >
+                                                Reject Squawks
+                                            </button>
+                                            
+                                        </aura:set>
+                                    </aura:if>
+                                </div>
+                            </div>
+                        </div>
+                    </aura:if>
+                </div>
+            </div>
+        </div>
+    </aura:if>
+    <aura:if isTrue="{!$Browser.formFactor != 'PHONE'}">
+        <!--Pending Squawks Modal-->
+        <div class="slds">
+            <div
+                 aria-hidden="true"
+                 role="dialog"
+                 tabindex="-1"
+                 aria-labelledby="header43"
+                 class="slds-modal slds-modal--large slds-fade-in-hide"
+                 aura:id="squawkModal"
+                 >
+                <span>
+                    <div
+                         class="slds-modal__container"
+                         style="display: inline-block; width: 98%; max-width: 100%; padding-right: 5%; padding-left: 5%; padding-top: 2%; padding-bottom: 2%;"
+                         >
+                        <header class="slds-modal__header backgroundHeaderModal">
+                            <lightning:buttonIcon
+                                                  class="slds-float_right icon"
+                                                  iconName="utility:close"
+                                                  variant="bare"
+                                                  onclick="{!c.handleCloseSquawksModal}"
+                                                  alternativeText="Close"
+                                                  />
+                            <h2 class="slds-text-heading_medium slds-hyphenate"
+                                >Pending Squawks For Project: {!v.ProjName} 
+                                
+                            </h2>
+                        </header>
+                        <aura:if isTrue ="{! not(v.isBroker)}">
+                            <div
+                                 class="slds-modal__content slds-p-around_medium"
+                                 style="background-color: rgb(255,250,217);"
+                                 >
+                                <div class="slds-grid">
+                                    <div class="slds-col slds-has-flexi-truncate ">
+                                        <div class="slds-media slds-no-space slds-grow">
+                                            <div class="slds-media__body">
+                                                <div>
+                                                    <p class="slds-page-header__title"
+                                                       >&nbsp;&nbsp;Pending Squawks List</p
+                                                        >
+                                                </div>
+                                                <div>
+                                                    <p>
+                                                        <span
+                                                              class="slds-badge badge slds-m-right--small slds-align-middle slds-truncate"
+                                                              >Selected Squawks:{!v.selectedCount}</span
+                                                            >
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="slds-col slds-no-flex slds-grid slds-align-middle">
+                                        
+                                        <div>
+                                            <aura:if isTrue="{!v.ProjType=='Seller'}">
+                                                <button class="slds-button approveButton"
+                                                        onclick="{!c.showApprovalmodal}"
+                                                        >
+                                                    Approve Squawks
+                                                </button>
+                                                <button class="slds-button rejectButton"
+                                                        onclick="{!c.rtsInRejectedSelection}"
+                                                        style="width: 125px;"
+                                                        >
+                                                    Reject Squawks
+                                                </button>
+                                                <button class="slds-button deferButton"
+                                                        onclick="{!c.showDefermodal}"
+                                                        >
+                                                    Defer to Buyer
+                                                </button>
+                                                <aura:set attribute="else">
+                                                    <button class="slds-button approveButton"
+                                                            onclick="{!c.showApprovalmodal}"
+                                                            >
+                                                        Approve Squawks
+                                                    </button>
+                                                    <button class="slds-button rejectButton" 
+                                                            style="width: 125px;"
+                                                            onclick="{!c.rtsInRejectedSelection}"
+                                                            >
+                                                        Reject Squawks
+                                                    </button>                                                   
+                                                </aura:set>
+                                            </aura:if>                                           
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                
+                            </div>
+                        </aura:if>
+                        
+                        <div class="slds-modal__footer slds-p-around_none">
+                            <article
+                                     class="slds-card scrollable uiScroller scroller-wrapper scroll-bidirectional native"
+                                     >
+                                <div
+                                     class="slds-table--header-fixed_container"
+                                     style="{!v.returnSize}"
+                                     >
+                                    <div
+                                         class="slds-card__body slds-card__body--inner slds-scrollable--y"
+                                         style="height: 100%;"
+                                         >
+                                        <table
+                                               class="slds-table slds-table_bordered slds-table--header-fixed slds-table--cell-buffer"
+                                               >
+                                            <thead>
+                                                <tr>
+                                                    <th
+                                                        class="slds-col slds-size_1-of-12"
+                                                        scope="col"
+                                                        onclick="{!c.sortName}"
+                                                        >
+                                                        <div
+                                                             class="slds-text-align--left slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable"
+                                                             title="Squawk No"
+                                                             ><strong>Squawk No</strong></div
+                                                            >
+                                                    </th>
+                                                    <th
+                                                        class="slds-col slds-align--absolute-center slds-size_5-of-12"
+                                                        scope="col"
+                                                        >
+                                                        <label
+                                                               class="slds-cell-fixed slds-th__action slds-vertical-align-center"
+                                                               ><strong>Description</strong></label
+                                                            >
+                                                    </th>
+                                                    <aura:if isTrue ="{! not(v.isBroker)}">
+                                                        <th
+                                                            class="slds-col slds-size_1-of-12"
+                                                            scope="col"
+                                                            onclick="{!c.sortLaborCost}"
+                                                            >
+                                                            <div
+                                                                 class="slds-text-align--center slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable"
+                                                                 title="Labor Cost"
+                                                                 ><strong>Labor Cost</strong></div
+                                                                >
+                                                        </th>
+                                                    </aura:if>
+                                                    <th
+                                                        class="slds-col slds-size_1-of-12"
+                                                        scope="col"
+                                                        onclick="{!c.sortFirmPriceLabor}"
+                                                        >
+                                                        <div
+                                                             class="slds-text-align--center slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable"
+                                                             title="Labor Type"
+                                                             ><strong>Labor Type</strong></div
+                                                            >
+                                                    </th>
+                                                    
+                                                    <aura:if isTrue ="{! not(v.isBroker)}">
+                                                        <th
+                                                            class="slds-col slds-size_1-of-12"
+                                                            scope="col"
+                                                            onclick="{!c.sortMaterialCost}"
+                                                            >
+                                                            <div
+                                                                 class="slds-text-align--center slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable"
+                                                                 title="Material Cost"
+                                                                 ><strong>Material Cost</strong></div
+                                                                >
+                                                        </th>
+                                                    </aura:if>
+                                                    <th
+                                                        class="slds-col slds-size_1-of-12"
+                                                        scope="col"
+                                                        onclick="{!c.sortFirmPriceMaterial}"
+                                                        >
+                                                        <div
+                                                             class="slds-text-align--center slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable"
+                                                             title="Material Type"
+                                                             ><strong>Material Type</strong></div
+                                                            >
+                                                    </th>
+                                                    <aura:if isTrue="{!v.showELH}">
+                                                        <th
+                                                            class="slds-col slds-size_1-of-12"
+                                                            scope="col"
+                                                            >
+                                                            <div class="slds-text-align--center slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable">
+                                                                <strong>Est Labor Hrs</strong>
+                                                            </div>
+                                                        </th>
+                                                    </aura:if>
+                                                    <th
+                                                        class="slds-col slds-size_1-of-12"
+                                                        scope="col"
+                                                        onclick="{!c.sortRTS}"
+                                                        >
+                                                        <div
+                                                             class="slds-text-align--center slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable"
+                                                             title="Items marked 'Req. for RTS' are considered mandatory items based on manufacturer requirements and/or safety of flight. Failure to address these items may result in a delayed return to service and/or a note of acceptance and acknowledgement of the open items on the aircrafts release."
+                                                             >
+                                                            <strong>Req. for RTS</strong>
+                                                        </div>
+                                                    </th>
+                                                    <aura:if isTrue ="{! not(v.isBroker)}">
+                                                        <th class="slds-col slds-size_1-of-12" scope="col">
+                                                            <label
+                                                                   class="slds-text-align--center slds-checkbox slds-cell-fixed slds-th__action slds-vertical-align-center"
+                                                                   ><strong>Select All</strong>&nbsp;
+                                                                <ui:inputCheckbox
+                                                                                  aura:id="box3"
+                                                                                  value="{!v.selectAll}"
+                                                                                  change="{!c.selectAll}"
+                                                                                  />
+                                                                <span class="slds-checkbox--faux"></span>
+                                                            </label>
+                                                        </th>
+                                                    </aura:if>
+                                                </tr>
+                                            </thead>
+                                            
+                                            <tbody>
+                                                
+                                                <aura:iteration
+                                                                items="{!v.squawks}"
+                                                                var="currentSquawks"
+                                                                >
+                                                    <tr>
+                                                        <th scope="row" data-label="Name">
+                                                            <div
+                                                                 class="slds-truncate slds-text-align--center"
+                                                                 >
+                                                                <aura:if isTrue ="{! not(v.isBroker)}">
+                                                                    <aura:if isTrue="{!currentSquawks.Has_Attachment__c == True}">
+                                                                        <a href="{!$Site.Prefix + '/Customer/s/squawk/'+currentSquawks.Id}" target="_blank">
+                                                                            <lightning:icon iconName="utility:attach" size="xx-small"/>
+                                                                            &nbsp;{!currentSquawks.fxSquawkNo__c}
+                                                                        </a>
+                                                                        <aura:set attribute="else">
+                                                                            <lightning:button variant="base" name="{!currentSquawks.Id}" label="{!currentSquawks.fxSquawkNo__c}" onclick="{!c.squawkNav}"/>
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                                <aura:if isTrue ="{! (v.isBroker)}">
+                                                                    <aura:if
+                                                                             isTrue="{!currentSquawks.Has_Attachment__c == True}"
+                                                                             >
+                                                                        
+                                                                        &nbsp;{!currentSquawks.fxSquawkNo__c}
+                                                                        
+                                                                        <aura:set attribute="else">
+                                                                            
+                                                                            {!currentSquawks.fxSquawkNo__c}
+                                                                            
+                                                                        </aura:set>
+                                                                    </aura:if>
+                                                                </aura:if>
+                                                            </div>
+                                                        </th>
+                                                        <td data-label="Description">
+                                                            <div class="slds-truncate col-4 slds-text-align--left"
+                                                                 title="{!currentSquawks.Job_Card_Description__c}"
+                                                                 >{!currentSquawks.Job_Card_Description__c}</div
+                                                                >
+                                                        </td>
+                                                        <aura:if isTrue ="{! not(v.isBroker)}">
+                                                            <td data-label="Labor Cost">
+                                                                <div class="slds-truncate slds-text-align--center">
+                                                                    <ui:outputCurrency value="{!currentSquawks.Labor_Amount__c}"/>
+                                                                </div>
+                                                            </td>
+                                                        </aura:if>
+                                                        <td data-label="Labor Type">
+                                                            <div
+                                                                 class="slds-truncate slds-text-align--center"
+                                                                 >
+                                                                <ui:OutputText value="{!currentSquawks.IsFirmPriceLabour__c}"/>
+                                                            </div>
+                                                        </td>
+                                                        <aura:if isTrue ="{! not(v.isBroker)}">
+                                                            <td data-label="Material Cost">
+                                                                <div class="slds-truncate slds-text-align--center">
+                                                                    <ui:outputCurrency value="{!currentSquawks.Material_Amount__c}"/>
+                                                                </div>
+                                                            </td>
+                                                        </aura:if>
+                                                        <td data-label="Material Type">
+                                                            <div
+                                                                 class="slds-truncate slds-text-align--center"
+                                                                 >
+                                                                <ui:OutputText value="{!currentSquawks.IsFirmPriceMaterial__c}"/>
+                                                            </div>
+                                                        </td>
+                                                        <aura:if isTrue="{!v.showELH}">
+                                                            <td data-label="Est Labor Hrs">
+                                                                <div class="slds-truncate slds-text-align--center">
+                                                                    <ui:OutputText value="{!currentSquawks.Estimated_Labor_Hours__c}"/>
+                                                                </div>
+                                                            </td>                                                                                                                        
+                                                        </aura:if>
+                                                        <td data-label="Req. for RTS">
+                                                            <div
+                                                                 class="slds-truncate slds-text-align--center"
+                                                                 >
+                                                                <ui:OutputText value="{!currentSquawks.IsRTS__c}"/>
+                                                            </div>
+                                                        </td>
+                                                        
+                                                        <aura:if isTrue ="{! not(v.isBroker)}">
+                                                            <td>
+                                                                <label class="slds-checkbox slds-truncate slds-text-align--right">
+                                                                    <ui:inputCheckbox text="{!currentSquawks.Id}"
+                                                                                      aura:id="boxPack"
+                                                                                      change="{!c.checkboxSelect}"
+                                                                                      />
+                                                                    <span class="slds-checkbox--faux"></span>
+                                                                    <span class="slds-form-element__label text"></span>
+                                                                </label>
+                                                            </td>
+                                                        </aura:if>
+                                                    </tr>
+                                                </aura:iteration>                                           
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </aura:if>
+</aura:component>

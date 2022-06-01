@@ -1,0 +1,7 @@
+<aura:component implements="force:lightningQuickAction,force:hasRecordId"  >
+    <lightning:flow aura:id="flow" onstatuschange="{!c.statusChange}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:attribute name="recordId" type="String" />    
+</aura:component>

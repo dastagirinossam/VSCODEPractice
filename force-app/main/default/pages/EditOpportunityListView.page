@@ -1,0 +1,112 @@
+<apex:page standardController="Opportunity" recordSetVar="opportunities" tabStyle="Opportunity" sidebar="false" lightningStylesheets="true">
+  <apex:slds />  
+    <style type="text/css">
+        .dateFormat{
+            visibility:hidden;
+        }
+    </style>
+    
+    <apex:form >   
+        <apex:pageBlock title="Edit Opportunity List" mode="edit">          
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageblocktable value="{!selected}" var="opp" >
+            
+                <apex:column headervalue="Move To Tracking Only" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputfield value="{!opp.Move_to_Tracking_Only__c}" style="width:80px"/>                  
+                </apex:column> 
+                                 
+                <apex:column headervalue="Opportunity Name" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.Name}" style="width:200px"/>                 
+                </apex:column>
+                                
+                <apex:column headervalue="Name Details" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">                                      
+                    <apex:inputField value="{!opp.Opportunity_Name_Details__c}" />                  
+                </apex:column>
+                                  
+                <apex:column headervalue="Name Override" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.Opportunity_Name_Override__c}" />                 
+                </apex:column>
+                                   
+                <apex:column headerValue="Stage" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:Outputtext value="{!opp.stagename}"/>
+                </apex:column>  
+                
+                <apex:column headervalue="Tier" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.Tier_Level__c}" />                  
+                </apex:column> 
+                                                 
+                <apex:column headervalue="RSM" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.RSM__c}" style="width:250px"/>                  
+                </apex:column>   
+                                 
+                <apex:column headervalue="TSM" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.AFSM__c}" style="width:250px"/>                 
+                </apex:column>  
+                
+                <apex:column headerValue="Account" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.accountid}"/>
+                </apex:column>
+                                            
+                <apex:column headerValue="Customer Name" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.CustomerName__c}"/>
+                </apex:column>            
+                                       
+                <apex:column headerValue="Close Date"  style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.closedate}" />                 
+                </apex:column>
+                
+                <apex:column headerValue="Input Date" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.InputDate__c}"/>                
+                </apex:column>
+               
+                <apex:column headerValue="Output Date" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.OutputDate__c}"/>                  
+                </apex:column> 
+                                             
+                <apex:column headerValue="Amount" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.amount}"/>
+                </apex:column>
+                
+                <apex:column headerValue="Facility" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.Facility__c}"/>
+                </apex:column>
+                              
+                <apex:column headerValue="Product Line" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.Product_Line__c}"/>
+                </apex:column>  
+                
+                <apex:column headerValue="Type" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.Type}"/>
+                </apex:column>
+                
+                <apex:column headerValue="Sub-Type" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.SubType__c}"/>
+                </apex:column>    
+                
+                <apex:column headerValue="Sub Type 2" style="background-color:#E0FFFF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!opp.SubType2__c}"/>
+                 </apex:column>
+                 
+                 <apex:column style="width:.0001px">
+                    <apex:inputfield required="false" value="{!opp.StageName}" style="width:.0001px;color:white" />
+                </apex:column>
+                        
+                <apex:column breakbefore="true" colspan="12" style="vertical-align:text-top;border:solid;border-width:.1px;border-color:gray">                                              
+                    <apex:outputText value="Next Step Dialogue:" style="vertical-align:top"/> <apex:inputField value="{!opp.Next_Step_Dialogue__c}" style="width: 350px;height:40px"/> 
+                    <apex:outputText value="_____" style="color:white;vertical-align:top"/> 
+                    <apex:outputText value="Quoting Detail Information:" style="vertical-align:top"/> <apex:inputField value="{!opp.Quoting_Detail_Information__c}" style="width: 350px;height:40px"/>
+                    <apex:outputText value="_____" style="color:white;vertical-align:top"/>
+                    <apex:outputText value="RFS Handoff Dialogue:" style="vertical-align:top"/> <apex:inputField value="{!opp.description}" style="width: 350px;height:40px"/>
+                    <apex:outputText value="_____" style="color:white;vertical-align:top"/>
+                    <apex:outputText value="Log A Call:"/><apex:inputCheckbox value="{!opp.Log_A_Call__c}"/>
+                </apex:column>
+                
+            </apex:pageblocktable>                   
+        </apex:pageBlock>        
+    </apex:form>
+</apex:page>

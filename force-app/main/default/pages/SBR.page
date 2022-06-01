@@ -1,0 +1,241 @@
+<apex:page docType="html-5.0" standardStylesheets="false" showHeader="false" sidebar="false">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" />
+        <link href="{!URLFOR($Resource.slides, 'assets/css/keypoint-bundle.css')}" rel="stylesheet" />
+        <link href="{!URLFOR($Resource.slides, 'assets/css/slides.css')}" rel="stylesheet" />
+    </head>
+
+    <body>
+
+    <div id="wrapper"></div>
+
+    <div id="slides" data-base-url="{!URLFOR($Resource.slides, '/')}">
+
+    <div class="slide bg">
+        <div style="position: absolute;top: 20%;left:10%;text-align:left;">
+            <h1><b>Sales Business Review</b></h1>
+            <div>Opening Slide Looked Bad, Still Working On It, Please Scroll --></div> 
+            <div>For a full screen on your browser hold CNTRL and press F11</div>
+            <div> You can also use your arrow keys for navigation</div>    
+        </div>
+    </div>
+
+    <div class="slide bg">
+        <div style="position: absolute;top: 5%;left: 5%;text-align:left;">
+            <h1><b>Purpose of the Sales Business Review (SBR)</b></h1>
+            <li><b>Improve forecasting and quota achievement for the quarter and year</b></li>
+                <div style="text-indent: 1em;">- Schedule 1: Pipeline</div>
+                <div style="text-indent: 1em;">- Schedule 2: Quoted % of 180</div>
+                <div style="text-indent: 1em;">- Schedule 3: Win Rate</div>
+                <div style="text-indent: 1em;">- Schedule 4: Bookings</div>
+                <div style="text-indent: 1em;">- Schedule 5: Losses</div>
+            <li><b>Identify key metrics that drive the revenue and quota achievement (5 Deck)</b></li>
+                <div style="text-indent: 1em;">-Each area presents Forecast + 5 deck (10-15 minutes each)</div>
+            <li><b>Provide structure and accountability to the regions</b></li>
+                <div style="text-indent: 1em;">-Reviewing losses and market trends on a regional basis</div>
+            <li><b>Identify holes in the funnel and/or areas that need course correction</b></li>
+        </div>
+    </div>
+    
+    <div class="slide bg">
+        <div style="position: absolute;top: 5%;left: 5%;text-align:left;">
+            <h1><b>Forecast</b></h1>
+        </div>
+        
+        <apex:form style="margin-top: 15%; align:center;">
+            <apex:pageBlock >
+                <apex:pageBlockSection >
+                    <apex:pageBlockSectionItem >
+
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+        </apex:form>
+    </div>
+
+    <div class="slide bg">
+        <div style="position: absolute;top: 5%;left: 5%;text-align:left;">
+            <h1><b>Pipeline</b></h1>
+        </div>
+
+        <table cellpadding="3" cellspacing="3" align="center" style="margin-top: 7%">
+            <tr>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000roHS&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=pie&cs=0&title=New+Flight+Hours+-+CY&eh=yes&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Source&dl2=&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O70000003qfd3%3Fdbw%3D1&sd=1&scv=yes&sct=no&spt=yes&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1466514452000" height="400px"/>
+                </td>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FLtC&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=pie&cs=0&title=New+Aircraft+-+CY&eh=no&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Aircraft+Make&dl2=&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O700000031jDu%3Fdbw%3D1&sd=1&scv=yes&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1466514449000" height="400px"/>
+                </td>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FXlP&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=pie&cs=0&title=New+Equipment+-+CY&eh=no&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Equipment+Prefix&dl2=&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O70000003R78v%3Fdbw%3D1&sd=1&scv=yes&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1466514449000" height="400px"/>
+                </td>
+             </tr>
+        </table>
+        
+        <p/>
+        
+        <div style="left: 5%;text-align:left;">
+            <li><b>Notes on pipeline health here:</b></li>
+        </div>
+        
+        <apex:form >
+        <div>
+            <apex:inputTextArea id="Notes" richText="true"/> 
+        </div>
+        </apex:form>
+ 
+    </div>
+
+    <div class="slide bg">
+        <div style="position: absolute;top: 5%;left: 5%;text-align:left;">
+            <h1><b>Quoted % of 180</b></h1>
+        </div> 
+        
+ 
+        <table cellpadding="3" cellspacing="3" align="center" style="margin-top: 7%">
+            <tr>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000roHN&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=0&title=New+Flight+Hours+Added&eh=yes&compo=no&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Hours+Date&dl2=&l=1&sax=yes&Yman=no&nc=0&actUrl=%2F00O70000003qfcP%3Fdbw%" height="400px"/>
+                </td>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FXlU&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=0&title=New+Equipment+Added&eh=yes&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Equipment%3A+Created+Date&dl2=&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O70000003R78g%3Fdbw%3D1&sd=1&scv=no&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1469566829000" height="400px"/>
+                </td>
+            </tr>
+        </table>
+        
+        <p/>
+        
+        <div style="left: 5%;text-align:left;">
+            <li><b>Notes on actions to improve here:</b></li>
+        </div>
+        
+        <apex:form >
+        <div>
+            <apex:inputTextArea />
+        </div>
+        </apex:form>
+
+    </div>
+
+    <div class="slide bg">
+        <div style="position: absolute;top: 5%;left: 5%;text-align:left;">
+            <h1><b>Win Rate</b></h1>
+        </div>
+        
+        <table cellpadding="3" cellspacing="3" align="center" style="margin-top: 7%">
+            <tr>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FKcK&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=2&title=New+Accounts&eh=yes&compo=no&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Created+Date&dl2=Area&l=1&sax=yes&Yman=no&nc=0&actUrl=%2F00O700000031hAt%3Fdbw%3D1&sd=1&scv=no&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gm=0.0&gc0=-1&gm0=1.0&gc1=-1&gm1=2.0&gc2=-1&gm2=3.0&sona=0&refreshts=1466514449000" height="400px"/>
+                </td>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FKce&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=2&title=New+Contacts&eh=yes&compo=no&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Created+Date&dl2=Area&l=1&sax=yes&Yman=no&nc=0&actUrl=%2F00O700000031hBr%3Fdbw%3D1&sd=1&scv=no&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gm=0.0&gc0=-1&gm0=1.0&gc1=-1&gm1=2.0&gc2=-1&gm2=3.0&sona=0&refreshts=1466514450000" height="400px"/>
+                </td>
+            </tr>
+        </table>
+        
+        <p/>
+        
+        <div style="left: 5%;text-align:left;">
+            <li><b>Talk on market trends here that may be affecting win rate, ect:</b></li>
+        </div>
+        
+        <apex:form >
+        <div>
+            <apex:inputTextArea />
+        </div>
+        </apex:form>
+        
+    </div>
+    
+    <div class="slide bg">
+        <div style="position: absolute;top: 5%;left: 5%;text-align:left;">
+            <h1><b>Bookings</b></h1>
+        </div>
+        
+        <table cellpadding="3" cellspacing="3" align="center" style="margin-top: 7%">
+            <tr>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FLtb&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=2&title=New+Opportunities&eh=no&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Created+Date&dl2=Type&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O700000031hAA%3Fdbw%3D1&sd=1&scv=no&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1466514451000" height="400px"/>
+                </td>
+            </tr>
+        </table>
+        
+        <p/>
+        
+        <div style="left: 5%;text-align:left;">
+            <li><b>Discuss Challenges, ect:</b></li>
+        </div>
+        
+        <apex:form >
+        <div>
+            <apex:inputTextArea />
+        </div>
+        </apex:form>
+        
+    </div>
+
+    <div class="slide bg">
+        <div style="position: absolute;top: 5%;left: 5%;text-align:left;">
+            <h1><b>Losses by Reason and Competitor</b></h1>
+        </div>
+        
+        <table cellpadding="3" cellspacing="3" style="position: absolute;top: 13%; left: 5%;">
+            <tr>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FLtb&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=2&title=New+Opportunities&eh=no&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Created+Date&dl2=Type&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O700000031hAA%3Fdbw%3D1&sd=1&scv=no&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1466514451000" height="400px"/>
+                </td>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FLtb&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=2&title=New+Opportunities&eh=no&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Created+Date&dl2=Type&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O700000031hAA%3Fdbw%3D1&sd=1&scv=no&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1466514451000" height="400px"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FLtb&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=2&title=New+Opportunities&eh=no&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Created+Date&dl2=Type&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O700000031hAA%3Fdbw%3D1&sd=1&scv=no&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1466514451000" height="400px"/>
+                </td>
+                <td>
+                    <img src="/servlet/servlet.ChartServer?rsid=0FL70000000FLtb&ruid=00500000005wpLr&did=01Z70000000VNfS&s=7&fs=10&tfg=12&tfs=-16777063&explode=0&c=column&cs=2&title=New+Opportunities&eh=no&compo=yes&fg=-16777216&bg1=-1&bg2=-1&bgdir=2&dl1=Created+Date&dl2=Type&l=2&sax=yes&Yman=no&nc=0&actUrl=%2F00O700000031hAA%3Fdbw%3D1&sd=1&scv=no&sct=no&spt=no&bd=yes&cu=USD&ab=X&u=0&vt=0&ab2=Y&u2=0&vt2=0&vl0=Record+Count&spoc=no&topn=no&gc0=-1&gc1=-1&gc2=-1&sona=0&refreshts=1466514451000" height="400px"/>
+                </td>
+            </tr>
+       </table>
+       
+            <div style="position: absolute;top: 15%;right: 5%;text-align:right;">
+                  <li><b>Explanation Here on the significant losses or loss trends, ect:</b></li>
+     
+                <apex:form >
+                    <div>
+                        <apex:inputTextArea style="height:800px;"/>
+                    </div>
+                </apex:form>
+                </div>
+                
+        
+    </div>
+
+    <div class="slide bg">
+        <div style="position: absolute;top: 5%;left: 5%;text-align:left;">
+            <h1><b>Anchor Inspection Reference</b></h1>
+        </div>
+    </div>
+
+    </div> <!-- end of '#slides' -->
+
+    <button id="menu-btn" class="button button-clear icon ion-navicon"></button>
+
+    <div id="menu" class="energized-bg">
+        <div class="title">Keypoint</div>
+        <div class="scroller cf">
+            <ol id="list" class="list"></ol>
+        </div>
+    </div>
+
+    <script src="{!URLFOR($Resource.slides, 'lib/keypoint-bundle.js')}"></script>
+    
+    <!-- Custom interactions for this presentation -->
+    <script src="{!URLFOR($Resource.slides, 'js/slides.js')}"></script>
+    <script>
+        keypoint.init('{!$Api.Session_ID}');
+    </script>
+
+    </body>
+</apex:page>

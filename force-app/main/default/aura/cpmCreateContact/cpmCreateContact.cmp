@@ -1,0 +1,77 @@
+<aura:component implements="lightning:availableForFlowScreens,force:hasRecordId" access="global" controller="CreateUserHandler">
+    
+    <aura:attribute name="newUserId" type="String"/>    
+    <aura:attribute name="newContact" type="Object"/>
+    <aura:attribute name="contactId" type="String"/>    
+    <aura:attribute name="simpleNewContact" type="Object"/>
+    <aura:attribute name="newContactError" type="String"/>
+    <aura:attribute name="accntId" type="String"/>
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="false" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+           
+    <aura:if isTrue="{!v.showSpinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <force:recordData aura:id="contactRecordCreator"
+                      layoutType="FULL"
+                      mode="EDIT"
+                      targetRecord="{!v.newContact}"
+                      targetFields="{!v.simpleNewContact}"
+                      targetError="{!v.newContactError}" 
+                      recordId="{!v.contactId}"/>  
+   
+    <!-- Display the new contact form -->
+    <aura:if isTrue="{!!v.saved}">
+        <div class="slds-m-bottom_large">
+            <b style="background-color: rgb(255, 255, 255); font-size: 14px;">Create myStandardAero User: </b>
+        </div>
+        <div class="slds-p-vertical--medium">
+            <lightning:input aura:id="contactField" label="First Name" required="true" value="{!v.simpleNewContact.FirstName}"/>
+            <lightning:input aura:id="contactField" label="Last Name" required="true" value="{!v.simpleNewContact.LastName}"/>
+            <lightning:input aura:id="contactField" label="Email" required="true" value="{!v.simpleNewContact.Email}"/>
+            <lightning:input aura:id="contactField" label="Title" value="{!v.simpleNewContact.Title}"/>
+            <lightning:input aura:id="contactField" label="Mobile Phone" value="{!v.simpleNewContact.MobilePhone}"/>
+            <lightning:input aura:id="contactField" label="Phone" value="{!v.simpleNewContact.Phone}"/>
+        </div> 
+        <footer class="slds-card__footer">
+            <div class="actionsRight">
+                <lightning:button label="Previous" aura:id="previousId" variant="neutral" onclick="{!c.handleChange}"/>
+                <lightning:button label="Create Contact" variant="brand" onclick="{!c.handleSaveContact}"/>
+            </div>
+        </footer>
+        
+        <aura:set attribute="else">    
+            <div class="slds-m-bottom_large">
+                <b style="background-color: rgb(255, 255, 255); font-size: 14px;">Create myStandardAero User:</b>
+            </div>
+            <div class="slds-p-horizontal--small">
+                <div class="slds-p-around_medium">
+                    <p>A new myStandardAero User has been created!</p>
+                </div>
+            </div> 
+            <footer class="slds-card__footer">
+                <div class="actionsRight">
+                    <lightning:button label="Next" aura:id="nextId" variant="brand" onclick="{!c.handleChange}"/>
+                </div>
+            </footer>              
+        </aura:set>	
+    </aura:if>
+    
+    <!-- Display Lightning Data Service errors -->
+    <aura:if isTrue="{!not(empty(v.newContactError))}">
+        <div class="recordError">
+            {!v.newContactError}</div>
+    </aura:if>
+    
+</aura:component>

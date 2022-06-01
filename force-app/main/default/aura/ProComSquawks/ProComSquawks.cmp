@@ -1,0 +1,250 @@
+<aura:component extends="forceCommunity:navigationMenuBase" implements="forceCommunity:availableForAllPageTypes" controller="SquawkApproval" access="global">
+    <ltng:require styles="{! $Resource.SLDS090 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    
+    <aura:attribute name="projRecordsId" type="List" access="public"/>
+    <aura:attribute name="displayModal" type="Boolean" default="false" access="public" />
+	<aura:attribute name="currentProject" type="String[]"/>
+	<aura:attribute name="checkedSquawks" type="String[]" />
+	<aura:attribute name="projects" type="MPM4_BASE__Milestone1_Project__c[]"/>
+	<aura:attribute name="squawks" type="SBQQ__QuoteLine__c[]"/> 
+	<aura:attribute name="MasterCheckbox" type="Boolean" default="true" />
+    <aura:attribute name="returnSize" type="string" default="height: 100%;"/>
+	<aura:attribute name="Spinner" type="boolean" default="false"/>
+    <aura:attribute name="selectedCount" type="integer" default="0"/>
+    <aura:attribute name="searchResult" type="List" description="use for store and display squawk list return from server"/>
+   	<aura:attribute name="searchKeyword" type="String" description="use for store user search input"/>  
+    <aura:attribute name="numberOfRecord" type="integer" default="0" description="use for display Number of records"/>          
+    <aura:attribute name="arrowDirection" type="string" default="arrowup" description="Use for change arrow sign direction on header based on click"/>
+    <aura:attribute name="isAsc" type="boolean" default="true" description="boolean flag for pass sorting condition to apex class"/> 
+    <aura:attribute name="selectedTabsoft" type="string" default="Squawk Name" description="Use for show/hide arraow sign on header based on conditions"/>
+   
+	<aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+           <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+             <span class="slds-assistive-text">Loading</span>
+             <div class="slds-spinner__dot-a"></div>
+             <div class="slds-spinner__dot-b"></div>
+           </div>
+        </div>
+ 	</aura:if>
+    
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="noneSelectedModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header slds-theme--error slds-theme--alert-texture">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">No Squawks Were Selected</h2>
+    			</div>
+    			<div class="slds-modal__content slds-p-around--medium slds-text-align--center">
+      				<p>No Squawks Were Selected. Please Select Squawks To Approve or Reject.</p>
+    			</div>
+    			<div class="slds-modal__footer">
+      				<button onclick="{!c.hideNoneSelectedModal}" class="slds-button slds-button--brand">Ok</button>
+    			</div>
+  			</div>
+		</div>  
+	</div>
+    
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="RtsSelectedModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header slds-theme--error slds-theme--alert-texture">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">Return To Service Squawk Denied</h2>
+    			</div>
+    			<div class="slds-modal__content slds-p-around--medium slds-text-align--center">
+      				<p>You have declined a squawk that is mandatory for RTS (Return to Service). Declining this squawk could result in delaying your project or requiring a written acknowledgement of the open discrepancy on the aircraft release from StandardAero. Are you sure you want to decline this squawk?</p>
+    			</div>
+                <div class="slds-modal__footer">                           
+                	<button onclick="{!c.hideRtsSelectedModal}" class="slds-button cancelButton">Cancel</button>
+      				<button onclick="{!c.showRejectRtsModal}" class="slds-button rejectButton">Ok</button>
+                </div>
+  			</div>
+		</div>  
+	</div>
+    
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="approveModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header approveModal slds-theme--alert-texture">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">Approve Selected Squawks</h2>
+    			</div>
+    			<div class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread">
+                    <div >Are you sure you want to approve these {!v.selectedCount} squawks?</div>
+                    <div>
+                    	<button onclick="{!c.hideApproveModal}" class="slds-button slds-button--neutral">Cancel</button>
+      					<button onclick="{!c.approveSelected}" class="slds-button approveButton">Approve Squawks</button>
+                    </div>
+    			</div>
+    			<div class="slds-modal__footer">                           
+                	<div class="slds-text-align--left slds-align-bottom legal">You are bound to these <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank">conditions</a> upon approval of selected squawks. By clicking "Approve Squawks" you agree to these terms.</div>
+            	</div>
+  			</div>
+		</div>  
+	</div>
+  
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="rejectModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header rejectModal slds-theme--alert-texture">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">Reject Selected Squawks</h2>
+    			</div>
+    			<div class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread">
+                    <div >Are you sure you want to reject these {!v.selectedCount} squawks?</div>
+                    <div>
+                    	<button onclick="{!c.hideRejectModal}" class="slds-button slds-button--neutral">Cancel</button>
+      					<button onclick="{!c.rejectSelected}" class="slds-button rejectButton">Reject Squawks</button>
+                    </div>
+    			</div>
+    			<div class="slds-modal__footer">                           
+                	<div class="slds-text-align--left slds-align-bottom legal">You are bound to these <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank">conditions</a> upon rejection of selected squawks. By clicking "Reject Squawks" you agree to these terms.</div>
+            	</div>
+  			</div>
+		</div>  
+	</div>
+        
+    <div class="slds-backdrop slds-backdrop--hide" aura:id="backdrop"></div>
+           
+	<div class="slds-page-header squawkContainer">    
+        <div class="slds-grid">
+            <div class="slds-col slds-has-flexi-truncate">
+              <div class="slds-media slds-no-space slds-grow">
+                <div class="slds-media__body">
+                    <div>
+                   		<p class="slds-page-header__title">&nbsp;&nbsp;Squawks List For Project</p>
+                    </div>
+                    <div>
+                        <p>
+                            <span class="slds-badge badge slds-m-right--small slds-align-middle slds-truncate">Selected Squawks:{!v.selectedCount}</span>
+                        </p>
+                    </div>
+                </div>
+              </div>
+            </div>
+        
+            <div class="slds-col slds-no-flex slds-grid slds-align-middle">
+              <div>
+                <button class="slds-button approveButton" onclick="{!c.showApprovalmodal}">
+                  Approve Squawks
+                </button>
+                <button class="slds-button rejectButton" onclick="{!c.rtsInRejectedSelection}">
+                  Reject Squawks
+                </button>
+              </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+		<article class="slds-card scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+            <div class="slds-table--header-fixed_container" style="{!v.returnSize}">
+                <div class="slds-card__body slds-card__body--inner slds-scrollable_y" style="{!v.returnSize}">
+                    <table class="slds-table slds-table_bordered slds-table--header-fixed slds-table--cell-buffer"> 
+                        <thead>
+                            <tr>   
+                                <th class="slds-col slds-size_1-of-12" scope="col" onclick="{!c.sortName}">
+                                    <div class="slds-checkbox slds-text-align--left slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable" title="Squawk Name"><strong>Squawk Name</strong></div>
+                                </th>
+                                <th class="slds-col slds-align--absolute-center slds-size_5-of-12" scope="col">                       
+                                	<label class="slds-checkbox slds-cell-fixed slds-th__action slds-vertical-align-center"><strong>Description</strong></label>
+                                </th>                      
+                                <th class="slds-col slds-size_1-of-12" scope="col" onclick="{!c.sortLaborCost}">                        
+                                    <div class="slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable" title="Labor Cost"><strong>Labor Cost</strong></div>
+                                </th>
+                                <th class="slds-col slds-size_1-of-12" scope="col" onclick="{!c.sortFirmPriceLabor}">
+                                    <div class="slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable" title="Labor Type"><strong>Labor Type</strong></div>
+                                </th>
+                                <th class="slds-col slds-size_1-of-12" scope="col" onclick="{!c.sortMaterialCost}">                       
+                                    <div class="slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable" title="Material Cost"><strong>Material Cost</strong></div>
+                                </th>
+                                <th class="slds-col slds-size_1-of-12" scope="col" onclick="{!c.sortFirmPriceMaterial}">                      
+                                    <div class="slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable" title="Material Type"><strong>Material Type</strong></div>
+                                </th>
+                                <th class="slds-col slds-size_1-of-12" scope="col" onclick="{!c.sortRTS}" >
+                                    <div class="slds-truncate slds-cell-fixed slds-th__action slds-text-link--reset slds-is-sortable" title="Items marked 'Req. for RTS' are considered mandatory items based on manufacturer requirements and/or safety of flight. Failure to address these items may result in a delayed return to service and/or a note of acceptance and acknowledgement of the open items on the aircrafts release.">    
+                                        <strong>Req. for RTS</strong>                 
+                                    </div>
+                                </th>
+                                <th class="slds-col slds-size_1-of-12" scope="col">                       
+                                	<label class="slds-checkbox slds-cell-fixed slds-th__action slds-vertical-align-center"><strong>Select All</strong>&nbsp;  
+                                    	<ui:inputCheckbox aura:id="box3" value="" change="{!c.selectAll}"/>
+                                        <span class="slds-checkbox--faux"></span>
+                                    </label>
+                                </th>  
+                            </tr> 
+                        </thead>
+                        <tbody>
+                            <aura:iteration items="{!v.squawks}" var="currentSquawks">
+                                <tr>				
+                                    <th scope="row" data-label="Name">
+                                        <div class="slds-truncate slds-text-align--center">
+                                            <aura:if isTrue="{!currentSquawks.Has_Attachment__c == True}">
+                                                <a href="{!$Site.Prefix + '/Customer/s/squawk/'+currentSquawks.Id}" target="_blank">
+                                                    <lightning:icon iconName="utility:attach" size="xx-small"/>                                
+                                                    &nbsp;{!currentSquawks.Name}
+                                                </a>
+                                                <aura:set attribute="else">
+                                                    <a href="{!$Site.Prefix + '/Customer/s/squawk/'+currentSquawks.Id}" target="_blank">
+                                                    {!currentSquawks.Name}
+                                                    </a>
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </th>   
+                                    <td data-label="Description">                                        
+                                        <div class="slds-truncate col-4 slds-text-align--left" title="{!currentSquawks.Job_Card_Description__c}">{!currentSquawks.Job_Card_Description__c}</div>      	
+                                    </td>                 
+                                    <td data-label="Labor Cost">
+                                        <div class="slds-truncate slds-text-align--center"> 
+                                            <ui:outputCurrency value="{!currentSquawks.Labor_Amount__c}"/>
+                                        </div>
+                                    </td>                 
+                                    <td data-label="Labor Type">
+                                        <div class="slds-truncate slds-text-align--center"> 
+                                                <ui:OutputText value="{!currentSquawks.IsFirmPriceLabour__c}"/>
+                                        </div>
+                                    </td>
+                                    <td data-label="Material Cost">
+                                        <div class="slds-truncate slds-text-align--center"> 
+                                            <ui:outputCurrency value="{!currentSquawks.Material_Amount__c}"/>
+                                        </div>
+                                    </td>
+                                    <td data-label="Material Type">
+                                        <div class="slds-truncate slds-text-align--center"> 
+                                            <ui:OutputText value="{!currentSquawks.IsFirmPriceMaterial__c}"/>
+                                        </div>                 
+                                    </td> 
+                                    <td data-label="Req. for RTS">
+                                        <div class="slds-truncate slds-text-align--center"> 
+                                            <ui:OutputText value="{!currentSquawks.IsRTS__c}"/>
+                                        </div>
+                                    </td>
+                                    <td>                         
+                                        <label class="slds-checkbox slds-truncate slds-text-align--right">
+                                            <ui:inputCheckbox text="{!currentSquawks.Id}" aura:id="boxPack" change="{!c.checkboxSelect}"/>
+                                            <span class="slds-checkbox--faux"></span>
+                                            <span class="slds-form-element__label text"></span>
+                                        </label>
+                                    </td>                                 
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+        	</div>
+        </article>        
+	</div>
+
+</aura:component>

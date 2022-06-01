@@ -1,0 +1,65 @@
+<aura:component extends="forceCommunity:navigationMenuBase" 
+                implements="forceCommunity:availableForAllPageTypes,force:appHostable,force:hasRecordId" 
+                access="global" 
+                controller="CreateUserHandler">
+    
+    <aura:attribute name="recordId" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.getrecord}" />
+     
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner />
+    </aura:if>
+    
+    <aura:if isTrue="{!!v.saved}">
+        <lightning:recordEditForm
+                                  onload="{!c.handleLoad}"
+                                  onsubmit="{!c.handleSubmit}"
+                                  onsuccess="{!c.handleSuccess}"
+                                  recordId="{!v.recordId}"
+                                  objectApiName="Contact">
+            <!-- the messages component is for error messages -->
+            <lightning:messages />
+            
+            <div class="Create Contact"> 
+                <lightning:card variant="Narrow" iconName="custom:custom56" title="Confirm RSVP" >          
+                    <div class="slds-p-horizontal--small">  
+                        
+                        <lightning:outputField fieldName="Name" /> 
+                        <lightning:outputField fieldName="Additional_Guest__c" />                        
+                        <lightning:outputField fieldName="Guest_Details__c" />
+                        <label for="guestNumber">
+                            <p>Additional guests should be limited to friends and family.  All other guests related to our industry such as peers, crew, etc should be invited separately to ensure their contact information is captured in our system.</p>
+                            <br/>
+                            <p>Enter the number of additional guests YOU are confirming for this invitee in the box below.</p></label>
+                        <lightning:inputField aura:id="guestNumber" fieldName="Number_of_Guests__c" required="true" variant="label-hidden"/>                      
+                        <lightning:inputField fieldName="Invited_to_NBAA__c" value="Confirmed" class="slds-hidden"/>
+                        
+                        <div>
+                            <lightning:button label="Cancel" onclick="{!c.handleCancel}" />
+                            <lightning:button disabled="{!v.disabled}" variant="brand" type="submit" name="save" label="Confirm" />
+                        </div>
+                    </div>
+                </lightning:card>
+            </div>
+        </lightning:recordEditForm> 
+        
+        <aura:set attribute="else">
+            <div class="Create Contact"> 
+                <lightning:card variant="Narrow" iconName="custom:custom56" title="Confirm RSVP" >          
+                    <div class="slds-p-horizontal--small"> 
+                        <p>RSVP has been Confirmed!</p>
+                        <p>Thank you!</p>
+                        <div class="slds-m-top_medium">
+                            <lightning:button label="Return" onclick="{!c.handleCancel}" />                         
+                        </div>
+                    </div>
+                </lightning:card>
+            </div>
+        </aura:set>	
+        
+    </aura:if>
+</aura:component>

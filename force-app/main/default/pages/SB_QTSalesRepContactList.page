@@ -1,0 +1,42 @@
+<!--==============================================================================================================
+@Author - Krunal Pala
+@Date - 14/3/17
+@Purpose-  This page is used for displaying Sales Rep List for Quote Templates. (XSL-FO Based Custom Layout)
+==========================================================================================================-->
+<apex:page contentType="text/xml" showHeader="false" sidebar="false" cache="false"
+ controller="SB_QTSalesRepSectionProcessor">
+
+
+    <block>
+        <apex:repeat var="salesRepGroup" value="{!salesRepDepWiseToReturnList}" >
+            <block white-space-treatment="preserve">
+            </block>
+            <block font-weight="bold">
+                <inline border-after-width="1pt" border-after-style="solid">
+                    <apex:outputText value="{!HTMLENCODE(salesRepGroup.derivedOppTypOrEnginEquipmnt)} " >           
+                    </apex:outputText>
+                </inline>
+            
+            </block> 
+            
+                <apex:repeat var="salesRepDetail" value="{!salesRepGroup.salesRepDetailList}" >
+                <block >
+                    <apex:outputText value="{!HTMLENCODE(salesRepDetail.salesRepName)} , {!HTMLENCODE(salesRepDetail.designation)}" >
+                    </apex:outputText>
+                </block> 
+                <block >
+                <apex:outputText value="{!HTMLENCODE(salesRepDetail.mobileNumber)} " >
+                </apex:outputText>
+                </block> 
+        
+            
+            </apex:repeat>
+        </apex:repeat>
+        
+    </block>
+
+        
+
+        
+
+</apex:page>

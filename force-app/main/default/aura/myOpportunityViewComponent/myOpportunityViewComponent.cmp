@@ -1,0 +1,109 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" controller="myOpportinutyViewCompController" access="global" >
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"
+                  />
+    
+    <aura:attribute name="opportunities" type="list[]"/>
+    <aura:attribute name="accounts" type="list[]"/>
+    <aura:attribute name="recordids" type="string"/>
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <lightning:card variant="Narrow" iconName="custom:custom66" title="My Opportunities">
+        <aura:if isTrue="{!$Browser.formFactor != 'PHONE'}">
+            
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col">
+                            <div class="slds-truncate">Opportunity</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Name">Account</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate" title="Type">Equipment</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Aircraft</div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-truncate">Close Date</div>
+                        </th>                   
+                    </tr>
+                </thead>
+                <tbody>                
+                    <aura:iteration items="{!v.opportunities}" var ="x">
+                        <tr>
+                            <th scope="row">
+                                <div class="slds-truncate" title="{!x.Name}" onclick="{! c.someClickHandler1}" data-record-id="{#x.Id }">
+                                    <a>{!x.Name}</a>
+                                </div>
+                            </th>
+                            <td>
+                                <div class="slds-truncate" title="{!x.Account__r.Name}" onclick="{! c.someClickHandler2}" data-record-id="{#x.Account__c }" >
+                                    <a>{!x.Account__r.Name}</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate" title="{!x.Equipment__r.Name}" onclick="{! c.someClickHandler3}" data-record-id="{#x.Equipment__c }" >
+                                    <a>{!x.Equipment__r.Name}</a>
+                                </div>
+                            </td>
+                            <td><div class="slds-truncate" title="{!x.Aircraft__r.Name}" onclick="{! c.someClickHandler4}" data-record-id="{#x.Aircraft__c }" >
+                                <a>{!x.Aircraft__r.Name}</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="slds-truncate" title="{!x.Close_Date__c}">{!x.Close_Date__c}</div>
+                            </td>                            
+                        </tr>
+                    </aura:iteration>  
+                    
+                </tbody>
+            </table>
+            
+            <aura:set attribute="else">
+                
+                
+                <aura:iteration items="{!v.opportunities}" var ="x">
+                    <article class="slds-card">
+                        <div class="slds-media__figure slds-var-p-around_xxx-small">
+                        <div class="slds-media__body slds-border_top slds-border_left slds-border_right slds-border_bottom">   
+                            <div class="slds-card__body slds-card__body_inner">
+                                <div class="slds-media__figure slds-var-p-around_xx-small"> 
+                                    <label for="male">Agent Opportunity:</label>
+                                    <div class="slds-truncate " onclick="{! c.someClickHandler1}" data-record-id="{#x.Id }" >                     
+                                        <a>{!x.Name}</a>
+                                    </div>
+                                    <div class="slds-media__figure">               
+                                        <div class="slds-truncate" onclick="{! c.someClickHandler2}" data-record-id="{#x.Account__c }" >
+                                            <label for="male">Account:&nbsp;</label>
+                                            <a>{!x.Account__r.Name}</a>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__figure">   
+                                        <div class="slds-truncate" title="{!x.Equipment__c}" onclick="{! c.someClickHandler3}" data-record-id="{#x.Equipment__c }" >                                
+                                            <label for="male">Equipment:&nbsp;</label>
+                                            <a>{!x.Equipment__r.Name}</a>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__figure">  
+                                        <div class="slds-truncate" title="{!x.Aircraft__c}" onclick="{! c.someClickHandler4}" data-record-id="{#x.Aircraft__c }" >                                
+                                            <label for="male">Aircraft:&nbsp;</label>
+                                            <a>{!x.Aircraft__r.Name}</a>
+                                        </div>
+                                    </div>
+                                    <div class="slds-media__figure">              
+                                        <div class="slds-truncate" title="{!x.Close_Date__c}">
+                                            <label for="male">Close Date:&nbsp;</label>
+                                            {!x.Close_Date__c}</div>
+                                    </div>
+                                </div> 
+                            </div>
+                            </div>
+                        </div>
+                    </article>
+                </aura:iteration>
+            </aura:set>                      
+        </aura:if>
+    </lightning:card>
+</aura:component>

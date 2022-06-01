@@ -1,0 +1,64 @@
+<aura:component controller="fslServiceAppointment" implements="force:lightningQuickActionWithoutHeader,lightning:actionOverride,lightning:availableForFlowActions" access="global" >
+    <aura:html tag="style">
+        .slds-modal__container {
+        min-width: 25vw;
+        max-width: 25rem !important;
+        }
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        
+        height:unset !important;
+        max-height:unset !important;
+        
+        }
+    </aura:html>
+    
+    <aura:attribute name="recordId" type="String" /> 
+    
+    <aura:attribute name="newTimeCard" type="Object"/>
+    <aura:attribute name="simpleNewTimeCard" type="Object"/>
+    <aura:attribute name="newTimeCardError" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <force:recordData aura:id="timeCardRecordCreator" 
+                      fields="Start__c, Stop__c, Type__c, Service_Appointment__c"
+                      targetRecord="{!v.newTimeCard}"
+                      targetFields="{!v.simpleNewTimeCard}"
+                      targetError="{!v.newTimeCardError}" />
+    
+    <!-- Display the new timeCard form -->   
+    <lightning:card class="slds-p-around_small slds-clearfix">
+        <aura:set attribute="title">
+            <lightning:icon iconName="standard:timesheet_entry" size="medium"/>
+            Create Time Card
+        </aura:set>
+        <aura:set attribute="footer">
+            <div class="slds-float_right">
+                <lightning:button label="Save Time Card" variant="brand" onclick="{!c.handleSaveTimeCard}" />
+            </div>
+        </aura:set>
+        <p class="slds-p-horizontal_medium">
+            <lightning:select aura:id="timeCardField" label="Type" value="{!v.simpleNewTimeCard.Type__c}" required="true">
+                <option value="">Select Type</option>
+                <option value="Planning Travel">Planning Travel</option>
+                <option value="Travel To Site">Travel To Site</option>
+                <option value="Perform Maintenance">Perform Maintenance</option>
+            </lightning:select>
+            <lightning:input aura:id="timeCardField" type="datetime" label="Start Time" value="{!v.simpleNewTimeCard.Start__c}"/>
+            <lightning:input aura:id="timeCardField" type="datetime" label="Stop Time" value="{!v.simpleNewTimeCard.Stop__c}"/>
+        </p>
+    </lightning:card>
+    
+    <!-- Display Lightning Data Service errors -->
+    <aura:if isTrue="{!not(empty(v.newTimeCardError))}">
+        <div class="recordError">
+            {!v.newTimeCardError}</div>
+    </aura:if>
+    
+</aura:component>

@@ -1,0 +1,187 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" default="{!recordId}"/>
+    <aura:attribute name="appHistory" type="String[]"/>
+    <aura:attribute name="appHistorySize" type="String"/>
+    <aura:attribute type="Boolean" name="sortAsc" />
+    <aura:attribute type="String" name="sortField" />
+    <aura:attribute name="files" type="String[]"/>
+    <aura:attribute name="files2" type="String[]"/>
+    <aura:attribute name="filesSize" type="String"/>
+    
+    <div class="container">
+    	<div class="container slds-p-top_medium forceRelatedListSingleContainer">
+        	<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+            	<div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    	<div class="slds-media__figure">
+                        	<span class="uiImage">
+                            	<lightning:icon iconName="standard:approval" size="small"/>
+                        	</span>
+                    	</div>
+                        <div class="slds-media__body">
+                        	<h2 class="slds-text-heading--small slds-truncate">Approval History ({!v.appHistorySize})</h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body--inner">
+        			<table class="slds-table slds-table--cell-buffer slds-table_bordered"> 
+        				<thead>
+							<tr class="slds-text-title_caps">            	
+                    			<th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Action</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Date</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Status</div>  
+       							</th>
+                                <th class="slds-text-title" scope="col">
+                            		<div class="slds-truncate slds-text-align--center">Assigned To</div>  
+       							</th>          
+							</tr> 
+    					</thead>
+                        <tbody>
+                        	<aura:iteration items="{!v.appHistory}" var="ah">
+								<tr>				
+                					<td scope="row" class="slds-p-vertical--xx-small">                 
+                     					<div class="slds-truncate slds-text-align--center">
+                                            <aura:if isTrue="{!ah.StepStatus == 'Started'}">
+                                            	Submitted for Approval
+                                            </aura:if>
+                                            <aura:if isTrue="{!and(ah.StepStatus == 'NoResponse', ah.ProcessInstance.Status == 'Pending')}">                                             
+                                            	Pending
+                                            </aura:if>                                          
+                                            <aura:if isTrue="{!and(ah.StepStatus == 'NoResponse', ah.ProcessInstance.Status == 'Approved')}">                                             
+                                            	Approved
+                                            </aura:if> 
+                                            <aura:if isTrue="{!ah.StepStatus == 'Approved'}">
+                                                Approved
+                                            </aura:if>
+                                            <aura:if isTrue="{!ah.StepStatus == 'Removed'}">
+                                                Recalled
+                                            </aura:if>
+                                            <aura:if isTrue="{!and(ah.StepStatus == 'NoResponse', ah.ProcessInstance.Status == 'Rejected')}">                                             
+                                            	Rejected
+                                            </aura:if>                                            
+                                            <aura:if isTrue="{!ah.StepStatus == 'Rejected'}">
+                                                Rejected
+                                            </aura:if> 
+                                        </div>
+									</td>   
+									<td scope="row" class="slds-p-vertical--xx-small">                                        
+                    					<div class="slds-truncate slds-text-align--center">
+                                            <ui:outputDateTime value="{!ah.CreatedDate}"/>
+                                        </div>            	
+									</td>                 
+									<td scope="row" class="slds-p-vertical--xx-small">
+                    					<div class="slds-truncate slds-text-align--center">
+                                            <aura:if isTrue="{!or(and(ah.StepStatus == 'Started', ah.ProcessInstance.Status == 'Approved'),
+                                                                  and(ah.StepStatus == 'Started', ah.ProcessInstance.Status == 'Rejected'))}">
+                                                Pending
+                                            </aura:if>
+ 											<aura:if isTrue="{!or(and(ah.StepStatus == 'Started', ah.ProcessInstance.Status == 'Removed'),
+                                                             	  and(ah.StepStatus == 'Started', ah.ProcessInstance.Status == 'Pending'))}">
+                                            	Pending
+                                            </aura:if>                                          
+                                            <aura:if isTrue="{!ah.StepStatus != 'Started'}">
+                                            	{!ah.ProcessInstance.Status}
+                                            </aura:if>
+                                        </div>
+									</td>                 
+									<td scope="row" class="slds-p-vertical--xx-small">
+										<div class="slds-truncate slds-text-align--center">{!ah.OriginalActor.Name}</div>                 
+									</td>                              
+                                </tr>
+                            </aura:iteration>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="slds-card__footer">
+                	<a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/squawk-approval-history?id='+v.recordId}" >
+                    	<span class="view-all-label">View All</span>
+                    </a>
+                </div>
+            </article>        
+        </div>   
+
+    	<div class="container slds-p-top_medium forceRelatedListSingleContainer">
+        	<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+            	<div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                    	<div class="slds-media__figure">
+                        	<span class="uiImage">
+                            	<lightning:icon iconName="standard:file" size="small"/>
+                        	</span>
+                    	</div>
+                        <div class="slds-media__body">
+                        	<h2 class="slds-text-heading--small slds-truncate">Notes and Attachments ({!v.filesSize})</h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body--inner">
+        			<table class="slds-table slds-table--cell-buffer">
+                        <thead/>
+                        <tbody>
+                            <div class="slds-grid">
+                        		<div class="slds-col slds-size--1-of-2">
+                                    <aura:iteration items="{!v.files}" var="f">
+                                        <p class="slds-table--bordered slds-border_right slds-border_left">
+                                            <td class="slds-cell-buffer_left">
+                                                <div class="thumbnailContainer" title="{!f.ContentDocument.Title}">
+                                                	<img class="slds-p-top_small slds-p-bottom_small" src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB120BY90&amp;versionId='+ f.ContentDocument.LatestPublishedVersionId}"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                <ui:OutputText class="itemTitle" value="{!f.ContentDocument.Title}" title="{!f.ContentDocument.Title}"/>
+                                                </div>
+                                                <div>
+                                                    <ui:OutputDate class="slds-m-around--none secondaryFields slds-text-body--small slds-truncate" value="{!f.ContentDocument.LastModifiedDate}"/>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-buffer_left slds-grid_vertical-align-center">
+                                                <lightning:button class="slds-button slds-float" onclick="{!c.viewDoc}"  label="View" value="{!f.Id}"/>
+                                            </td>
+                                        </p>                                
+                                    </aura:iteration>
+                                </div>
+                                <div class="slds-col slds-size--1-of-2">
+                                    <aura:iteration items="{!v.files2}" var="f2">
+                                        <p class="slds-table--bordered slds-border_right slds-border_left">
+                                            <td class="slds-cell-buffer_left">
+                                                <div class="thumbnailContainer" title="{!f2.ContentDocument.Title}">
+                                                	<img class="slds-p-top_small slds-p-bottom_small" src="{!'/sfc/servlet.shepherd/version/renditionDownload?rendition=THUMB120BY90&amp;versionId='+ f2.ContentDocument.LatestPublishedVersionId}"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                <ui:OutputText class="itemTitle" value="{!f2.ContentDocument.Title}" title="{!f2.ContentDocument.Title}"/>
+                                                </div>
+                                                <div>
+                                                    <ui:OutputDate class="slds-m-around--none secondaryFields slds-text-body--small slds-truncate" value="{!f2.ContentDocument.LastModifiedDate}"/>
+                                                </div>
+                                            </td>
+                                            <td class="slds-cell-buffer_left slds-grid_vertical-align-center">
+                                                <lightning:button class="slds-button slds-float" onclick="{!c.viewDoc}"  label="View" value="{!f2.Id}"/>
+                                            </td>
+                                        </p>                                
+                                    </aura:iteration>
+                                </div>
+                            </div>
+                    	</tbody>
+                    </table>
+                </div>
+                <div class="slds-card__footer">
+                    <a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/squawk-notes-and-attachments?id='+v.recordId}" >                      
+                    	<span class="view-all-label">View All</span>
+                    </a>
+                </div>
+            </article>        
+        </div>   
+    </div>
+        
+</aura:component>

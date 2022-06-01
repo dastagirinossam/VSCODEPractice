@@ -1,0 +1,271 @@
+<apex:page standardController="MPM4_BASE__Milestone1_Project__c" Extensions="CPM_ViewAllSquawks" tabStyle="MPM4_BASE__Milestone1_Project__c" sidebar="false" LightningStylesheets="true">
+    <apex:slds /> 
+    <apex:form id="CPM_VAS">
+        
+        <apex:variable value="{!0.00}" var="totalLabor" />
+        <apex:variable value="{!0.00}" var="totalMaterial"/>
+        
+        <style>
+            .popupBackground {
+                background-color:black;
+                opacity: 0.20;
+                filter: alpha(opacity = 20);
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: 998;
+                position: absolute;
+                cursor:wait;
+            }
+            
+            .body1 {
+                background-image: url(/assets/images/themes/oneSalesforce/banner-brand-default.png), linear-gradient(to top, rgba(175, 197, 222, 0) 0, #1B5F9E);
+            }
+
+        </style>
+        
+        <script type="text/javascript">              
+        function sts( apr , dec, pen, nys ){
+            searchServer(
+                document.getElementById(apr).checked,
+                document.getElementById(dec).checked,
+                document.getElementById(pen).checked,
+                document.getElementById(nys).checked
+            );
+        }
+        </script>
+        
+        <apex:actionFunction name="searchServer" action="{!runSearch}" status="spinnerStatus" rerender="results, debug, errors, totals">
+            <apex:param name="Approved" value=""/>
+            <apex:param name="Declined" value=""/>
+            <apex:param name="Pending" value=""/>
+            <apex:param name="NotSubmitted" value=""/>            
+        </apex:actionFunction>
+        
+        <apex:actionStatus id="spinnerStatus">
+            <apex:facet name="start">
+                <div>
+                    <div class="popupBackground"/>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+        
+        <div class="body1">
+            <div class="slds-p-top_x-small slds-p-left_small slds-p-right_small">
+                <apex:pageBlock >
+                    <div class="slds-clearfix">
+                    <div class="slds-grid">
+                        <div class="slds-grid slds-col slds-has-flexi-truncate">
+                            <div class="slds-media slds-no-space">
+                                <div class="slds-avatar slds-m-right_small" style="background-color: rgb(231, 105, 180);">
+                                    <img src="https://standardaero--fullcopy1.my.salesforce.com/img/icon/t4v35/custom/custom70_120.png" title="Project"/>
+                                </div>
+                            </div>
+                            <div class="slds-media__body">
+                                <h1>
+                                    <div class="slds-line-height--reset">
+                                        Project
+                                        <div class="slds-page-header__title slds-m-right--small slds-align-middle slds-line-clamp">
+                                            <b>{!MPM4_BASE__Milestone1_Project__c.Name}</b>
+                                        </div>
+                                    </div>
+                                </h1>
+                            </div>
+                        </div>
+                        <div class="slds-page-header__col-actions">
+                            <div class="slds-page-header__controls">
+                                <div class="slds-page-header__control">
+                                    <div class="slds-clearfix">
+                                        
+                                        <ul class="slds-button-group-list">
+                                            <li>
+                                                <apex:commandButton styleClass="slds-button slds-button_neutral" value="Create PDF" action="{!pdf}"/>
+                                            </li>
+                                            <li>
+                                                <apex:commandButton styleClass="slds-button slds-button_neutral" value="Return To Project" action="{!cancel}"/>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </apex:pageBlock>
+                </div>
+
+            <div class="slds-p-left_small slds-p-right_small">
+            <table width="100%" border="0">
+                    <td width="150px" valign="top" >
+                        <div class="slds-p-right_x-small">                          
+                        <apex:pageBlock mode="edit" id="totals" >
+                            <table> 
+                                <tr>
+                                    <td class="slds-align_absolute-center slds-text-heading_small slds-truncate">
+                                        <b>
+                                            <u>
+                                                Select Squawk Status
+                                            </u>
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold; text-align: center;">Approved</td>
+                                    <td>
+                                        <apex:inputCheckbox id="Approved" onchange="sts('{!$Component.Approved}', '{!$Component.Declined}', '{!$Component.Pending}', '{!$Component.NotSubmitted}');"/>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="font-weight:bold; text-align: center;">Declined</td>
+                                    <td>
+                                        <apex:inputCheckbox id="Declined" onchange="sts('{!$Component.Approved}', '{!$Component.Declined}', '{!$Component.Pending}', '{!$Component.NotSubmitted}');"/>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="font-weight:bold; text-align: center;">Pending</td>
+                                    <td>
+                                        <apex:inputCheckbox id="Pending" onchange="sts('{!$Component.Approved}', '{!$Component.Declined}', '{!$Component.Pending}', '{!$Component.NotSubmitted}');"/>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="font-weight:bold; text-align: center;">Not Submitted</td>
+                                    <td>
+                                        <apex:inputCheckbox id="NotSubmitted" onchange="sts('{!$Component.Approved}', '{!$Component.Declined}', '{!$Component.Pending}', '{!$Component.NotSubmitted}');"/>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="slds-align_absolute-center slds-text-heading_small slds-p-top_medium">
+                                        <b>
+                                            <u>
+                                                Status Totals
+                                            </u>
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight:bold;">Labor Total: </td>
+                                    <td>
+                                        <apex:outputText value="{0, Number, Currency}" id="tl">
+                                            <apex:param value="{!totalLabor}"/>
+                                        </apex:outputText>
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="font-weight:bold;">Material Total: </td>
+                                    <td>
+                                        <apex:outputText value="{0, Number, Currency}">
+                                            <apex:param value="{!totalMaterial}"/>
+                                        </apex:outputText>                       
+                                    </td>
+                                </tr>
+                                
+                                <tr>
+                                    <td style="font-weight:bold;">Combined Total: </td>
+                                    <td >
+                                        <apex:outputText value="{0, Number, Currency}">
+                                            <apex:param value="{!totalMaterial + totalLabor}"/>
+                                        </apex:outputText>
+                                    </td>
+                                </tr>
+                            </table>
+                        </apex:pageBlock>
+                        </div>
+                    </td>
+                    <td valign="top">                     
+                        <apex:pageBlock mode="edit" id="results">
+                            
+                            <apex:pageMessages ></apex:pageMessages> 
+                            
+                            <apex:pageBlockTable value="{!sqk}" var="ql" rendered="{!sqk.Size > 0}" >  
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Squawk No" status="spinnerStatus" action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="fxItemNo__c" assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputLink value="{! If( or( ql.Add_Work_Status__c == 'Pending', ql.Add_Work_Status__c == 'Approved', ql.Add_Work_Status__c == 'Denied') ,URLFOR($Page.Squawk, null, [Id=ql.Id]), '/' + ql.Id) }" target="_blank">{!ql.fxSquawkNo__c}</apex:outputLink>
+                                </apex:column>                                
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:outputLabel >Job Card</apex:outputLabel>
+                                    </apex:facet>
+                                    <apex:outputField value="{!ql.fxJob_Card__c}"/>
+                                </apex:column>
+                                                                                    
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:outputLabel >Job Card Description</apex:outputLabel>
+                                    </apex:facet>
+                                    <apex:outputField value="{!ql.Job_Card_Description__c}"/>
+                                </apex:column>
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Status" status="spinnerStatus" action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="Add_Work_Status__c" assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputField value="{!ql.Add_Work_Status__c}"/>
+                                </apex:column>
+                                                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Material Amount" status="spinnerStatus" action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="Material_Amount__c" assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputField value="{!ql.Material_Amount__c}"/>
+                                    <apex:variable var="totalMaterial" value="{!totalMaterial + ql.Material_Amount__c}" />
+                                </apex:column>
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Material Type" status="spinnerStatus" action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="Material_Type__c" assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputField value="{!ql.Material_Type__c}"/>                        
+                                </apex:column>
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Labor Amount" status="spinnerStatus" action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="Labor_Amount__c" assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputField value="{!ql.Labor_Amount__c}"/>
+                                    <apex:variable var="totalLabor" value="{!totalLabor + ql.Labor_Amount__c}"/>
+                                </apex:column>
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Labor Type" status="spinnerStatus"  action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="Add_Work_Labor_Type__c" assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputField value="{!ql.Add_Work_Labor_Type__c}"/>
+                                </apex:column>                             
+                                
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Req. For Service" status="spinnerStatus"  action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="IsRTS__c " assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputField value="{!ql.IsRTS__c}"/>
+                                </apex:column>                                                                                                        
+                            </apex:pageBlockTable>               
+                        </apex:pageBlock> 
+                    </td>
+            </table>
+        </div>
+        </div>
+    </apex:form>    
+</apex:page>

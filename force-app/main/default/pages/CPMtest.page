@@ -1,0 +1,55 @@
+<apex:page standardController="SBQQ__Quote__c" showHeader="false" renderAs="pdf">
+
+    <table border="0" cellspacing="0" cellpadding="0" width="100%" id="table1">
+        <tr>
+            <td>
+
+            </td>
+            <td  align="right">
+                <font face="Arial" >
+                    <b>Quote  for {!SBQQ__Quote__c.Name}</b>
+                </font>
+                <br/>
+            </td>      
+        </tr>
+
+        <hr/>
+
+    </table>
+    
+    <table border="0" cellspacing="0" cellpadding="0" width="100%" id="table1">
+        <tr>    
+            <td>
+                <font face="Arial" >
+                    {!SBQQ__Quote__c.Project__r.Name}<br/>
+                    {!SBQQ__Quote__c.Account_Name__c}<br/>
+                    {!SBQQ__Quote__c.AircraftName__c}<br/>
+                    {!SBQQ__Quote__c.Labor_Type1__c}<br/>
+                </font>
+            </td> 
+        </tr>
+    </table>
+
+    <br/>
+    <hr/>
+    <p><b><font color="#000080" face="Arial">Squawks</font></b></p>
+    <table border="0" width="100%" id="table4">
+        <tr>
+               <td bgcolor="#C0C0C0"><font face="Arial">Job Card</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">Labor Code</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">Job Description</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">Material</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">Material Type</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">Labor</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">Labor Type</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">Approved</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">Denied</font></td>
+               <td bgcolor="#C0C0C0"><font face="Arial">RTS</font></td>
+        </tr>
+        <tr>
+
+        </tr>
+
+    </table>
+
+</apex:page>

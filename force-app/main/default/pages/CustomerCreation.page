@@ -1,0 +1,5 @@
+<apex:page standardcontroller="Contact" extensions="CreateCustomerUser" showheader="false" action="{!prFinishLocation}">
+
+    <apex:param name="varContactId" value="{!Contact.Id}"/>
+
+</apex:page>

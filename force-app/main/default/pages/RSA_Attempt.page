@@ -1,0 +1,5 @@
+<apex:page standardController="Task" tabStyle="Task">
+    <apex:sectionHeader title="Create Sales Intermediary Requests" subtitle="New SIR"/>
+    <!--<flow:interview name="Create_SIR" finishLocation="{!URLFOR('/home/home.jsp')}" buttonLocation="bottom" >
+    </flow:interview>-->
+</apex:page>

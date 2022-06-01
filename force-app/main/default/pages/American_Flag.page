@@ -1,0 +1,4 @@
+<apex:page sidebar="false" showHeader="false" lightningStylesheets="true">
+<apex:slds />
+<img src ="{!$Resource.AmericanFlag}" width="405" height="245" /> 
+</apex:page>

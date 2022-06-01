@@ -1,0 +1,21 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+   
+    <aura:attribute name="recordId" type="String" default="{!recordId}"/>
+    <aura:attribute name="name" type="String"/> 
+    
+    <div class="slds-grid primaryFieldRow">
+    	<div class="slds-grid slds-col slds-has-flexi-truncate slds-media--center">
+    		<div class="profilePicWrapper slds-media slds-no-space slds-p-right_small">
+        		<lightning:icon iconName="standard:maintenance_plan" size="large"/>
+        	</div>
+        	<div class="slds-media__body">
+    			<p class="slds-text-heading--label slds-line-height--reset">SQUAWK QUOTE</p>
+    			<h2 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle">{!v.name}</h2>
+        	</div>
+		</div>
+	</div>
+    
+</aura:component>

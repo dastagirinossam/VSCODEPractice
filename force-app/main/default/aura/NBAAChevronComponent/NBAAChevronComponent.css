@@ -1,0 +1,54 @@
+.THIS .slds-tabs--path .slds-is-current {
+    background-color: rgb(0, 0, 205);
+}
+
+.THIS .slds-tabs_path__item+.slds-is-current:before{
+    background-color: rgb(194, 57, 52);
+}
+
+.THIS .slds-tabs--path__item+.slds-is-current:before{
+   	background-color: rgb(194, 57, 52);
+}
+
+.THIS .slds-tabs--path .slds-is-complete {
+    background-color: rgb(194, 57, 52);
+}
+
+.THIS .slds-tabs_path__item+.slds-is-complete:before{
+    background-color: rgb(194, 57, 52);
+}
+
+.THIS .slds-tabs--path__item+.slds-is-complete:before{
+    background-color: rgb(194, 57, 52);
+}
+.THIS .slds-tabs--path .slds-is-Confirm {
+    background-color: rgb(34, 139, 34);
+}
+
+.THIS .slds-tabs_path__item+.slds-is-Confirm:before{
+    background-color: rgb(34, 139, 34);
+}
+
+.THIS .slds-tabs--path__item+.slds-is-Confirm:before{
+    background-color: rgb(34, 139, 34);
+}
+
+.THIS .slds-tabs_path .slds-is-current + .slds-is-Confirm::before {
+    background-color: rgb(0, 0, 205);
+}
+
+.THIS .slds-tabs--path .slds-is-current + .slds-is-Confirm::before{
+    background-color: rgb(0, 0, 205);
+}
+
+.THIS .slds-tabs_path .slds-is-current + .slds-is-incomplete::before {
+    background-color: rgb(0, 0, 205);
+}
+
+.THIS .slds-tabs--path .slds-is-current + .slds-is-incomplete::before{
+    background-color: rgb(0, 0, 205);
+}
+
+.THIS .slds-tabs--path .slds-is-complete + .slds-is-incomplete::before{
+    background-color: rgb(194, 57, 52);
+}

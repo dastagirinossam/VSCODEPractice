@@ -1,0 +1,124 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{! $Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" default="{!recordId}"/>
+    <aura:attribute name="AppTotal" type="SBQQ__Quote__c"/>
+    <aura:attribute name="EstTotal" type="SBQQ__Quote__c"/>
+    <aura:attribute name="PendingTotal" type="SBQQ__Quote__c"/>
+    <aura:attribute name="QuoteType" type="SBQQ__Quote__c"/>
+    <aura:attribute name="WorkOrder" type="SBQQ__Quote__c"/>
+    <aura:attribute name="project" type="String"/>
+    <aura:attribute name="projectId" type="String"/>
+
+	<div class="container slds-p-top_medium slds-p-bottom_xx-large forceRelatedListSingleContainer">
+		<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+        	<div class="slds-card__header slds-grid">
+            	<header class="slds-media slds-media--center slds-has-flexi-truncate">
+                	<div class="slds-media__figure">
+                    	<span class="uiImage">
+                        	<lightning:icon iconName="standard:work_type" size="small"/>
+                        </span>
+                   	</div>
+                    <div class="slds-media__body">
+                    	<h2 class="slds-section__title">
+            				<span class="section-header-title slds-p-horizontal--small slds-truncate">Squawk Quote Information</span>
+            			</h2>
+                    </div>
+                </header>
+            </div>
+    		<div class="slds-card__body slds-card__body--inner">
+        		<table class="slds-table slds-table--cell-buffer">
+                	<thead/>
+                    <tbody>
+                        <div class="slds-grid full forcePageBlockSectionRow">
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Pending Total</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">${!v.PendingTotal}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>                                			
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Work Order</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">{!v.WorkOrder}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>            			
+                        </div>
+                        
+                        <div class="slds-grid full forcePageBlockSectionRow">
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Approved Total</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">${!v.AppTotal}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Squawk Quote Type</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">{!v.QuoteType}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                        </div>
+                        
+                        <div class="slds-grid full forcePageBlockSectionRow">       				            			
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Estimated Total</span>
+                                        <span>
+                                            <lightning:icon iconName="utility:info" size="xx-small" title="Approved Total + Pending Total"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">${!v.EstTotal}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>                             			
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Project</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow"> 
+                                            <a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/project/'+v.projectId}" >
+                                                <span class="uiOutputText">{!v.project}</span>
+                                            </a>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                        </div>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </div>
+</aura:component>

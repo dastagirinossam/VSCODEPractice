@@ -1,0 +1,121 @@
+<apex:page standardController="Equipment__c" extensions="EquipmentCloneController" lightningStylesheets="true">
+<apex:slds />
+        <apex:sectionHeader title="{!$ObjectType.Equipment__c.label} Edit" subtitle="New {!$ObjectType.Equipment__c.name}"/>
+        <apex:pageMessages />
+        <apex:form >
+        <apex:pageBlock title="{!$ObjectType.Equipment__c.label} Edit" mode="edit">
+                <apex:pageBlockButtons >
+                        <apex:commandButton action="{!saveAndReturn}" value="Save"/>
+                        <apex:commandButton action="{!GoBack}" value="Cancel"/>
+                </apex:pageBlockButtons>
+                <apex:pageBlockSection showHeader="true" title="Equipment Description" columns="2">
+                
+                <apex:inputField required="true" value="{!Equipment__c.Product_Line__c}"/>
+                <apex:pageBlockSectionItem > </apex:pageBlockSectionItem>
+                
+                        <apex:inputField required="true" value="{!Equipment__c.Equipment_Prefix__c}"/>
+                         
+                        <apex:inputField required="true" value="{!Equipment__c.Account__c}"/>
+                        <apex:inputField required="true" value="{!Equipment__c.EngineorAPUSN__c}"/>
+                        
+                        <apex:inputField value="{!Equipment__c.Aircraft__c}"/>
+                        <apex:inputField required="true" value="{!Equipment__c.Equipment_Type__c}"/>
+
+                        <apex:inputField required="true" value="{!Equipment__c.Model__c}"/>
+                        <apex:inputField value="{!Equipment__c.EnginePosition__c}"/>
+                        <apex:inputField value="{!Equipment__c.Average_Monthly_Hours__c}"/>
+                        <apex:inputField value="{!Equipment__c.Primary_Contact__c}"/>
+
+                        <apex:inputField value="{!Equipment__c.Average_Monthly_Hours_Override__c}"/>
+                                                <apex:pageBlockSectionItem />
+                        <apex:inputField required="true" value="{!Equipment__c.Equipment_Status__c}"/>
+
+                        <apex:pageBlockSectionItem />
+                        <apex:pageBlockSectionItem />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection showHeader="false" >
+                        <apex:inputField value="{!Equipment__c.Description__c}" style="width:150%" />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection showHeader="true" title="Maintenance Program" columns="2">
+                        <apex:inputField value="{!Equipment__c.MaintenancePrgmID__c}"/>
+                        <apex:inputField value="{!Equipment__c.Maintenance_Prgm_Data_Refresh_Date__c}"/>
+                        <apex:inputField value="{!Equipment__c.MaintenancePrgmType__c}"/>
+                        <apex:inputField value="{!Equipment__c.Maintenance_Prgm_Account_Name__c}"/>
+                        <apex:inputField value="{!Equipment__c.Maintenance_Prgm_Status__c}"/>
+                        <apex:inputField value="{!Equipment__c.Maintenance_Prgm_Account_Address__c}"/>
+                        <apex:inputField value="{!Equipment__c.MaintenancePrgmExpiration__c}"/>
+                        <apex:inputField value="{!Equipment__c.Maintenance_Prgm_Account_Phone__c}"/>
+
+
+                </apex:pageBlockSection>
+                <apex:pageBlockSection showHeader="true" title="MPI" columns="2">
+                        <apex:inputField value="{!Equipment__c.MPIInterval__c}"/>
+                        <apex:inputField value="{!Equipment__c.MPIDate__c}"/>
+                        <apex:inputField value="{!Equipment__c.MPISvCtr__c}"/>
+                        <apex:inputField value="{!Equipment__c.Next_MPI_Hours__c}"/>
+                        <apex:inputField value="{!Equipment__c.LastMPI__c}"/>
+                        <apex:pageBlockSectionItem />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection showHeader="true" title="CZI" columns="2">
+                        <apex:inputField value="{!Equipment__c.CZIINTVL__c}"/>
+                        <apex:inputField value="{!Equipment__c.CZIDate__c}"/>
+                        <apex:inputField value="{!Equipment__c.CZI_SVCTR__c}"/>
+                        <apex:inputField value="{!Equipment__c.Next_CZI_Hours__c}"/>
+                        <apex:inputField value="{!Equipment__c.LASTCZI__c}"/>
+                </apex:pageBlockSection>
+              
+                
+                <apex:pageBlockSection showHeader="true" title="Equipment Interval Accuracy" columns="1">
+                        <apex:inputField value="{!Equipment__c.Interval_Confirmed__c}"/>
+                        <apex:inputField value="{!Equipment__c.Interval_Confirmed_Date__c}"/>
+                </apex:pageBlockSection>     
+                       
+                  <apex:pageBlockSection showHeader="true" title="HTF Combustor Change" columns="2">
+                        <apex:inputField value="{!Equipment__c.Last_HTF_Combustor_Change__c}"/>
+                        <apex:inputField value="{!Equipment__c.Last_HTF_Combustor_Change_Date__c}"/>
+                </apex:pageBlockSection>
+                
+                <apex:pageBlockSection showHeader="true" title="PW300" columns="1">
+                When forecasting use the sections for MPI (Hot Section) and CZI (Core) for input of interval and last inspections. For next inspection calculations, use the Next Maintenance Event Calculations section as normally used for other engine types. The original Borescope/Core Inspection fields here have been removed.
+                  
+                </apex:pageBlockSection>
+                
+                <apex:pageBlockSection showHeader="false" title="PW300 Section" columns="2">
+                        <apex:inputField value="{!Equipment__c.PW300_Last_600_Hr_Inspection__c}"/>
+                        <apex:inputField value="{!Equipment__c.On_Condition_Engine__c}"/>
+                                              
+                        <apex:inputField value="{!Equipment__c.PW300_Last_600_Hr_Inspection_Date__c}"/>
+                        <apex:inputField value="{!Equipment__c.PW300_EEC__c}"/>
+                        
+                   
+                        <apex:pageBlockSectionItem > </apex:pageBlockSectionItem> 
+                        <apex:pageBlockSectionItem > </apex:pageBlockSectionItem> 
+                        <apex:inputField value="{!Equipment__c.PW300_Next_600_Hr_Inspection__c}"/>
+                          <apex:inputField value="{!Equipment__c.PW300_AltAir_DTU_Ref__c}"/>
+                   
+                        <apex:inputField value="{!Equipment__c.PW300_Next_600_Hr_Insp_Date__c}"/>
+                
+                        <apex:pageBlockSectionItem > </apex:pageBlockSectionItem> 
+                        <apex:pageBlockSectionItem > </apex:pageBlockSectionItem> 
+                        
+                       
+                      
+                </apex:pageBlockSection>
+                
+                <apex:pageBlockSection showHeader="true" title="Next Maintenance Event Calculations" columns="2">
+                </apex:pageBlockSection>
+                <apex:pageBlockSection showHeader="true" title="Last Hours and Cycles - Update Last Hours & Date for Maintenance Calculations" columns="2">
+                        <apex:inputField value="{!Equipment__c.LastHours__c}"/>
+                        <apex:inputField value="{!Equipment__c.LastHoursDate__c}"/>
+                        <apex:inputField value="{!Equipment__c.LastCycles__c}"/>
+                        <apex:inputField value="{!Equipment__c.LastCyclesDate__c}"/>
+                        <apex:inputField value="{!Equipment__c.Update_Flight_Hours__c}"/>
+                        <apex:pageBlockSectionItem />
+                </apex:pageBlockSection>
+                <apex:pageBlockSection showHeader="false" title="Information" columns="2">
+                </apex:pageBlockSection>              
+                      
+        </apex:pageBlock>
+        </apex:form>
+        <apex:pageMessages />
+</apex:page>

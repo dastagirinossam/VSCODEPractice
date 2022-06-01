@@ -1,0 +1,7 @@
+<apex:page standardController="Product2" extensions="CloneProductWithRelatedList">
+    <flow:interview name="CloneProductBundle" interview="{!myflow}" finishLocation="{!GotoProductOptions}"/>
+    <apex:form >
+        <apex:commandLink value="Cancel" action="{!customCancel}"/>
+          
+    </apex:form>
+</apex:page>

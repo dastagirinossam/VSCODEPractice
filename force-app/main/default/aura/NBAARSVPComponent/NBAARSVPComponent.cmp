@@ -1,0 +1,112 @@
+<aura:component extends="forceCommunity:navigationMenuBase" 
+                implements="forceCommunity:availableForAllPageTypes,flexipage:availableForAllPageTypes,force:appHostable,force:hasRecordId" 
+                access="global" 
+                controller="CreateUserHandler">
+    
+    <aura:attribute name="recordId" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.getrecord}" />
+    <aura:handler name="change" value="{!v.additionalGuest}" action="{!c.checkboxSelect}" />
+    
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="name" type="String"/>
+    
+    <aura:attribute name="additionalGuest" type="Boolean" default="false"/>
+    <aura:attribute  name="acceptedResponse" type="Boolean" default="false"/>                                                            
+    <aura:attribute name="showGuest" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    
+    <aura:attribute name="nbaaInviteFront" type="String"/>
+    <aura:attribute name="nbaaInviteBack" type="String"/>
+    <aura:attribute name="inviteStatus" type="String" default="Invited"/>
+    
+
+    
+    <aura:if isTrue="{!!v.saved}">
+        <lightning:recordEditForm
+                                  aura:id="contactForm"
+                                  onload="{!c.handleLoad}"
+                                  onsubmit="{!c.handleSubmit}"
+                                  onsuccess="{!c.handleSuccess}"
+                                  recordId="{!v.recordId}"
+                                  objectApiName="Contact">
+            <!-- the messages component is for error messages -->
+            <lightning:messages />
+            
+            <div class="Create Contact"> 
+                <img src="{!v.nbaaInviteFront}" onclick="{!c.frontInvite}"/>
+                <c:NBAAChevronComponent inviteStatus ="{!v.inviteStatus}"/>
+                
+                <article class="slds-card">
+                    <header class="slds-card__header slds-grid">
+                        <lightning:icon size="large" iconName="custom:custom20" />
+                        <div class="slds-media slds-media--center slds-has-flexi-truncate slds-p-left_x-small">
+                            <div class="slds-media__figure">                            
+                                <h1>
+                                    <span>RSVP to StandardAero's</span>
+                                </h1>
+                                <h2>
+                                    <span class="slds-text-heading--small">NBAA - 2019 Party</span>
+                                </h2>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <div class="slds-p-horizontal--small">                     
+                        <p class="slds-p-vertical_xx-small">Welcome <b>Tim Austin!</b></p>
+                        
+                        <aura:if isTrue="{!v.acceptedResponse}">
+                            
+                            <lightning:inputField fieldName="RSVP__c" required="true"/>
+                            <lightning:inputField fieldName="Additional_Guest__c"/>                       
+                            <lightning:inputField fieldName="Guest_Details__c" />
+                            
+                            <!--<ui:inputCheckbox label="Additional Guest" value="{!v.additionalGuest}"/>
+                            <aura:if isTrue="{!v.showGuest}">
+                                <lightning:inputField fieldName="Guest_Details__c" />
+                            </aura:if>-->
+                            
+                            <div class="slds-m-top_medium">
+                                <lightning:button label="Cancel" onclick="{!c.handleCancel}" />
+                                <lightning:button disabled="{!v.disabled}" variant="brand" type="submit" name="save" label="RSVP" />
+                            </div>
+                            <aura:set attribute="else">
+                                
+                                <p class="slds-p-vertical_xx-small">You have accepted the RSVP!</p>
+                                <p class="slds-p-vertical_xx-small">We look forward to seeing you at 6:30pm on Oct.23!</p>
+                                <div class="slds-align_absolute-center">
+                                    <a href="http://maps.google.com/?q=3000 Joe W. Brown Drive, Las Vegas, NV 89109">
+                                        <span>The Las Vegas Country Club</span><br/>
+                                        <span>3000 Joe W. Brown Drive</span><br/>
+                                        <span>Las Vegas, NV 89109</span><br/>
+                                    </a>
+                                </div>
+                                
+                                <div class="slds-card__footer">
+                                    <lightning:button label="Return" onclick="{!c.handleCancel}" />
+                                </div>
+                                
+                            </aura:set>
+                        </aura:if>                                              
+                    </div>                  
+                </article>
+                <img src="{!v.nbaaInviteBack}" onclick="{!c.backInvite}"/>
+            </div>            
+        </lightning:recordEditForm> 
+        
+        <aura:set attribute="else">
+            <div class="Create Contact"> 
+                <lightning:card variant="Narrow" iconName="custom:custom20" title="RSVP to StandardAero's NBAA - 2019 Party" >          
+                    <div class="slds-p-horizontal--small"> 
+                        <p>RSVP has been submitted!</p>
+                        <p>Thank you!</p>
+                        <div class="slds-m-top_medium">
+                            <lightning:button label="Return" onclick="{!c.handleCancel}" />                         
+                        </div>
+                    </div>
+                </lightning:card>
+            </div>
+        </aura:set>	
+        
+    </aura:if>
+</aura:component>

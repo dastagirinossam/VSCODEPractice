@@ -1,0 +1,53 @@
+<apex:page showHeader="false">
+<script type="text/javascript">
+
+var date1 = '{!TODAY() + 7}';
+var date2 = '{!TODAY() + 15}';
+var date3 = '{!TODAY() + 24}';
+
+</script>
+   <table> 
+      
+      <tr> <!-- This row is for the 3 images -->
+         <td class="welcome_marketingheaderimage"><apex:image value="{!$Resource.CustomerPortalWelcome_MarketingHeaderImageLeft}" /></td>
+         <td class="welcome_marketingheaderimage"><apex:image value="{!$Resource.CustomerPortalWelcome_MarketingHeaderImageCenter}" /></td>
+         <td class="welcome_marketingheaderimage"><apex:image value="{!$Resource.CustomerPortalWelcome_MarketingHeaderImageRight}" /></td>
+      </tr>
+      
+      <tr> <!-- This row is for the header text for each of the 3 sections -->
+         <td width=33%><h1>Anytime, Anywhere Access to Answers</h1></td>
+         <td width=33%><h1>Upcoming Events</h1></td>
+         <td width=34%><h1>Product Spotlight</h1></td>
+      </tr>
+      
+      <tr> <!--  This row is for the text below the images -->
+         <td width=33%>
+            We've recently re-designed our customer portal. You can monitor work orders, approve squawks, browse aviation content, and share your ideas.
+         </td>
+         
+         <td width=33%>
+            <ul>
+              <li><script>document.writeln(date1.substring(0,10));</script> : Augusta Service Center Tour</li>
+              <li><script>document.writeln(date2.substring(0,10));</script> : FAA Update Webinar</li>
+              <li><script>document.writeln(date3.substring(0,10));</script> : Macbook Air Giveaway</li>
+            </ul>
+         </td>
+         
+         <td width=34%>
+            <ul>
+               <li>Mobile Service Team: We come to you.</li>
+               <li>TFE731 heavy maintenance promotions.</li>
+               <li>CFM56 Facility online soon in Winnipeg.</li>
+            </ul>
+         </td>
+      </tr>   
+   
+   </table>
+   
+   <style>
+   .welcome_marketingheaderimage {
+    width:30%;
+    padding:10px 0;
+   }
+   </style>
+</apex:page>

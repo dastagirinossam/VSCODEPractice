@@ -1,0 +1,12 @@
+.THIS .backgroundHeaderModal{    
+    color:white; 
+    background-color: rgb(0, 114, 187);
+}
+.THIS .txt:hover{
+    text-decoration-line: underline;
+    text-decoration-color: blueviolet;
+}
+.THIS .txt:hover{
+    text-decoration-line: underline;
+    text-decoration-color: green;
+}

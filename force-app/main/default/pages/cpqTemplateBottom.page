@@ -1,0 +1,83 @@
+<apex:page contentType="text/xml" showHeader="false" sidebar="false" cache="false" controller="cpqTemplateBottomHandler">
+    
+    <block>       
+        <table table-layout="fixed" width="100%">            
+            <table-body>
+                
+                <table-row font-size="0.9em" text-align="left" color="#000000">
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Accepted and Agreed to by:"></apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+                
+                <table-row font-size="0.9em"  text-align="left" color="#000000" >
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="{!quote.SBQQ__BillingName__c}"></apex:outputText>
+                        </block>
+                    </table-cell>                   
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="{!quote.X3rd_Party_Signature_Line_Option__c}" rendered="{!quote.Add_3rd_Party_Signature__c}"></apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+                <table-row font-size="0.9em"  text-align="left" color="#000000" >
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Signature:&nbsp; &nbsp; &nbsp; &nbsp;_______________________________"></apex:outputText>
+                        </block>
+                    </table-cell>                
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Signature:&nbsp; &nbsp; &nbsp; &nbsp;_______________________________" rendered="{!quote.Add_3rd_Party_Signature__c}"></apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+                <table-row font-size="0.9em"  text-align="left" color="#000000" >
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Print Name:&nbsp; &nbsp; &nbsp; _______________________________"></apex:outputText>
+                        </block>
+                    </table-cell>                   
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Print Name:&nbsp; &nbsp; &nbsp; _______________________________" rendered="{!quote.Add_3rd_Party_Signature__c}"></apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+                <table-row font-size="0.9em"  text-align="left" color="#000000" >
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Title:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;_______________________________"></apex:outputText>
+                        </block>
+                    </table-cell>                   
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Title:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;_______________________________" rendered="{!quote.Add_3rd_Party_Signature__c}"></apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+                <table-row font-size="0.9em"  text-align="left" color="#000000" >
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Email Address&nbsp; _______________________________"></apex:outputText>
+                        </block>
+                    </table-cell>                   
+                    <table-cell margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                        <block>
+                            <apex:outputText value="Email Address&nbsp;_______________________________" rendered="{!quote.Add_3rd_Party_Signature__c}"></apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>                                                                             
+            </table-body>
+        </table>       
+    </block>
+    
+    <block font-weight="bold" text-align="center" font-size="0.9em" color="#000000" padding="2pt" padding-top="20pt">
+        <apex:outputText value="Thank you for considering StandardAero."></apex:outputText>
+    </block>
+    
+</apex:page>

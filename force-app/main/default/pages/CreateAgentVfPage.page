@@ -1,0 +1,18 @@
+<apex:page standardController="Contact" extensions="CreateAgentUserVf" action="{!CreateUserFromContact}" >
+    
+    
+    <apex:form >
+        <div  style="border-style:solid;border-width:2px;
+                     border-color:blue;background-color:lightblue">
+            <p style="text-align:center;color: red;font-size:20px;">
+                <b>
+                    A community user is already existing with this email address!
+                </b>
+            </p>
+                     
+            <apex:commandButton action="{!redirect}" id="agentButton" value="OK"/> 
+            
+        </div>       
+        
+    </apex:form>
+</apex:page>

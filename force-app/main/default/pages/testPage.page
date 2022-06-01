@@ -1,0 +1,192 @@
+<apex:page Controller="SalesToolKitController" docType="html-5.0" showHeader="True" standardStylesheets="true" sidebar="false" tabStyle="Marketing_Material__c">
+
+  <head>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
+  </head>
+
+  <apex:form id="STK">
+  <apex:pageMessages id="errors" />
+
+  <apex:pageBlock title="Sales Toolkit"  mode="edit">
+    <style type="text/css">
+        .bPageBlock .pbTitle {
+        width: 100%;    
+        text-align: center;
+        }
+    </style>
+
+        <apex:panelGrid columns="4"> 
+                     
+                    <apex:commandLink action="{!airframeSearch}" Shape="rect">
+                        <apex:image value="{!$Resource.AirframeButton}" width="100%" height="20%"/>
+                    </apex:commandLink>
+              
+                    <apex:commandLink action="{!engineSearch}" Shape="rect">
+                        <apex:image value="{!$Resource.EngineButton}" width="100%" height="20%"/>
+                    </apex:commandLink>
+                
+                    <apex:commandLink action="{!avionicsSearch}" Shape="rect">
+                        <apex:image value="{!$Resource.AvionicsButton}" width="100%" height="20%"/>
+                    </apex:commandLink>
+
+                    <apex:commandLink action="{!sitesSearch}" Shape="rect">
+                        <apex:image value="{!$Resource.CampaignsButton}" width="100%" height="20%"/>
+                    </apex:commandLink>
+
+        </apex:panelGrid>
+
+      <table width="100%" border="0">
+  <tr>  
+    <td width="200" valign="top">
+
+      <apex:pageBlock title="Search" mode="edit" id="criteria">
+      
+      <script type="text/javascript"> 
+                    
+      var event = new sforce.SOBject('Event_Log__c');            
+                                   
+      function captureEvent(){
+
+        alert('Go Home');
+      
+      }
+           
+      </script> 
+
+      <apex:actionFunction name="searchServer" action="{!runSearch}" rerender="results,debug,errors">
+          <apex:param name="name" value="" />
+          <apex:param name="targetAudience" value=""/>
+          <apex:param name="dataType" value=""/>
+          <!--<apex:param name="category" value=""/>
+          <apex:param name="manufacturer" value=""/>
+          <apex:param name="make" value=""/>
+          <apex:param name="model" value=""/>-->
+
+      </apex:actionFunction>
+     
+      <table cellpadding="3" cellspacing="3">
+      <tr>
+        <td style="font-weight:bold;">Marketing Material Name<br/>
+        <input type="text" id="name" onkeyup="doSearch();"/>
+        </td>
+      </tr>
+      
+      <tr>
+        <td style="font-weight:bold;">Target Audience<br/>
+          <select id="targetAudience" onchange="doSearch();">
+            <option value=""></option>
+            <apex:repeat value="{!targetAudiences}" var="objTA">
+              <option value="{!objTA}">{!objTA}</option>
+            </apex:repeat>
+          </select>
+        </td>
+      </tr>
+      
+      <tr>
+        <td style="font-weight:bold;">Data Type<br/>
+          <select id="dataType" onchange="doSearch();">
+            <option value=""></option>
+            <apex:repeat value="{!dataType}" var="objDT">
+              <option value="{!objDT}">{!objDT}</option>
+            </apex:repeat>
+          </select>
+        </td>
+      </tr>
+
+     <!--<tr>
+        <td style="font-weight:bold;">Catergory<br/>
+            <apex:selectList size="1" value="{!l1ValStr}" id="category" onchange="doSearch();">
+                <apex:selectoptions value="{!Level1Lst}"/>
+                <apex:actionSupport event="onchange" action="{!getLevel2Lst}" reRender="man"/>
+            </apex:selectList>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="font-weight:bold;">Manufacturer<br/>
+          <apex:outputPanel id="man">
+            <apex:selectList size="1" value="{!l2ValStr}" onchange="doSearch();">
+                <apex:selectoptions value="{!Level2Lst}"/>
+                <apex:actionSupport event="onchange" reRender="mak"/>
+            </apex:selectList>
+          </apex:outputPanel>
+        </td>
+      </tr>
+
+      <tr>
+         <td style="font-weight:bold;">Make<br/>
+          <apex:outputPanel id="mak">
+            <apex:selectList size="1" value="{!l3ValStr}" onchange="doSearch();">
+                <apex:selectoptions value="{!Level3Lst}"/>
+                <apex:actionSupport event="onchange" reRender="mod"/>
+            </apex:selectList>
+            </apex:outputPanel>
+         </td>
+      </tr>
+
+      <tr>
+         <td style="font-weight:bold;">Model<br/>
+         <apex:outputPanel id="mod">
+            <apex:selectList size="1" value="{!l4ValStr}" onchange="doSearch();">
+                <apex:selectoptions value="{!Level4Lst}"/> 
+            </apex:selectList>
+            </apex:outputPanel>
+         </td>
+      </tr>-->
+
+      </table>
+
+      </apex:pageBlock>
+
+    </td>
+    <td valign="top">
+
+    <apex:pageBlock mode="edit" id="results">
+
+        <apex:pageBlockTable value="{!mc}" var="objMC">
+        
+            <apex:column >
+                <apex:facet name="header">
+                    <apex:commandLink value="Marketing Material" action="{!toggleSort}" rerender="results,debug">
+                        <apex:param name="sortField" value="Product_Name__c" assignTo="{!sortField}"/>
+                    </apex:commandLink>                   
+                </apex:facet>
+                
+                <apex:repeat value="{!objMC.Feeds}" var="file">
+                    <a onclick="return captureEvent();">{!objMC.Name}</a>
+                </apex:repeat>
+            </apex:column>                         
+
+            <apex:column >
+                <apex:facet name="header">
+                    <apex:commandLink value="Target Audience" action="{!toggleSort}" rerender="results,debug">
+                        <apex:param name="sortField" value="Target_Audience__c" assignTo="{!sortField}"/>
+                    </apex:commandLink>
+                </apex:facet>
+                <apex:outputField value="{!objMC.Target_Audience__c}"/>
+            </apex:column>
+            
+            <apex:column >
+                <apex:facet name="header">
+                    <apex:commandLink value="GoTo Record" action="{!toggleSort}" rerender="results,debug">
+                        <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                    </apex:commandLink>
+                </apex:facet>
+                <apex:outputLink value="/{!objMC.id}" target="_blank">Go To Record
+                </apex:outputLink>
+            </apex:column>
+                                                    
+          </apex:pageBlockTable>
+        
+    </apex:pageBlock>
+
+    </td>
+  </tr>
+  </table>
+
+  
+  </apex:pageBlock>
+
+  </apex:form>
+
+</apex:page>

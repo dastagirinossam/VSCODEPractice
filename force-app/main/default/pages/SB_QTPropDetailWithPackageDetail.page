@@ -1,0 +1,1192 @@
+<apex:page contentType="text/xml" showHeader="false"  sidebar="false" cache="false" controller="SB_QTProposalInternalReviewTemplate" >
+    
+    <!-- Airframe -->
+    <apex:repeat var="outerExGroup" value="{!propDetailToReturn.outerExgroup}" >
+        <block white-space-treatment="preserve" >
+        </block>
+        <block font-weight="bold" font-style="Arial" font-size="10pt" keep-with-next.within-page="always" > 
+            <apex:outputText value="{!outerExGroup.outerExGroupNumber} . {!HTMLENCODE(outerExGroup.derivedOppTypOrEnginEquipmnt)}" >
+            </apex:outputText>
+        </block>
+
+        <apex:repeat var="bundle" value="{!outerExGroup.bundlelines}" >
+            <block white-space-treatment="preserve" keep-with-next.within-page="always">
+            </block>
+                        
+            <block font-weight="bold" text-indent="5%" font-style="Arial" font-size="10pt" keep-with-next.within-page="always" >
+                <apex:outputText value="{!bundle.bundleLineNumber}.      {!HTMLENCODE(bundle.mainLineProductName)}" escape="false">         
+                </apex:outputText>
+                
+            </block>
+            
+            <table margin-left="10%" border="0"  table-layout="auto">
+                <table-column column-width="15%"> </table-column>
+                <table-column column-width="35%"> </table-column>
+                <table-column column-width="25%"> </table-column>
+                <table-column column-width="10%"> </table-column>
+                <table-column column-width="15%"> </table-column>
+                
+                <table-body>
+                    <table-row height="5pt" keep-with-next.within-page="auto">
+                        <table-cell  margin="0pt" padding="2pt"  padding-left="2pt" number-columns-spanned="5">
+                            <block font-style="Arial" text-align="justify" font-size="9pt" >
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    <table-row keep-with-next.within-page="auto">
+                        <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                            <block font-style="Arial" text-align="justify" linefeed-treatment="preserve" white-space-collapse="false" font-size="9pt" >
+                                <apex:outputText value="{!HTMLENCODE(bundle.mainLineSpecFromProduct)}" escape="false"></apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <apex:outputText rendered="{!bundle.childLines.size>0}" >
+                        <table-row keep-with-next.within-page="auto">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-weight="bold" font-style="Arial" font-size="8pt"  >
+                                    <apex:outputText value="Labor and Material Detail:" rendered="{!bundle.childLines.size>0}" >
+                                    </apex:outputText> 
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <apex:outputText rendered="{!bundle.childLines.size>0}" >
+                        
+                        <table-row keep-with-next.within-page="auto">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt"  >
+                                    
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="24%"></table-column>
+                                        <table-column column-width="6%"></table-column>
+                                        <table-column column-width="10%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="7%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="9%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Description
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity Unit of Measure
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Condition
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Vendor Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Warranty Program
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Extend Cost
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Extended Customer Price
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        <table-body>
+                                            <apex:repeat var="childline" value="{!bundle.childLines}">
+                                                <apex:outputText >
+                                                    <table-row>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Product_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.SBQQ__Product__r.Description}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                {!childline.SBQQ__Quantity__c}
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                {!childline.Measure__c}
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Condition__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Vendor_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Warranty_Program__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <apex:outputText value="{0,number,currency}">
+                                                                    <apex:param value="{!childline.SBQQ__Quantity__c*childline.SBQQ__UnitCost__c}" >
+                                                                    </apex:param>   
+                                                                </apex:outputText>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <apex:outputText value="{0,number,currency}">
+                                                                    <apex:param value="{!childline.fxNet_Total__c}" >
+                                                                    </apex:param>   
+                                                                </apex:outputText>
+                                                            </block>
+                                                        </table-cell>
+                                                    </table-row>
+                                                </apex:outputText>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>
+                                    
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <table-row keep-with-next.within-page="always">
+                        <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                            <block font-weight="bold" font-style="Arial" font-size="8pt"  >
+                                <apex:outputText value="Labor and Material Summary:" rendered="{!bundle.childLines.size > 0}" >
+                                </apex:outputText> 
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <apex:outputText rendered="{!bundle.FeatureDetailsCostSize > 0}">
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt"  >
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Feature
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Cost
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Sell
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Margin
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        <table-body>
+                                            <apex:repeat value="{!bundle.FeatureDetailsCost}" var="key">
+                                                <table-row>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <![CDATA[{!key}]]>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            {!bundle.FeatureDetailsQuauntity[key]}
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,currency}">
+                                                                <apex:param value="{!bundle.FeatureDetailsCost[key]}" >
+                                                                </apex:param>   
+                                                            </apex:outputText>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,currency}">
+                                                                <apex:param value="{!bundle.FeatureDetailsSell[key]}" >
+                                                                </apex:param>   
+                                                            </apex:outputText>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,###.00}">
+                                                                <apex:param value="{!bundle.FeatureDetailsMargin[key]}" >
+                                                                </apex:param> 
+                                                            </apex:outputText>%
+                                                        </block>
+                                                    </table-cell>
+                                                </table-row>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <apex:outputText rendered="{!bundle.hasTsm==true}" >
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-weight="bold" font-style="Arial" font-size="8pt"  >
+                                    <apex:outputText value="TSM Notes:" >
+                                    </apex:outputText> 
+                                </block>
+                            </table-cell>
+                        </table-row>
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt"  >
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="30%"></table-column>
+                                        <table-column column-width="70%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        TSM Note
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        <table-body>
+                                            <apex:repeat var="childline" value="{!bundle.childLines}">
+                                                <apex:outputText rendered="{!childline.TSM_Notes__c != null}" >
+                                                    <table-row>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Product_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.TSM_Notes__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                    </table-row>
+                                                </apex:outputText>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <table-row font-size="8pt" keep-with-next.within-page="always">
+                        <table-cell  border ="1px solid" margin="0pt" text-align="right" font-weight="bold" padding="2pt" padding-left="2pt" number-columns-spanned="4" >
+                            <block> 
+                                <apex:outputText value="Customer Net Total :" ></apex:outputText>
+                            </block>
+                        </table-cell>
+                        
+                        <table-cell  border ="1px solid" margin="0pt"  text-align="right" padding="2pt" padding-left="2pt" >
+                            <block>   
+                                <apex:outputText value="{0,number,currency}">
+                                    <apex:param value="{!(bundle.totalSell - bundle.warrantySell)}" >
+                                    </apex:param>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <table-row font-size="8pt" keep-with-next.within-page="always">
+                        <table-cell padding="2pt" text-align="right" font-weight="bold" number-columns-spanned="5">
+                            <block> 
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell> 
+                    </table-row>
+                    
+                    <apex:outputText rendered="{!bundle.hasWarranty==true}" >
+                        <apex:variable value="{!0}" var="WarrantyTotal"/>
+                        <apex:repeat var="childline" value="{!bundle.childLines}">
+                            <apex:outputText rendered="{!childline.Warranty_Program__c != null}" >
+                                <apex:variable value="{!(WarrantyTotal+childline.fxNet_Total__c)}" var="WarrantyTotal"/>
+                            </apex:outputText>
+                        </apex:repeat>
+                        
+                        <table-row font-size="8pt" keep-with-next.within-page="always">
+                            <table-cell  border ="1px solid" margin="0pt" text-align="right" font-weight="bold"
+                                        padding="2pt" padding-left="2pt" number-columns-spanned="4" >
+                                <block> 
+                                    <apex:outputText value="{!'Warranty Net Total :'}"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            
+                            <table-cell  border ="1px solid" margin="0pt"  text-align="right" 
+                                        padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{0,number,currency}" >
+                                        <apex:param value="{!WarrantyTotal}" >
+                                        </apex:param>
+                                    </apex:outputText>  
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                </table-body>
+            </table>     
+
+        </apex:repeat>
+    </apex:repeat>
+    
+    <!-- Engines -->
+    <apex:repeat var="outerExGroup" value="{!propDetailToReturn.outerExGroupEngines}" >
+        <block white-space-treatment="preserve" >
+        </block>
+        <block font-weight="bold" font-style="Arial" font-size="10pt" keep-with-next.within-page="always" > 
+            <apex:outputText value="{!outerExGroup.outerExGroupNumber} . {!HTMLENCODE(outerExGroup.derivedOppTypOrEnginEquipmnt)}" >
+            </apex:outputText>
+        </block>
+
+        <apex:repeat var="bundle" value="{!outerExGroup.bundlelines}" >
+            <block white-space-treatment="preserve" keep-with-next.within-page="always">
+            </block>
+                        
+            <block font-weight="bold" text-indent="5%" font-style="Arial" font-size="10pt" keep-with-next.within-page="always" >
+                <apex:outputText value="{!bundle.bundleLineNumber}.      {!HTMLENCODE(bundle.mainLineProductName)}" escape="false">         
+                </apex:outputText>
+                
+            </block>
+            
+            <table margin-left="10%" border="0"  table-layout="auto">
+                <table-column column-width="15%"> </table-column>
+                <table-column column-width="35%"> </table-column>
+                <table-column column-width="25%"> </table-column>
+                <table-column column-width="10%"> </table-column>
+                <table-column column-width="15%"> </table-column>
+                
+                <table-body>
+                    <table-row height="5pt" keep-with-next.within-page="auto">
+                        <table-cell  margin="0pt" padding="2pt"  padding-left="2pt" number-columns-spanned="5">
+                            <block font-style="Arial"   text-align="justify" font-size="9pt" >
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    <table-row keep-with-next.within-page="auto">
+                        <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                            <block font-style="Arial" text-align="justify" linefeed-treatment="preserve" white-space-collapse="false" font-size="9pt" >
+                                <apex:outputText value="{!HTMLENCODE(bundle.mainLineSpecFromProduct)}" escape="false"></apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+
+                    <apex:outputText rendered="{!bundle.childLines.size>0}" >
+                        <table-row keep-with-next.within-page="auto">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-weight="bold" font-style="Arial" font-size="8pt"  >
+                                    <apex:outputText value="Labor and Material Detail:" rendered="{!bundle.childLines.size>0}" >
+                                    </apex:outputText> 
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <apex:outputText rendered="{!bundle.childLines.size>0}" >
+                        
+                        <table-row keep-with-next.within-page="auto">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt"  >
+                                    
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="24%"></table-column>
+                                        <table-column column-width="6%"></table-column>
+                                        <table-column column-width="10%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="7%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="9%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Description
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity Unit of Measure
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Condition
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Vendor Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Warranty Program
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Extend Cost
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Extended Customer Price
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        <table-body>
+                                            <apex:repeat var="childline" value="{!bundle.childLines}">
+                                                <apex:outputText >
+                                                    <table-row>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Product_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.SBQQ__Product__r.Description}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                {!childline.SBQQ__Quantity__c}
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                {!childline.Measure__c}
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Condition__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Vendor_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Warranty_Program__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <apex:outputText value="{0,number,currency}">
+                                                                    <apex:param value="{!childline.SBQQ__Quantity__c*childline.SBQQ__UnitCost__c}" >
+                                                                    </apex:param>   
+                                                                </apex:outputText>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <apex:outputText value="{0,number,currency}">
+                                                                    <apex:param value="{!childline.fxNet_Total__c}" >
+                                                                    </apex:param>   
+                                                                </apex:outputText>
+                                                            </block>
+                                                        </table-cell>
+                                                    </table-row>
+                                                </apex:outputText>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <table-row keep-with-next.within-page="always">
+                        <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                            <block font-weight="bold" font-style="Arial" font-size="8pt"  >
+                                <apex:outputText value="Labor and Material Summary:" rendered="{!bundle.childLines.size > 0}" >
+                                </apex:outputText> 
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <apex:outputText rendered="{!IF(AND(bundle.FeatureDetailsCostSize != null, bundle.FeatureDetailsCostSize > 0),true,false)}">
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt"  >
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Feature
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Cost
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Sell
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Margin
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        <table-body>
+                                            <apex:repeat value="{!bundle.FeatureDetailsCost}" var="key">
+                                                <table-row>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <![CDATA[{!key}]]>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            {!bundle.FeatureDetailsQuauntity[key]}
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,currency}">
+                                                                <apex:param value="{!bundle.FeatureDetailsCost[key]}" >
+                                                                </apex:param>   
+                                                            </apex:outputText>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,currency}">
+                                                                <apex:param value="{!bundle.FeatureDetailsSell[key]}" >
+                                                                </apex:param>   
+                                                            </apex:outputText>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,###.00}">
+                                                                <apex:param value="{!bundle.FeatureDetailsMargin[key]}" >
+                                                                </apex:param> 
+                                                            </apex:outputText>%
+                                                        </block>
+                                                    </table-cell>
+                                                </table-row>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <apex:outputText rendered="{!bundle.hasTsm==true}" >
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-weight="bold" font-style="Arial" font-size="8pt"  >
+                                    <apex:outputText value="TSM Notes:" >
+                                    </apex:outputText> 
+                                </block>
+                            </table-cell>
+                        </table-row>
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt"  >
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="30%"></table-column>
+                                        <table-column column-width="70%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        TSM Note
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        <table-body>
+                                            <apex:repeat var="childline" value="{!bundle.childLines}">
+                                                <apex:outputText rendered="{!childline.TSM_Notes__c != null}" >
+                                                    <table-row>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Product_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.TSM_Notes__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                    </table-row>
+                                                </apex:outputText>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <table-row font-size="8pt" keep-with-next.within-page="always">
+                        <table-cell  border ="1px solid" margin="0pt" text-align="right" font-weight="bold" padding="2pt" padding-left="2pt" number-columns-spanned="4" >
+                            <block> 
+                                <apex:outputText value="Customer Net Total :" ></apex:outputText>
+                            </block>
+                        </table-cell>
+                        
+                        <table-cell  border ="1px solid" margin="0pt"  text-align="right" padding="2pt" padding-left="2pt" >
+                            <block>   
+                                <apex:outputText value="{0,number,currency}">
+                                    <apex:param value="{!(bundle.totalSell - bundle.warrantySell)}" >
+                                    </apex:param>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <table-row font-size="8pt" keep-with-next.within-page="always">
+                        <table-cell padding="2pt" text-align="right" font-weight="bold" number-columns-spanned="5">
+                            <block> 
+                                <apex:outputText value=""></apex:outputText>
+                            </block>
+                        </table-cell> 
+                    </table-row>
+                    
+                    <apex:outputText rendered="{!bundle.hasWarranty==true}" >
+                        <apex:variable value="{!0}" var="WarrantyTotal"/>
+                        <apex:repeat var="childline" value="{!bundle.childLines}">
+                            <apex:outputText rendered="{!childline.Warranty_Program__c != null}" >
+                                <apex:variable value="{!(WarrantyTotal+childline.fxNet_Total__c)}" var="WarrantyTotal"/>
+                            </apex:outputText>
+                        </apex:repeat>
+                        
+                        <table-row font-size="8pt" keep-with-next.within-page="always">
+                            <table-cell  border ="1px solid" margin="0pt" text-align="right" font-weight="bold" padding="2pt" padding-left="2pt" number-columns-spanned="4" >
+                                <block> 
+                                    <apex:outputText value="{!'Warranty Net Total :'}"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            
+                            <table-cell  border ="1px solid" margin="0pt"  text-align="right" padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{0,number,currency}" >
+                                        <apex:param value="{!WarrantyTotal}" >
+                                        </apex:param>
+                                    </apex:outputText>  
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                </table-body>
+            </table>     
+        </apex:repeat>
+    </apex:repeat>
+    
+    <!--  avionics paint-->
+    <apex:repeat var="outerExGroup" value="{!propDetailToReturn.outerExgroupAsSetNoMatLines}" >
+        <block white-space-treatment="preserve">
+        </block>
+        
+        <block font-weight="bold" font-style="Arial" font-size="10pt" keep-with-next.within-page="always">  
+            <apex:outputText value="{!outerExGroup.outerExGroupNumber} . {!HTMLENCODE(outerExGroup.derivedOppTypOrEnginEquipmnt)}" >
+            </apex:outputText>
+        </block>
+
+        <apex:repeat var="bundle" value="{!outerExGroup.bundlelines}" >
+            <block white-space-treatment="preserve"  keep-with-next.within-page="always">
+            </block>          
+            
+            <block font-weight="bold" text-indent="5%" font-style="Arial" font-size="10pt" keep-with-next.within-page="always" > 
+                <apex:outputText value="{!bundle.bundleLineNumber}.      {!HTMLENCODE(bundle.mainLineProductName)}"  escape="false">         
+                </apex:outputText> 
+            </block>
+            
+            <table margin-left="10%" border="0">
+                <table-column column-width="15%"> </table-column>
+                <table-column column-width="35%"> </table-column>
+                <table-column column-width="25%"> </table-column>
+                <table-column column-width="10%"> </table-column>
+                <table-column column-width="15%"> </table-column>
+                              
+                <table-body>
+                    <table-row height="5pt" keep-with-next.within-page="always">
+                        <table-cell  margin="0pt" padding="2pt"  padding-left="2pt" number-columns-spanned="5">
+                            <block font-style="Arial"   text-align="justify" font-size="9pt" >
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <table-row keep-with-next.within-page="always">
+                        <table-cell margin="0pt" 
+                                    padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                            <block font-style="Arial" text-align="justify" keep-with-next.within-page="always" linefeed-treatment="preserve" white-space-collapse="false" font-size="9pt" >
+                                <apex:outputText value="{!HTMLENCODE(bundle.mainLineSpecFromProduct)}" escape="false"></apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <apex:outputText rendered="{!bundle.childLines.size>0}" >
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-weight="bold" font-style="Arial" font-size="8pt"  >
+                                    <apex:outputText value="Bundle Option Detail:" rendered="{!bundle.childLines.size>0}" >
+                                    </apex:outputText> 
+                                </block>
+                            </table-cell>
+                        </table-row>
+
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt"  >
+                                    
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="24%"></table-column>
+                                        <table-column column-width="6%"></table-column>
+                                        <table-column column-width="10%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="7%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="8%"></table-column>
+                                        <table-column column-width="9%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Description
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity Unit of Measure
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Condition
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Vendor Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Warranty Program
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Extend Cost
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Extended Customer Price
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        
+                                        <table-body>
+                                            <apex:repeat var="childline" value="{!bundle.childLines}">
+                                                <apex:outputText >
+                                                    <table-row>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Product_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.SBQQ__Product__r.Description}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                {!childline.SBQQ__Quantity__c}
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                {!childline.Measure__c}
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.SBQQ__Product__r.Condition__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.SBQQ__Product__r.Vendor_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Warranty_Program__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <apex:outputText value="{0,number,currency}">
+                                                                    <apex:param value="{!childline.SBQQ__Quantity__c*childline.SBQQ__UnitCost__c}" >
+                                                                    </apex:param>   
+                                                                </apex:outputText>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <apex:outputText value="{0,number,currency}">
+                                                                    <apex:param value="{!childline.fxNet_Total__c}" >
+                                                                    </apex:param>   
+                                                                </apex:outputText>
+                                                            </block>
+                                                        </table-cell>
+                                                    </table-row>
+                                                </apex:outputText>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>                                   
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText> 
+                    
+                    <table-row keep-with-next.within-page="always">
+                        <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                            <block font-weight="bold" font-style="Arial" font-size="8pt">
+                                <apex:outputText value="Feature Detail:" rendered="{!bundle.childLines.size > 0}" >
+                                </apex:outputText> 
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <apex:outputText rendered="{!bundle.FeatureDetailsCostSize > 0}" >
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt">
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-column column-width="20%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Feature
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Quantity
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Cost
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Sell
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Margin
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        
+                                        <table-body>
+                                            <apex:repeat value="{!bundle.FeatureDetailsCost}" var="key">
+                                                <table-row>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <![CDATA[{!key}]]>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,currency}">
+                                                                <apex:param value="{!bundle.FeatureDetailsQuauntity[key]}" >
+                                                                </apex:param>   
+                                                            </apex:outputText>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,currency}">
+                                                                <apex:param value="{!bundle.FeatureDetailsCost[key]}" >
+                                                                </apex:param>   
+                                                            </apex:outputText>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,currency}">
+                                                                <apex:param value="{!bundle.FeatureDetailsSell[key]}" >
+                                                                </apex:param>   
+                                                            </apex:outputText>
+                                                        </block>
+                                                    </table-cell>
+                                                    <table-cell border-style="solid">
+                                                        <block width="100%" height="100%">
+                                                            <apex:outputText value="{0,number,###.00}" >
+                                                                <apex:param value="{!bundle.FeatureDetailsMargin[key]}"/>
+                                                            </apex:outputText>%
+                                                        </block>
+                                                    </table-cell>                  
+                                                </table-row>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <apex:outputText rendered="{!bundle.hasTsm == true}" >
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-weight="bold" font-style="Arial" font-size="8pt"  >
+                                    <apex:outputText value="TSM Notes:" >
+                                    </apex:outputText> 
+                                </block>
+                            </table-cell>
+                        </table-row>
+                        
+                        <table-row keep-with-next.within-page="always">
+                            <table-cell margin="0pt" padding="2pt" padding-left="2pt" number-columns-spanned="5">
+                                <block font-style="Arial" font-size="8pt"  >
+                                    <table border="1" table-layout="auto">
+                                        <table-column column-width="30%"></table-column>
+                                        <table-column column-width="70%"></table-column>
+                                        <table-header>
+                                            <table-row>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        Product Name
+                                                    </block>
+                                                </table-cell>
+                                                <table-cell border-style="solid">
+                                                    <block font-weight="bold" width="100%" height="100%" padding-top="1pt">
+                                                        TSM Note
+                                                    </block>
+                                                </table-cell>
+                                            </table-row>
+                                        </table-header>
+                                        <table-body>
+                                            <apex:repeat var="childline" value="{!bundle.childLines}">
+                                                <apex:outputText rendered="{!childline.TSM_Notes__c != null}" >
+                                                    <table-row>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.Product_Name__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                        <table-cell border-style="solid">
+                                                            <block width="100%" height="100%">
+                                                                <![CDATA[{!childline.TSM_Notes__c}]]>
+                                                            </block>
+                                                        </table-cell>
+                                                    </table-row>
+                                                </apex:outputText>
+                                            </apex:repeat>
+                                        </table-body>
+                                    </table>
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                    
+                    <table-row font-size="8pt" keep-with-next.within-page="always">
+                        <table-cell  border ="1px solid" margin="0pt" text-align="right" font-weight="bold" padding="2pt" padding-left="2pt" number-columns-spanned="4">
+                            <block> 
+                                <apex:outputText value="Customer Net Total :" ></apex:outputText>
+                            </block>
+                        </table-cell>
+                        
+                        <table-cell  border ="1px solid" margin="0pt"  text-align="right" padding="2pt" padding-left="2pt" >
+                            <block>
+                                <apex:outputText value="{0,number,currency}">
+                                    <apex:param value="{!bundle.totalSell}" >
+                                    </apex:param>
+                                </apex:outputText>                        
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    
+                    <apex:outputText rendered="{!bundle.hasWarranty==true}" >
+                        <apex:variable value="{!0}" var="WarrantyTotal"/>
+                        <apex:repeat var="childline" value="{!bundle.childLines}">
+                            <apex:outputText rendered="{!childline.Warranty_Program__c != null}" >
+                                <apex:variable value="{!(WarrantyTotal+childline.fxNet_Total__c)}" var="WarrantyTotal"/>
+                            </apex:outputText>
+                        </apex:repeat>
+                        <table-row font-size="8pt" keep-with-next.within-page="always">
+                            <table-cell  border ="1px solid" margin="0pt" text-align="right" font-weight="bold"
+                                        padding="2pt" padding-left="2pt" number-columns-spanned="4" >
+                                <block> 
+                                    <apex:outputText value="{!'Warranty Net Total :'}"></apex:outputText>
+                                </block>
+                            </table-cell>
+                            
+                            <table-cell  border ="1px solid" margin="0pt"  text-align="right" 
+                                        padding="2pt" padding-left="2pt" >
+                                <block> 
+                                    <apex:outputText value="{0,number,currency}" >
+                                        <apex:param value="{!WarrantyTotal}" >
+                                        </apex:param>
+                                    </apex:outputText>  
+                                </block>
+                            </table-cell>
+                        </table-row>
+                    </apex:outputText>
+                </table-body>
+            </table>   
+        </apex:repeat>
+    </apex:repeat>
+       
+    <!-- End of Quote -->
+    <table table-layout="fixed" width="100%" keep-with-previous="always" >
+        <table-column column-width="15%"> </table-column>
+        <table-column column-width="20%"> </table-column>
+        <table-column column-width="25%"> </table-column>
+        <table-column column-width="10%"> </table-column>
+        <table-column column-width="15%"> </table-column>
+        <table-column column-width="15%"> </table-column>
+             
+        <table-body>                  
+            <table-row font-size="8pt"  keep-with-previous="always" >
+                <table-cell text-align="right" number-columns-spanned="6" border="0" margin="0pt" padding="2pt" padding-left="2pt" >
+                    <block white-space-treatment="preserve">  
+                    </block>
+                </table-cell>
+            </table-row>
+          
+            <table-row font-size="8pt"  keep-with-previous="always" >
+                <table-cell border="1px solid" text-align="right" font-weight="bold" number-columns-spanned="5"  margin="0pt" padding="2pt" padding-left="2pt" >
+                    <block> 
+                        <apex:outputText value=" Grand Total of Quote :">
+                        </apex:outputText>
+                    </block>
+                </table-cell>
+                <table-cell border="1px solid" text-align="right"   margin="0pt" padding="2pt" padding-left="2pt" >
+                    <block> 
+                        <apex:outputText value="{0,number,currency}">
+                            <apex:param value="{!TotalSellInternalReview}" ></apex:param>
+                        </apex:outputText>
+                    </block>
+                </table-cell>
+            </table-row>
+        </table-body>
+    </table>
+    
+</apex:page>

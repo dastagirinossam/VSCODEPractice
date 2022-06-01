@@ -1,0 +1,171 @@
+<apex:page Controller="SalesToolKitController" docType="html-5.0" showHeader="True" sidebar="false" tabStyle="Marketing_Material__c" lightningStylesheets="true">
+    <head>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
+    </head>
+
+    <apex:form id="STK">
+        <apex:pageMessages id="errors" />
+
+        <apex:pageBlock title="Sales Toolkit"  mode="edit">
+            <style type="text/css">
+                .bPageBlock .pbTitle {
+                    width: 100%;    
+                    text-align: center;
+                }
+                
+                .grid{
+                      display: grid;
+                      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+                      grid-gap: 1rem;
+                      > div {
+                        background: black;
+                        padding: 1rem;
+                        display: grid;
+                        place-items: center;
+                        a:before {
+                          content: "";
+                          display: block;
+                          padding-bottom: 100%;
+                          grid-area: 1 / 1 / 1 / 1;
+                        }
+                        img {
+                          width: 100%;
+                          grid-area: 1 / 1 / 1 / 1;
+                        }
+                    }
+                }             
+         </style>
+
+            <div class="grid"> 
+                 <div>
+                    <apex:commandLink action="{!airframeSearch}">
+                        <img src="{!$Resource.AirframeButton}" width="300" height="250"/>
+                    </apex:commandLink>
+                </div>
+              
+                <div>
+                    <apex:commandLink action="{!engineSearch}">
+                        <img src="{!$Resource.EngineButton}" width="300" height="250"/>
+                    </apex:commandLink>
+                </div>
+                
+                <div>
+                    <apex:commandLink action="{!avionicsSearch}">
+                        <img src="{!$Resource.AvionicsButton}" width="300" height="250"/>
+                    </apex:commandLink>
+                </div>
+
+                <div>
+                    <apex:commandLink action="{!sitesSearch}">
+                        <img src="{!$Resource.CampaignsButton}" width="300" height="250"/>
+                    </apex:commandLink>
+                </div>
+
+            </div>
+
+            <table width="100%" border="0">
+                <tr>  
+                    <td width="200" valign="top">
+
+                        <apex:pageBlock title="Search" mode="edit" id="criteria">
+                            
+                            <script type="text/javascript">               
+                                function doSearch(){
+                                    searchServer(
+                                        document.getElementById("name").value,
+                                        document.getElementById("targetAudience").options[document.getElementById("targetAudience").selectedIndex].value,
+                                        document.getElementById("dataType").options[document.getElementById("dataType").selectedIndex].value
+                                    );
+                                }           
+                            </script> 
+
+                            <apex:actionFunction name="searchServer" action="{!runSearch}" rerender="results,debug,errors">
+                                <apex:param name="name" value="" />
+                                <apex:param name="targetAudience" value=""/>
+                                <apex:param name="dataType" value=""/>
+                                <!--<apex:param name="category" value=""/>
+                                <apex:param name="manufacturer" value=""/>
+                                <apex:param name="make" value=""/>
+                                <apex:param name="model" value=""/>-->
+                            </apex:actionFunction>
+     
+                            <table cellpadding="3" cellspacing="3">
+                                <tr>
+                                    <td style="font-weight:bold;">Marketing Material Name<br/>
+                                        <input type="text" id="name" onkeyup="doSearch();"/>
+                                    </td>
+                                </tr>
+      
+                                <tr>
+                                    <td style="font-weight:bold;">Target Audience<br/>
+                                        <select id="targetAudience" onchange="doSearch();">
+                                            <option value=""></option>
+                                            <apex:repeat value="{!targetAudiences}" var="objTA">
+                                                <option value="{!objTA}">{!objTA}</option>
+                                            </apex:repeat>
+                                        </select>
+                                    </td>
+                                </tr>
+      
+                                <tr>
+                                    <td style="font-weight:bold;">Data Type<br/>
+                                        <select id="dataType" onchange="doSearch();">
+                                            <option value=""></option>
+                                            <apex:repeat value="{!dataType}" var="objDT">
+                                                <option value="{!objDT}">{!objDT}</option>
+                                            </apex:repeat>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            
+                        </apex:pageBlock>
+                    </td>
+                    
+                    <td valign="top">
+                        
+                        <apex:pageBlock mode="edit" id="results">
+
+                            <apex:pageBlockTable value="{!mc}" var="objMC">        
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Marketing Material" action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="Product_Name__c" assignTo="{!sortField}"/>
+                                        </apex:commandLink>                   
+                                    </apex:facet>
+                
+                                    <apex:repeat value="{!objMC.Feeds}" var="file">              
+                                        <apex:commandLink value="{!objMC.product_name__c}" action="{!countReference}" onclick="window.open('/sfc/servlet.shepherd/version/download/{!file.RelatedRecordId}');">
+                                            <apex:param name="recordId" value="{!objMC.id}" assignTo="{!recordId}"/>
+                                            <apex:param name="fileId" value="{!file.RelatedRecordId}" assignTo="{!fileId}"/>
+                                        </apex:commandLink>
+                                    </apex:repeat>
+                                </apex:column>                         
+
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="Target Audience" action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="Target_Audience__c" assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputField value="{!objMC.Target_Audience__c}"/>
+                                </apex:column>
+            
+                                <apex:column >
+                                    <apex:facet name="header">
+                                        <apex:commandLink value="GoTo Record" action="{!toggleSort}" rerender="results,debug">
+                                            <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                                        </apex:commandLink>
+                                    </apex:facet>
+                                    <apex:outputLink value="/{!objMC.id}" target="_blank">Go To Record</apex:outputLink>
+                                </apex:column>
+                                                    
+                            </apex:pageBlockTable>        
+                        </apex:pageBlock>
+                    </td>
+                </tr>
+            </table> 
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

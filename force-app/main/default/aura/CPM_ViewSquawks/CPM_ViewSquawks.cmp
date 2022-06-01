@@ -1,0 +1,211 @@
+<aura:component controller="cpm_ViewSquawks" implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    
+    <aura:attribute name="qlList" type="List"/>
+    <aura:attribute name="slideStatus" type="String" default="Open"/>
+    <aura:attribute name="approved" type="Boolean" default ="false" />
+    <aura:attribute name="declined" type="Boolean" default ="false" />
+    <aura:attribute name="pending" type="Boolean" default ="false" />
+    <aura:attribute name="notSubmitted" type="Boolean" default ="false" />
+    <aura:attribute name="recordId" type="String"/>
+    
+    <aura:attribute name="sendData" type="object"/>
+    
+    <aura:attribute name="totalLabor" type="String"/>
+    <aura:attribute name="totalMaterial" type="String"/>
+    <aura:attribute name="totalAmount" type="String"/>
+    
+    <aura:attribute name="description" type="String"/>
+    <aura:attribute name="squawkNo" type="String"/>
+    
+    <aura:attribute name="options" type="List" default="[
+                                                        { label: 'Approved', value: 'approved' },
+                                                        { label: 'Declined', value: 'denied' },
+                                                        { label: 'Pending', value: 'pending' },
+                                                        { label: 'Not Submitted', value: 'null' }]"/>
+    
+    <aura:attribute name="value" type="List"/>
+    
+    <aura:handler name="init" value="{!this}" action="{! c.doInit }"/>
+    
+    <article class="slds-card">
+        <div class="slds">                            
+            <div style="height: 65vh">
+                <div id="toggle" class="slds-grid" style="height: 100%;">
+                    <div aura:id="slide" class="slds-split-view_container showSlide">
+                        <button class="slds-button slds-button_icon slds-icon_xx-small slds-split-view__toggle-button" onclick="{!c.toggle}">
+                            <aura:if isTrue="{!v.slideStatus == 'Open'}">
+                                <lightning:icon iconName="utility:left" size="xx-small" ></lightning:icon>
+                                <aura:set attribute="else">
+                                    <lightning:icon iconName="utility:right" size="xx-small" ></lightning:icon>
+                                </aura:set>
+                            </aura:if>
+                        </button>
+                        <article aria-hidden="false" id="split-view-id" class="slds-split-view slds-grid slds-grid_vertical slds-grow slds-scrollable_none">
+                            <header class="slds-split-view__header slds-box">
+                                <div class="slds-grid slds-grid_vertical-align-center slds-m-bottom_xx-small">
+                                    <div class="slds-has-flexi-truncate">
+                                        <div class="slds-media slds-media_center">
+                                            <div class="slds-media__figure">
+                                                
+                                                <div class="slds-panel__header">
+                                                    <div>
+                                                        <tr>
+                                                            <label><b>Search</b></label>
+                                                        </tr>
+                                                        <tr>
+                                                            <ui:inputText label="Squawk Number" value="{!v.squawkNo}"/>
+                                                        </tr>
+                                                        <tr>
+                                                            <ui:inputText label="Description" value="{!v.description}"/> 
+                                                        </tr>  
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="slds-panel__body">
+                                                    
+                                                    <lightning:checkboxGroup name="Squawk Status"
+                                                                             label="Select Squawk Status"
+                                                                             options="{!v.options}"
+                                                                             value="{!v.value}"
+                                                                             onchange="{!c.handleChange}">
+                                                    </lightning:checkboxGroup>
+                                                    
+                                                </div>
+                                                <div class="slds-m-left_small slds-border_top slds-grid slds-wrap">
+                                                    <div class="slds-col slds-p-top_small slds-size_1-of-3">
+                                                        Labor Total: 
+                                                    </div>
+                                                    <div class="slds-col slds-p-top_small slds-size_1-of-3">
+                                                        <ui:outputCurrency value="{!v.totalLabor}"/>
+                                                    </div> 
+                                                    <div class="slds-col slds-p-top_small slds-size_1-of-3"/>
+                                                    <div class="slds-col slds-size_1-of-3">
+                                                        Material Total: 
+                                                    </div>
+                                                    <div class="slds-col slds-size_1-of-3">
+                                                        <ui:outputCurrency value="{!v.totalMaterial}"/>
+                                                    </div>   
+                                                    <div class="slds-col slds-size_1-of-3"/>
+                                                    <div class="slds-col slds-p-bottom_small slds-size_1-of-3">
+                                                        Combined Total: 
+                                                    </div>
+                                                    <div class="slds-col slds-p-bottom_small slds-size_1-of-3">
+                                                        <ui:outputCurrency value="{!v.totalAmount}"/>
+                                                    </div> 
+                                                    <div class="slds-col slds-p-bottom_small slds-size_1-of-3"/>
+                                                </div>                   
+                                                <div class="slds-border_top">
+                                                    <div class="slds-var-p-around_medium slds-m-right_large slds-m-left_large">
+                                                        <button class="slds-button slds-button_brand" onclick="{!c.search}">Search</button>
+                                                        <!--<button class="slds-button slds-button_brand" onclick="{!c.downloadDocument}">Create PDF</button>-->
+                                                        <button class="slds-button slds-button_brand" onclick="{!c.reset}">Reset</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </header>
+                        </article>
+                    </div>
+                    <div class="slds-grow slds-scrollable_y" style="margin-left: 0.50rem;">
+                        <dl class="slds-box slds-m-left_medium slds-m-bottom_medium slds-list_horizontal slds-wrap">
+                            <div class="slds-table--header-fixed_container" style="height:59vh;">
+                                <div class="slds-scrollable_y" style="height:100%;">
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-table--header-fixed">
+                                        <thead>                        
+                                            <tr>
+                                                <th scope="col" style="width:100px;min-width:100px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed">Squawk No</div>
+                                                </th> 
+                                                <th scope="col" style="width:120px;min-width:120px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed">NonRoutine</div>
+                                                </th>   
+                                                <th scope="col" style="width:500px;min-width:500px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed">Description</div>
+                                                </th>
+                                                <th scope="col" style="width:80px;min-width:80px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-cell-wrap">Status</div>
+                                                </th>
+                                                <th scope="col" style="width:120px;min-width:120px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-cell-wrap">Material Amount</div>
+                                                </th>
+                                                <th scope="col" style="width:100px;min-width:100px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-cell-wrap">Material Type</div>
+                                                </th>
+                                                <th scope="col" style="width:100px;min-width:100px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-cell-wrap">Labor Amount</div>
+                                                </th>
+                                                <th scope="col" style="width:100px;min-width:100px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-cell-wrap">Labor Type</div>
+                                                </th>
+                                                <!--<th scope="col" style="width:100px;min-width:100px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-cell-wrap">Est Labor Hours</div>
+                                                </th>-->
+                                                <th scope="col" style="width:30px;min-width:30px;text-align: center;">
+                                                    <div class="slds-truncate slds-cell-fixed slds-cell-wrap">RTS</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <aura:iteration items="{!v.qlList}" var="ql"  >
+                                                <tr class="slds-hint-parent">
+                                                    <th scope="row" data-label="QuoteLine">
+                                                        <div class="slds-truncate">
+                                                            <aura:if isTrue="{!ql.Add_Work_Status__c == 'Pending' || ql.Add_Work_Status__c == 'Approved' || ql.Add_Work_Status__c == 'Denied'}">
+                                                                <a href="{!'/apex/Squawk?Id=' + ql.Id }">
+                                                                    {!ql.fxSquawkNo__c}
+                                                                </a>
+                                                                <aura:set attribute="else">
+                                                                    <a href="{!'/' + ql.Id }">
+                                                                        {!ql.fxSquawkNo__c}
+                                                                    </a>
+                                                                </aura:set>
+                                                            </aura:if>
+                                                        </div>
+                                                    </th>
+                                                    <td scope="row" data-label="NonRoutine">
+                                                        <div class="slds-truncate">{!ql.fxJob_Card__c}</div>
+                                                    </td>
+                                                    <td data-label="Description">
+                                                        <div class="slds-truncate slds-cell-wrap">{!ql.Job_Card_Description__c}</div>
+                                                    </td>
+                                                    <td data-label="Status">
+                                                        <div class="slds-truncate">{!ql.Add_Work_Status__c}</div>
+                                                    </td>
+                                                    <td data-label="Material Amount">
+                                                        <div class="slds-truncate">
+                                                            <ui:outputCurrency value="{!ql.Material_Amount__c}"/>
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Material Type">
+                                                        <div class="slds-truncate">{!ql.Material_Type__c}</div>
+                                                    </td>
+                                                    <td data-label="Labor Amount">
+                                                        <div class="slds-truncate">
+                                                            <ui:outputCurrency value="{!ql.Labor_Amount__c}"/>
+                                                        </div>
+                                                    </td>
+                                                    <td data-label="Labor Type">
+                                                        <div class="slds-truncate">{!ql.Add_Work_Labor_Type__c}</div>
+                                                    </td>
+                                                    <!--<td data-label="Est Labor Hours">
+                                                        <div class="slds-truncate">{!ql.Estimated_Labor_Hours__c}</div>
+                                                    </td>-->
+                                                    <td data-label="RTS">
+                                                        <div class="slds-truncate">{!ql.IsRTS__c}</div>
+                                                    </td>
+                                                </tr>
+                                            </aura:iteration>                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </dl>
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </article>
+    
+</aura:component>

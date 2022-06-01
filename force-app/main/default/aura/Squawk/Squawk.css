@@ -1,0 +1,115 @@
+.THIS .approveButton{
+   background-color: rgb(37, 116, 169);
+   display: inline-block;
+   color: #fff;  
+}
+
+.THIS .approveButton:hover {
+	background-color: rgb(19, 95, 144);
+    color: #fff; 
+}
+
+.THIS .rtsModal {
+	background-color: rgb(211, 211, 211);
+}
+
+.THIS .legal {
+	font-size:xx-small;
+}
+
+.THIS .approveModal {
+	background-color: rgb(37, 116, 169);
+    color: #fff;    
+}
+
+.THIS .rejectModal{
+    background-color: rgb(191, 62, 57);
+    color: #fff; 
+}
+
+.THIS .deferModal{
+    background-color: rgb(156, 39, 176);
+    color: #fff; 
+}
+
+.THIS .rejectButton{
+   background-color: rgb(191, 62, 57);
+   border-radius: 4px;
+   display: inline-block;
+   border: none;
+   color: #fff; 
+   font-size: 14px;
+   width: 125px;
+   height: 33px;
+   text-align: center; 
+}
+
+.THIS .deferButton{
+   background-color: rgb(156, 39, 176);
+   color: #fff; 
+}
+
+.THIS .deferButton:hover{
+   background-color: rgb(146, 65, 146);
+   color: #fff; 
+}
+
+.THIS .squawkOutlineTop{
+   background-color: rgb(240,248,255);
+   border-width: 3px;
+   border-top-style: solid;
+   border-color: rgb(0,0,255);
+}
+
+.THIS .squawkHeader{
+   background-color: rgb(255,250,217);
+}
+
+.THIS .badge{
+   background-color: rgb(225,225,225);
+}
+
+.THIS .squawkOutlineBottom{
+   background-color: rgb(240,248,255);
+   border-width: 3px;
+   border-bottom-style: solid;
+   border-color: rgb(0,0,255);
+}
+
+.THIS .squawkOutlineBottomThin{
+   border-bottom-style: solid;
+   border-width: .5px;
+   border-color: rgb(0,0,255);
+}
+
+.THIS .squawkOutlineLeft{
+   border-left-style: solid;
+   border-width: 3px;
+   border-color: rgb(0,0,255);
+}
+
+.THIS.container {
+	margin: 5px;
+	border: 3px solid blue;
+	border-radius: 1px;
+    background-color: rgb(213,253,213);
+}
+
+.THIS .squawkOutlineRight{
+   border-right-style: solid;
+   border-width: 3px;
+   border-color: rgb(0,0,255);
+}
+
+.THIS .rejectButton:hover {
+	background-color: rgb(188, 0, 10);
+}
+
+.THIS.toggle {
+    display: none;
+}
+
+.THIS.slds-spinner_container {  
+  z-index: 10000;
+  position: fixed;   
+}

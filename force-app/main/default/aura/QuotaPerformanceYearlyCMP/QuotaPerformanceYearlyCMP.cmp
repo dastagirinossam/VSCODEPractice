@@ -1,0 +1,565 @@
+<aura:component controller="QuotaPerformanceYearly" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	 <aura:attribute name="searchResult" type="List"/>
+    <aura:attribute name ="Year" type= "string"/>
+   
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+     <aura:attribute name="listOfYear" type="list"  default ="All,2017,2018,2019,2020,2021"/>
+    <aura:attribute name="selectedYear" type="String" default="All"/> 
+     
+    
+    <aura:iteration items="{!v.searchResult}" var="per" indexVar="count">
+        <div class="slds-section slds-is-open">
+            <div class="container">
+                <article class="slds-card">
+                    <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                        <span class="slds-truncate slds-p-horizontal_x-small" title="Section Title"><b>Details</b></span>
+                    </h3>
+                    <div aria-hidden="false" class="slds-section__content">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance Name: </b> <ui:outputText value="{!per.Name}"/>    
+                            </div>
+                            
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Year: </b> <ui:outputText value="{!per.Year}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Region: </b> <ui:outputText value="{!per.Region}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quarter: </b> <ui:outputText value="{!per.Annual}"/>  
+                            </div>
+                            
+                            <!--
+                    <div class="slds-col slds-size_1-of-2">
+                        <b>Role : </b> <ui:outputText value="{!per.ESM_Count__c}"/> 
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <b>RSM Count : </b> <ui:outputText value="{!per.RSM_Count__c}"/>    
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <b>Leader Rollup : </b> <ui:outputText value="{!per.Leader__c}"/>  
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <b>ESM Count : </b> <ui:outputText value="{!per.ESM_Count__c}"/> 
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <b>Region Rollup : </b> <ui:outputText value="{!per.Region_Rollup__c}"/>    
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <b>Locked : </b> <ui:outputText value="{!per.Locked__c}"/>  
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <b>Exclude Splits : </b> <ui:outputText value="{!per.Exclude_Splits__c}"/> 
+                    </div>
+                    <div class="slds-col slds-size_1-of-2">
+                        <b>Year Quarter : </b> <ui:outputText value="{!per.Year_Quarter__c}"/> 
+                    </div>
+-->
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <div class="slds-section slds-is-open">
+            <div class="container">
+                <article class="slds-card">
+                    <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                        <span class="slds-truncate slds-p-horizontal_x-small" title="Section Title"><b>Annual IC Measures Performance</b></span>
+                    </h3>
+                    <div aria-hidden="false" class="slds-section__content">
+                        
+                        <!-- Engines -->
+                        <div class="slds-grid slds-wrap">                           
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Actual - Revenue - Engines: </b> <ui:outputCurrency value="{!per.ActualRevenueEngines}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Actual - Margin - Engines: </b> <ui:outputCurrency value="{!per.ActualMarginEngines}"/>  
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quota - Revenue - Engines: </b> <ui:outputCurrency value="{!per.QuotaRevenueEngines}"/> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quota - Margin - Engines: </b> <ui:outputCurrency value="{!per.QuotaMarginEngines}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance - Revenue - Engines: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueEngines*.01}" style="percent"/> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance - Margin - Engines: </b> <lightning:formattedNumber value="{!per.PerformanceMarginEngines*.01}" style="percent"/> 
+                            </div>
+                        </div>
+                        
+                        <!-- Non-Engines -->
+                        <div class="slds-grid slds-wrap slds-p-vertical_medium">
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Actual - Revenue - Non-Engine: </b> <ui:outputCurrency value="{!per.ActualRevenueNonEngine}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Actual - Margin - Non-Engine: </b> <ui:outputCurrency value="{!per.ActualMarginNonEngine}"/>  
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quota - Revenue - Non-Engine: </b> <ui:outputCurrency value="{!per.QuotaRevenueNonEngine}"/> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quota - Margin - Non-Engine: </b> <ui:outputCurrency value="{!per.QuotaMarginNonEngine}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance - Revenue - Non-Engine: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueNonEngine*.01}" style="percent"/> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance - Margin - Non-Engine: </b> <lightning:formattedNumber value="{!per.PerformanceMarginNonEngine*.01}" style="percent"/> 
+                            </div>
+                        </div>
+                        
+                        <!-- TPE All -->
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Actual - Revenue - TPE (All): </b> <ui:outputCurrency value="{!per.ActualRevenueTPEAll}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Actual - Margin - TPE (All): </b> <ui:outputCurrency value="{!per.ActualMarginTPEAll}"/>  
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quota - Revenue - TPE (All): </b> <ui:outputCurrency value="{!per.QuotaRevenueTPEAll}"/> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quota - Margin - TPE (All): </b> <ui:outputCurrency value="{!per.QuotaMarginTPEAll}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance - Revenue - TPE (All): </b> <lightning:formattedNumber value="{!per.PerformanceRevenueTPEAll*.01}" style="percent"/> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance - Margin - TPE (All): </b> <lightning:formattedNumber value="{!per.PerformanceMarginTPEALL*.01}" style="percent"/> 
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <!-- Quota Performance Section -->
+        <div class="slds-section slds-is-open">
+            <div class="container">
+                <article class="slds-card">
+                    <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                        <span class="slds-truncate slds-p-horizontal_x-small" title="Section Title"><b>Quota Performance - Total</b></span>
+                    </h3>
+                    <div aria-hidden="false" class="slds-section__content">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Actual - Revenue - Total: </b> <ui:outputCurrency value="{!per.ActualRevenueTotal}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Actual - Margin - Total: </b> <ui:outputCurrency value="{!per.ActualMarginTotal}"/>  
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quota - Revenue - Total: </b> <ui:outputCurrency value="{!per.QuotaRevenueTotal}"/> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Quota - Margin - Total: </b> <ui:outputCurrency value="{!per.QuotaMarginTotal}"/>    
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance - Revenue - Total: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueTotal*.01}" style="percent"/> 
+                            </div>
+                            <div class="slds-col slds-size_1-of-2">
+                                <b>Performance - Margin - Total: </b> <lightning:formattedNumber value="{!per.PerformanceMarginTotal*.01}" style="percent"/>  
+                            </div>
+                        </div>                                             
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <!-- Quota Performance Products -->
+        <div class="slds-section slds-is-open">
+            <div class="container">
+                <article class="slds-card">
+                    <h3 class="slds-section__title slds-theme_shade slds-theme_inverse">
+                        <span class="slds-truncate slds-p-horizontal_x-small" title="Section Title"><b>Quota Performance - Products</b></span>
+                    </h3>
+                    
+                    <!-- TFE731 -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - TFE731: </b> <ui:outputCurrency value="{!per.ActualRevenueTFE731}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - TFE731: </b> <ui:outputCurrency value="{!per.ActualMarginTFE731}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - TFE731: </b> <ui:outputCurrency value="{!per.QuotaRevenueTFE731}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - TFE731: </b> <ui:outputCurrency value="{!per.QuotaMarginTFE731}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - TFE731: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueTFE731*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - TFE731: </b> <lightning:formattedNumber value="{!per.PerformanceMarginTFE731*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- Airframe -->
+                    <div class="slds-grid slds-wrap slds-p-vertical_medium">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Airframe: </b> <ui:outputCurrency value="{!per.ActualRevenueAirframe}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Airframe: </b> <ui:outputCurrency value="{!per.ActualMarginAirframe}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - Airframe: </b> <ui:outputCurrency value="{!per.QuotaRevenueAirframe}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - Airframe: </b> <ui:outputCurrency value="{!per.QuotaMarginAirframe}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - Airframe: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueAirframe*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - Airframe: </b> <lightning:formattedNumber value="{!per.PerformanceMarginAirframe*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- HTF -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - HTF: </b> <ui:outputCurrency value="{!per.ActualRevenueHTF}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - HTF: </b> <ui:outputCurrency value="{!per.ActualMarginHTF}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - HTF: </b> <ui:outputCurrency value="{!per.QuotaRevenueHTF}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - HTF: </b> <ui:outputCurrency value="{!per.QuotaMarginHTF}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - HTF: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueHTF*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - HTF: </b> <lightning:formattedNumber value="{!per.PerformanceMarginHTF*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- CFE738 -->
+                    <div class="slds-grid slds-wrap slds-p-vertical_medium">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - CFE738: </b> <ui:outputCurrency value="{!per.ActualRevenueCFE738}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - CFE738: </b> <ui:outputCurrency value="{!per.ActualMarginCFE738}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - CFE738: </b> <ui:outputCurrency value="{!per.QuotaRevenueCFE738}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - CFE738: </b> <ui:outputCurrency value="{!per.QuotaMarginCFE738}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - CFE738: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueCFE738*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - CFE738: </b> <lightning:formattedNumber value="{!per.PerformanceMarginCFE738*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- TPE331 -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - TPE: </b> <ui:outputCurrency value="{!per.ActualRevenueTPEAll}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - TPE: </b> <ui:outputCurrency value="{!per.ActualMarginTPEAll}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - TPE: </b> <ui:outputCurrency value="{!per.QuotaRevenueTPEAll}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - TPE: </b> <ui:outputCurrency value="{!per.QuotaMarginTPEAll}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - TPE: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueTPEAll*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - TPE: </b> <lightning:formattedNumber value="{!per.PerformanceMarginTPEALL*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- PWC -->
+                    <div class="slds-grid slds-wrap slds-p-vertical_medium">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - PW300: </b> <ui:outputCurrency value="{!per.ActualRevenuePW300}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - PW300:: </b> <ui:outputCurrency value="{!per.ActualMarginPW300}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - PW300: </b> <ui:outputCurrency value="{!per.QuotaRevenuePW300}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - PW300: </b> <ui:outputCurrency value="{!per.QuotaMarginPW300}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - PW300: </b> <lightning:formattedNumber value="{!per.PerformanceMarginPW300*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - PW300: </b> <lightning:formattedNumber value="{!per.PerformanceMarginPW300*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- PW300 Offload -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - PW300 Offload: </b> <ui:outputCurrency value="{!per.ActualRevenuePW300Offload}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - PW300 Offload: </b> <ui:outputCurrency value="{!per.ActualMarginPW300Offload}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - PW300 Offload: </b> <ui:outputCurrency value="{!per.QuotaRevenuePW300Offload}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - PW300 Offload: </b> <ui:outputCurrency value="{!per.QuotaMarginPW300Offload}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - PW300 Offload: </b> <lightning:formattedNumber value="{!per.PerformanceRevenuePW300Offload*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - PW300 Offload: </b> <lightning:formattedNumber value="{!per.PerformanceMarginPW300Offload*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- Other Engine -->
+                    <div class="slds-grid slds-wrap slds-p-vertical_medium">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Other Engine: </b> <ui:outputCurrency value="{!per.ActualRevenueOtherEngine}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Other Engine: </b> <ui:outputCurrency value="{!per.ActualMarginOtherEngine}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - Other Engine: </b> <ui:outputCurrency value="{!per.QuotaRevenueOtherEngine}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - Other Engine: </b> <ui:outputCurrency value="{!per.QuotaMarginOtherEngine}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - Other Engine: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueOtherEngine*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - Other Engine: </b> <lightning:formattedNumber value="{!per.PerformanceMarginOtherEngine*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- APU -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - APU: </b> <ui:outputCurrency value="{!per.ActualRevenueAPU}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - APU: </b> <ui:outputCurrency value="{!per.ActualMarginAPU}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - APU: </b> <ui:outputCurrency value="{!per.QuotaRevenueAPU}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - APU: </b> <ui:outputCurrency value="{!per.QuotaMarginAPU}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - APU: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueAPU*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - APU: </b> <lightning:formattedNumber value="{!per.PerformanceMarginAPU*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- AE3007 -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - AE3007: </b> <ui:outputCurrency value="{!per.ActualRevenueAE3007}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - AE3007: </b> <ui:outputCurrency value="{!per.QuotaRevenueAE3007}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - AE3007: </b> <ui:outputCurrency value="{!per.QuotaRevenueAE3007}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - AE3007: </b> <ui:outputCurrency value="{!per.QuotaMarginAE3007}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - AE3007: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueAE3007*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - AE3007: </b> <lightning:formattedNumber value="{!per.PerformanceMarginAE3007*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                     <!-- Engine Exchange -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Engine Exchange: </b> <ui:outputCurrency value="{!per.ActualRevenueEngineExchange}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Engine Exchange: </b> <ui:outputCurrency value="{!per.ActualMarginEngineExchange}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - Engine Exchange: </b> <ui:outputCurrency value="{!per.QuotaRevenueEngineExchange}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - Engine Exchange: </b> <ui:outputCurrency value="{!per.QuotaMarginEngineExchange}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - Engine Exchange: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueEngineExchange*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - Engine Exchange: </b> <lightning:formattedNumber value="{!per.PerformanceMarginEngineExchange*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    
+                    <!-- Avionics -->
+                    <div class="slds-grid slds-wrap slds-p-vertical_medium">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Avionics: </b> <ui:outputCurrency value="{!per.ActualRevenueAvionics}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Avionics: </b> <ui:outputCurrency value="{!per.ActualMarginAvionics}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - Avionics: </b> <ui:outputCurrency value="{!per.QuotaRevenueAvionics }"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - Avionics: </b> <ui:outputCurrency value="{!per.QuotaMarginAvionics}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - Avionics: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueAvionics*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - Avionics: </b> <lightning:formattedNumber value="{!per.PerformanceMarginAvionics*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    
+                           <div class="slds-grid slds-wrap">
+                             
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Engines Splits: </b> <ui:outputCurrency value="{!per.ActualRevenueEngineSplits}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Engines Splits: </b> <ui:outputCurrency value="{!per.ActualMarginEnginesSplits}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Non-Engine Splits: </b> <ui:outputCurrency value="{!per.ActualRevenueNonEngineSplits}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Non-Engine Splits: </b> <ui:outputCurrency value="{!per.ActualMarginNonEngineSplits}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Other: </b> <lightning:formattedNumber value="{!per.ActualRevenueOther}" /> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Other: </b> <lightning:formattedNumber value="{!per.ActualMarginOther}" /> 
+                        </div>
+                    </div>                    
+                    
+                    <!-- Interior Mods -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Interior Mods: </b> <ui:outputCurrency value="{!per.ActualRevenueInteriorMods}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Interior Mods: </b> <ui:outputCurrency value="{!per.ActualMarginInteriorMods}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - Interior Mods: </b> <ui:outputCurrency value="{!per.QuotaRevenueInteriorMods}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - Interior Mods: </b> <ui:outputCurrency value="{!per.QuotaMarginInteriorMods}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - Interior Mods: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueInteriorMods*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - Interior Mods: </b> <lightning:formattedNumber value="{!per.PerformanceMarginInteriorMods*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- Paint -->
+                    <div class="slds-grid slds-wrap slds-p-vertical_medium">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - Paint: </b> <ui:outputCurrency value="{!per.ActualRevenuePaint}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - Paint: </b> <ui:outputCurrency value="{!per.ActualMarginPaint}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - Paint: </b> <ui:outputCurrency value="{!per.Quota_Revenue_Paint__c}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - Paint: </b> <ui:outputCurrency value="{!per.QuotaRevenuePaint}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - Paint: </b> <lightning:formattedNumber value="{!per.PerformanceRevenuePaint*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - Paint: </b> <lightning:formattedNumber value="{!per.PerformanceMarginPaint*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- ODA -->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - ODA: </b> <ui:outputCurrency value="{!per.ActualRevenueODA}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - ODA: </b> <ui:outputCurrency value="{!per.ActualMarginODA}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - ODA: </b> <ui:outputCurrency value="{!per.QuotaRevenueODA}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - ODA: </b> <ui:outputCurrency value="{!per.QuotaMarginODA}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - ODA: </b> <lightning:formattedNumber value="{!per.PerformanceRevenueODA*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - ODA: </b> <lightning:formattedNumber value="{!per.PerformanceMarginODA*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                    <!-- PPE -->
+                    <div class="slds-grid slds-wrap slds-p-top_medium">
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Revenue - PPE: </b> <ui:outputCurrency value="{!per.ActualRevenuePPE}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Actual - Margin - PPE: </b> <ui:outputCurrency value="{!per.ActualMarginPPE}"/>  
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Revenue - PPE: </b> <ui:outputCurrency value="{!per.QuotaRevenuePPE}"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Quota - Margin - PPE: </b> <ui:outputCurrency value="{!per.QuotaMarginPPE}"/>    
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Revenue - PPE: </b> <lightning:formattedNumber value="{!per.PerformanceRevenuePPE*.01}" style="percent"/> 
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <b>Performance - Margin - PPE: </b> <lightning:formattedNumber value="{!per.PerformanceMarginPPE*.01}" style="percent"/> 
+                        </div>
+                    </div>
+                    
+                </article>
+            </div>
+        </div>
+    </aura:iteration>
+    
+</aura:component>

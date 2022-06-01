@@ -1,0 +1,89 @@
+<aura:component controller="StatusUpdateController" implements="force:lightningQuickActionWithoutHeader,force:hasRecordId" access="global">
+    
+    <aura:html tag="style">
+        .slds-modal__container {
+        	min-width: 30vw;
+        	max-width: 55rem !important;
+        }
+        
+        .cuf-content {
+        	padding: 0 0rem !important;
+        }
+        
+        .slds-p-around--medium {
+        	padding: 0rem !important;
+        } 
+        
+        .slds-modal__content{      
+        	height:unset !important;
+        	max-height:unset !important; 
+        }
+    </aura:html> 
+    
+    <aura:attribute name="record" type="Map"/> 
+    <aura:attribute name="recordId" type="String" />    
+        
+    <aura:attribute name="selected" type="Map[]"/>
+    <aura:attribute name="open" type="Boolean" default="false"/>
+    <aura:attribute name="toEmail" type="String" />
+    <aura:attribute name="toEmailSubject" type="String" />
+    <aura:attribute name="toEmailBody" type="String" />
+        
+    <aura:handler name="selectedAttachmentsNotifyEvent" event="c:selectedAttachmentsNotifyEvent" action="{!c.selectedAction}"/>
+    
+    <aura:if isTrue="{!!v.open}">
+    <div class="slds-modal__header slds-modal__title">
+        Send Email via Salesforce
+    </div>
+    
+    <div class="slds-modal__content slds-align_absolute-center" aura:id="modalbody" id="modalbody">                  
+        <div class="slds-p-horizontal--small">            
+            
+            <lightning:input aura:id="emailAddress" 
+                             class="slds-p-around_small"
+                             label="Send To: " 
+                             type="text"
+                             name="toEmail"
+                             value="{!v.toEmail}"
+                             required="true"
+                             messageWhenPatternMismatch="Please enter a valid email or valid emails separated by a semi-colon"
+                             pattern="^(([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)(\s*;\s*|\s*$))*$" />
+            
+            <lightning:input aura:id="emailSubject" 
+                             label="Subject: " 
+                             type="text"
+                             required="true"
+                             value="{!v.toEmailSubject}"
+                             class="slds-p-around_small"/>
+            
+            <lightning:layoutItem class="slds-p-around_small">
+                <h2 class="header">Body:</h2>
+                <lightning:inputRichText aura:id="emailBody" value="{!v.toEmailBody}"></lightning:inputRichText>
+            </lightning:layoutItem>
+            
+            <lightning:layoutItem padding="around-small">
+                <h2 class="header">Selected Files</h2>
+                
+                <div class="slds-p-left_medium">
+                    <aura:iteration items="{!v.selected}" var="l">
+                        <li class="slds-listbox-item slds-truncate" role="presentation">
+                            <aura:if isTrue="{! v.selected}">
+                                <lightning:pill class="" label="{!l.Title}" name="{!l}" onremove="{!c.handleRemoveOnly }" href="{!'/'+(l.Id)}"/>
+                            </aura:if>
+                        </li>
+                    </aura:iteration>
+                </div>
+            </lightning:layoutItem>                       
+        </div>
+    </div>
+    
+    <div class="slds-modal__footer">
+        <button class="slds-button slds-button_neutral" onclick="{!c.cancel}">Cancel</button>
+        <button class="slds-button slds-button_brand" onclick="{!c.toOpenAttachments}">Attach Files</button>
+        <button class="slds-button slds-button_brand" onclick="{!c.sendMail}">Send Email</button>
+    </div>
+    </aura:if>
+    <c:selectAttachments isOpen="{!v.open}" recordId="{!v.recordId}"/> 
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+    
+</aura:component>

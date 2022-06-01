@@ -1,0 +1,142 @@
+<apex:page standardController="SBQQ__QuoteLine__c" extensions="ReviseQuoteLine" showHeader="true">
+    <apex:slds />
+    <apex:includeScript value="{!$Resource.SBQQ__jQuery}"/>
+    
+    <script>
+        var jeet = $.noConflict();
+
+        jeet(document).ready(function(){
+            jeet('.actionLink').each(function(index){
+                var text = jeet(this).attr('href');
+                if(text)
+                    jeet(this).css('display', 'none');      
+            });
+            jeet('.tertiaryPalette').css('background-color', 'rgb(132, 73, 73)');
+            jeet('.secondaryPalette').css('border-top', '3px solid rgb(132, 73, 73)');
+            jeet('.pShowMore').css('display', 'none');
+            jeet('.btn[name="piRemove"]').css('display', 'none');
+            jeet('.btn[name="piSubmit"]').css('display', 'none');
+        });
+    
+        function showFeed() {
+            var x = document.getElementById('chatter-container');
+            var y = document.getElementById('showFeedLink');
+            var z = document.getElementById('hideFeedLink');
+            
+            if (x.style.display === 'none') {
+                x.style.display = 'block';
+            } else {
+                x.style.display = 'none';
+            }
+            
+            if (y.style.display === 'none') {
+                y.style.display = 'inline-block';
+            } else {
+                y.style.display = 'none';
+            }
+            
+            if (z.style.display === 'none') {
+                z.style.display = 'inline-block';
+            } else {
+                z.style.display = 'none';
+            }
+        }
+    </script>
+    
+    <style>
+        .chatter{
+            background: transparent url(/img/alohaSkin/metaBar_sprite.png) left -104px repeat-x;
+            border: 1px solid #e1e0e0;
+            border-top-color: #d1d1d1;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            margin: 10px 0 0;
+            line-height: 26px;
+            width: auto;
+            background-color: #ececec;        
+        }
+        
+    </style>
+    
+    <apex:sectionHeader title="{!$ObjectType.SBQQ__QuoteLine__c.label}" subtitle="{!SBQQ__QuoteLine__c.name}"/>
+    <div>       
+        <div style="padding-bottom: .32em;">           
+            <div class="chatter">
+                <span id="showFeedLink" style="display: inline-block; padding-left: 1em; padding-right: 1em; border-right: 1px solid #d1d1d1;">
+                    <a href="javascript:void(0)" onclick="showFeed()">
+                        <span>Show Feed</span>                             
+                    </a>
+                </span>
+                <span id="hideFeedLink" style="display: none; padding-left: 1em; padding-right: 1em; border-right: 1px solid #d1d1d1;">
+                    <a href="javascript:void(0)" onclick="showFeed()">                               
+                        <span>Hide Feed</span>                              
+                    </a>
+                </span>                     
+            </div>
+        </div>
+
+        <div id="chatter-container" style="display: none;">
+            <chatter:feed entityId="{!SBQQ__QuoteLine__c.Id}" />
+        </div>
+    </div>  
+      
+    <apex:form >
+        <apex:pageBlock title="{!$ObjectType.SBQQ__QuoteLine__c.label}" mode="edit">
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton action="{!RecallApprovalRequest}" value="Recall Approval Request" disabled="{! If( Or(SBQQ__QuoteLine__c.Add_Work_Status__c == 'Approved', SBQQ__QuoteLine__c.Add_Work_Status__c == 'Denied'), True, False)}"/>
+                <apex:commandButton action="{!URLFOR($Action.SBQQ__QuoteLine__c.Revise_Quote_Line, Id)}" value="Revise Quote Line"/>
+                <apex:commandButton action="{!URLFOR($Action.SBQQ__QuoteLine__c.Change_And_Resubmit, Id)}" value="Change & Resubmit" disabled="{! If( SBQQ__QuoteLine__c.Add_Work_Status__c == 'Pending', True, False)}" />
+            </apex:pageBlockButtons>
+         
+            <apex:pageBlockSection title="Information" columns="1">
+                <apex:outputField label="Project" value="{!SBQQ__QuoteLine__c.Project__c}"/>                    
+                <apex:outputField label="Quote" value="{!SBQQ__QuoteLine__c.SBQQ__Quote__c}"/>
+                <apex:outputText value="{!SBQQ__QuoteLine__c.Work_Order__c}"/>
+                <apex:outputText value="{!SBQQ__QuoteLine__c.Non_Routine__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection showHeader="true" title="Job Card Information" columns="2">
+                <apex:outputText value="{!SBQQ__QuoteLine__c.Job_Card_Description__c}"/>
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection showHeader="false" title="Job Card Information" columns="2">   
+                <apex:outputText value="{!SBQQ__QuoteLine__c.Add_Work_Status__c}"/>    
+                <apex:outputText label="Name" value="{!SBQQ__QuoteLine__c.Name}"/>
+                <apex:outputText value="{!SBQQ__QuoteLine__c.Job_Card__c}"/>                       
+                <apex:outputText label="Estimated Total" value="{0, number, currency}">
+                    <apex:param value="{!SBQQ__QuoteLine__c.AddWork_Estimated_Total__c}"/>
+                </apex:outputText>                    
+                <apex:outputText value="{!SBQQ__QuoteLine__c.Labor_Code__c}"/>   
+                <apex:inputcheckbox label="Req. for RTS" value="{!SBQQ__QuoteLine__c.RTS__c}" disabled="true"/>                                     
+                <apex:outputText label="Labor Amount" value="{0, number, currency}">
+                    <apex:param value="{!SBQQ__QuoteLine__c.Labor_Amount__c}"/> 
+                </apex:outputText>                     
+                <apex:outputText value="{!SBQQ__QuoteLine__c.Add_Work_Labor_Type__c}"/>                   
+                <apex:outputText label="Material Amount" value="{0, number, currency}">
+                    <apex:param value="{!SBQQ__QuoteLine__c.Material_Amount__c}"/> 
+                </apex:outputText>                      
+                <apex:outputText value="{!SBQQ__QuoteLine__c.Material_Type__c}"/>                                                     
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection showHeader="true" title="Project Team Members" columns="1">
+                <apex:outputField label="CPM" value="{!SBQQ__QuoteLine__c.CPM__c}"/>
+                <apex:outputField label="Backup CPM" value="{!SBQQ__QuoteLine__c.BackupCPM__c}"/>
+                <apex:outputField label="Administrator" value="{!SBQQ__QuoteLine__c.Administrator__c}"/>   
+                <apex:outputField label="Designated Approver" value="{!SBQQ__QuoteLine__c.Designated_Approver__c}"/>   
+                <apex:outputField label="Secondary Approver" value="{!SBQQ__QuoteLine__c.Secondary_Approver__c}"/> 
+                <apex:outputField label="Additional Approver #3" value="{!SBQQ__QuoteLine__c.X3_Approver__c}"/> 
+                <apex:outputField label="Additional Approver #4" value="{!SBQQ__QuoteLine__c.X4_Approver__c}"/> 
+                <apex:outputField label="Additional Approver #5" value="{!SBQQ__QuoteLine__c.X5_Approver__c}"/> 
+                <apex:outputField label="Additional Approver #6" value="{!SBQQ__QuoteLine__c.X6_Approver__c}"/>               
+            </apex:pageBlockSection>
+            
+        </apex:pageBlock>
+    </apex:form>
+       
+    <apex:relatedList subject="{!SBQQ__QuoteLine__c}" title="Approval History" list="ProcessSteps" /> 
+    <apex:relatedList subject="{!SBQQ__QuoteLine__c}" title="Notes" list="AttachedContentNotes" />  
+    <apex:relatedList subject="{!SBQQ__QuoteLine__c}" title="Files" list="AttachedContentDocuments" />    
+    <apex:relatedList subject="{!SBQQ__QuoteLine__c}" title="Quote Line History" list="ActivityHistories" />
+    
+</apex:page>

@@ -1,0 +1,22 @@
+<aura:component >
+    <aura:attribute name="oSubType2" type="Sub_Type_2__c" />
+    <!--Register the component level event-->
+    <aura:registerEvent name="oSelectedSubType2Event" type="c:selectedSt2Event"/>
+    
+    
+    <li class="slds-listbox__item" role="presentation">
+        <span class="slds-media slds-listbox__option slds-media_center slds-listbox__option_entity" role="option">
+            <span class="slds-media__figure slds-listbox__option-icon">
+                <lightning:icon class="slds-icon-standard-knowledge slds-icon_container" iconName="standard:knowledge"/>
+            </span>
+            <span class="slds-media__body">
+                <a onclick="{!c.selectSubType2}">
+                    <span class="slds-listbox__option-text slds-listbox__option-text_entity">
+                        <div class="slds-lookup__result-text slds-truncate">{!v.oSubType2.Name}</div>
+                    </span>
+                </a>
+            </span>
+        </span>
+    </li>
+    
+</aura:component>

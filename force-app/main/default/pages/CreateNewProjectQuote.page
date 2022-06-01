@@ -1,0 +1,9 @@
+<apex:page standardController="MPM4_BASE__Milestone1_Project__c" tabStyle="MPM4_BASE__Milestone1_Project__c" extensions="createProjectQuote" lightningStylesheets="true">
+<apex:slds /> 
+    <apex:sectionHeader title="Create A New Quote" subtitle="{!MPM4_BASE__Milestone1_Project__c.Name}"/>
+  
+    <flow:interview name="ProjectCreateQuote"  interview="{!Create_Quote}"  finishLocation="{!prFinishLocation}" buttonLocation="bottom">
+        <apex:param name="varProjectId" value="{!MPM4_BASE__Milestone1_Project__c.Id}"/>
+    </flow:interview>
+          
+</apex:page>

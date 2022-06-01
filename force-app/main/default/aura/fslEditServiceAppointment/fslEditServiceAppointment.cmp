@@ -1,0 +1,5 @@
+<aura:component implements="force:lightningQuickAction,lightning:availableForFlowActions">
+   <aura:attribute name="WorkOrderId" type="String" />
+   <aura:attribute name="ServiceAppointmentId" type="String" />
+    
+</aura:component>

@@ -1,0 +1,21 @@
+<design:component>
+	<design:attribute name="WorkOrderRecords" label="Work Orders" description="Uses list of engines and aircraft to create work orders" />
+    <design:attribute name="WorkOrder" label="Work Order Values" description="Uses list of engines and aircraft to create work orders" />
+    <design:attribute name="WorkTypeId" label="WorkTypeId" />    
+    <design:attribute name="ServiceTerritoryId" label="ServiceTerritoryId" />    
+    <design:attribute name="AccountId" label="AccountId" />
+    <design:attribute name="ContactId" label="ContactId" />
+    <design:attribute name="Aircraft" label="Aircraft" />       
+    <design:attribute name="CaseId" label="CaseId" />        
+    <design:attribute name="StartDate" label="StartDate" />        
+    <design:attribute name="EndDate" label="EndDate" />
+    <design:attribute name="Status" label="Status" />        
+    <design:attribute name="Priority" label="Priority" />        
+    <design:attribute name="Subject" label="Subject" />        
+    <design:attribute name="Description" label="Description" />        
+    <design:attribute name="City" label="City" />        
+    <design:attribute name="State" label="State" />        
+    <design:attribute name="Country" label="Country" />       
+    <design:attribute name="PostalCode" label="PostalCode" />        
+    <design:attribute name="Street" label="Street" />
+</design:component>

@@ -1,0 +1,111 @@
+<apex:page contentType="text/xml" showHeader="false" sidebar="false" cache="false" controller="SB_QTProposalExecutiveSummary">
+    
+    <block white-space-treatment="preserve">
+        
+    </block>
+    
+    <block>
+        <table table-layout="auto" margin-left="2.5%" margin-right="2.5%">
+            <table-body>
+                <table-row white-space="nowrap" border-style="solid">
+                    <table-cell margin="0pt" padding-top="2pt" padding-bottom="2pt" padding-left="2pt" width="100%">
+                        <block text-align="left" font-weight="bold" font-style="Arial" font-size="9pt" padding="2pt">
+                            <apex:outputText value="EXECUTIVE PRICING SUMMARY"></apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+                <table-row white-space="nowrap" border-style="solid">
+                    <table-cell margin="0pt" padding-top="2pt" padding-bottom="2pt" padding-left="2pt" width="85%">
+                        <block text-align="left" font-style="Arial" font-size="9pt" padding="2pt">
+                            <apex:outputText value="Summary of Proposed Services">
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell margin="0pt" padding-top="2pt" padding-bottom="2pt" padding-right="8pt">
+                        <block text-align="right" font-style="Arial" font-size="9pt" padding="2pt">
+                            <apex:outputText value="Price">
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+        <table table-layout="auto" margin-left="2.5%" margin-right="2.5%" empty-cells="show">
+            <table-column column-width="75%"></table-column>
+            <table-column column-width="25%"></table-column>
+            <table-body>
+                <apex:repeat var="outerExGroup" value="{!outerExGroupToReturn}" >
+                    <table-row background-color="LightGray" border-style="solid" margin="0pt" padding-left="2pt">
+                        <table-cell margin="0pt" padding-left="2pt">
+                            <block text-align="left" font-style="Arial" font-size="9pt" padding="2pt" vertical-align="middle">
+                                <apex:outputText value="{!outerExGroup.outerExGroupNumber} {!HTMLENCODE(outerExGroup.derivedOppTypOrEnginEquipmnt)}" >
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                        <table-cell margin="0pt" padding-right="2pt">
+                            <block text-align="right" font-style="Arial" font-size="9pt" padding="2pt" vertical-align="middle"> 
+                                <apex:outputText value="{0,number,currency}" >
+                                    <apex:param value="{!outerExGroup.totalOfAll}"></apex:param>
+                                </apex:outputText>
+                            </block>
+                        </table-cell>
+                    </table-row>
+                    <apex:repeat var="outerKey" value="{!outerExGroup.bl_esgMapSortFinal}" >
+                    
+                        <apex:repeat value="{!outerExGroup.bl_esgMapSortFinal[outerKey]}" var="bundle" >
+
+                            <table-row border-style="solid" vertical-align="middle">
+                                <table-cell margin="0pt" padding-left="8pt">
+                                    <block text-align="left" font-style="Arial" font-size="9pt" padding="2pt">
+                                        <apex:outputText escape="false" rendered="{!AND(BEGINS(bundle,'Option:'), NOT(ISBLANK(bundle)))}" value="{!HTMLENCODE(bundle)}"></apex:outputText>
+                                        <apex:outputText rendered="{!NOT(BEGINS(bundle,'Option:'))}" value="{!HTMLENCODE(bundle)}"></apex:outputText>
+                                    </block>
+                                </table-cell>
+                                
+                                <table-cell margin="0pt" padding-right="2pt">
+                                    <block text-align="left" font-style="Arial" font-size="9pt" padding-top="2pt">
+                                        <apex:outputText rendered="{!AND(BEGINS(bundle,'Option:'), NOT(ISBLANK(bundle)))}" value="{0, number, currency}">
+                                            <apex:param value="{!outerExGroup.bl_esgCategoryMap[bundle]['sell']}" ></apex:param>
+                                        </apex:outputText>  
+                                    </block>
+
+                                    <block text-align="right" font-style="Arial" font-size="9pt" padding-bottom="2pt" padding-right="2pt">
+                                        <apex:outputText rendered="{!NOT(BEGINS(bundle,'Option:'))}" value="{0, number, currency}">
+                                            <apex:param value="{!outerExGroup.bl_esgCategoryMap[bundle]['sell']}" ></apex:param>
+                                        </apex:outputText>
+                                    </block>
+                                </table-cell>
+
+                            </table-row>
+
+                        </apex:repeat> 
+                    </apex:repeat>
+                </apex:repeat>
+
+                <table-row background-color="LightGray" border-style="solid">
+                    <table-cell margin="0pt" padding-left="2pt" padding="2pt">
+                        <block text-align="left" font-style="Arial" font-size="9pt" vertical-align="middle">
+                            <apex:outputText rendered="{!hasOptions == true}" value="Grand Total (Excludes Optional Items)" >
+                            </apex:outputText>
+                            
+                            <apex:outputText rendered="{!hasOptions == false}" value="Grand Total" >
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                    <table-cell margin="0pt" padding-right="2pt" padding="2pt">
+                        <block text-align="right" font-style="Arial" font-size="9pt" vertical-align="middle"> 
+                            <apex:outputText value="{0,number,currency}" >
+                                <apex:param value="{!quoteSObj.CustomerNetTotal__c}" ></apex:param>
+                            </apex:outputText>
+                        </block>
+                    </table-cell>
+                </table-row>
+            </table-body>
+        </table>
+    </block>
+    
+    <block white-space-treatment="preserve">
+        
+    </block>
+    
+</apex:page>

@@ -1,0 +1,81 @@
+<aura:component controller="BuyerSellerSquawks" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS26 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="quoteLine" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="quoteLineSize" type="SBQQ__QuoteLine__c"/> 
+    <aura:attribute name="project" type="String"/>
+    <aura:attribute name="projectName" type="String"/> 
+    
+    <article class="slds-card">      
+        <div class="container">
+            <div class="container forceRelatedListSingleContainer">  
+                <div class="slds-page-header--object-home slds-page-header slds-shrink-none test-headerRegion forceListViewManagerHeader">
+                    <div class="slds-media slds-no-space slds-grow">
+                        <div class="slds-media__body slds-align-middle">
+                            <h1 class="slds-page-header__title slds-truncate">Sellers Squawks</h1>
+                            <p class="slds-text-body--small">
+                                <div class="test-listViewStatusInfo">
+                                    <span class="uiOutputText">{!v.quoteLineSize} items</span>
+                                </div>
+                            </p>
+                        </div>
+                        <div class="slds-m-left--xx-small forceActionsContainer">
+                            <div class="slds-truncate">
+                                <button class="slds-button slds-button--brand" onclick="{!c.downloadSellersSquawksCsv}">Download To Excel</button>       
+                            </div>   
+                        </div>
+                    </div>
+                </div>            
+                <div style="slds container slds-p-top_medium forceRelatedListSingleContainer">
+                    <article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+                        <div class="slds-grid listDisplays">
+                            <table class="slds-table slds-table--bordered slds-table--cell-buffer"> 
+                                <thead>
+                                    <tr>            	
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Squawk No.</div>  
+                                        </th>
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Status</div>  
+                                        </th>
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate">Squawk Description</div>  
+                                        </th>                           
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Req. for RTS</div>  
+                                        </th> 
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.quoteLine}" var="ql">
+                                        <tr>				
+                                            <td scope="row" class="slds-p-vertical--xx-small">
+                                                <div class="slds-truncate slds-text-align--center">{!ql.fxSquawkNo__c}</div>
+                                            </td>   
+                                            <td scope="row" class="slds-p-vertical--xx-small">                                        
+                                                <div class="slds-truncate slds-text-align--center">{!ql.Add_Work_Status__c}</div>          	
+                                            </td>                                 
+                                            <td scope="row" class="slds-p-vertical--xx-small">
+                                                <div class="slds-truncate  slds-truncate slds-text-align--left col-1" title="{!ql.Job_Card_Description__c}">{!ql.Job_Card_Description__c}</div>                 
+                                            </td>
+                                            <td scope="row" class="slds-p-vertical--xx-small">
+                                                <div class="uiOutputCheckbox slds-text-align--center">
+                                                    <ui:outputCheckbox value="{!ql.RTS__c}"/>
+                                                </div>
+                                            </td>   
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>        
+                </div> 
+            </div>
+        </div>
+    </article>
+        
+    
+    
+        
+</aura:component>

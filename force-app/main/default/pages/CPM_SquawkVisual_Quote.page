@@ -1,0 +1,20 @@
+<apex:page standardController="SBQQ__Quote__c" extensions="CPM_SquawkVisual_Quote">
+   <apex:pageBlock title="Squawks Lines">
+      <apex:outPutPanel layout="block" style="overflow:auto;height:650px">
+          <apex:pageBlockTable value="{!QuoteLines}" var="line">       
+             <apex:column headerValue="Line Name"> 
+                 <apex:outputLink value="{! If( or( line.Add_Work_Status__c == 'Pending', line.Add_Work_Status__c == 'Approved', line.Add_Work_Status__c == 'Denied') ,URLFOR($Page.Squawk, null, [Id=line.Id]), '/' + line.Id) }" target="_blank">{!line.Name}</apex:outputLink>        
+             </apex:column>
+             <apex:column value="{!line.Add_Work_Status__c}"/> 
+             <apex:column value="{!line.fxJob_Card__c}"/> 
+             <apex:column value="{!line.Job_Card_Description__c}"/> 
+             <apex:column value="{!line.Designated_Approver__c}"/>
+             <apex:column value="{!line.Labor_Amount__c}"/>  
+             <apex:column value="{!line.Add_Work_Labor_Type__c}"/> 
+             <apex:column value="{!line.Material_Amount__c}"/> 
+             <apex:column value="{!line.Material_Type__c}"/> 
+             <apex:column headerValue="Is RTS?" value="{!line.IsRTS__c}"/>                 
+          </apex:pageBlockTable>
+      </apex:outPutPanel>
+   </apex:pageBlock>
+</apex:page>

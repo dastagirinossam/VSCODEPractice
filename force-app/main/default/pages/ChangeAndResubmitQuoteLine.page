@@ -1,0 +1,23 @@
+<apex:page standardController="SBQQ__QuoteLine__c" extensions="ReviseQuoteLine" tabStyle="SBQQ__QuoteLine__c" lightningStylesheets="true">
+<apex:slds />
+    <apex:form > 
+        <apex:sectionHeader title="Change and Resubmit" subtitle="{!SBQQ__QuoteLine__c.Name}"/>
+        <apex:pageblock title="Change and Resubmit: {!SBQQ__QuoteLine__c.Name}">
+            
+            <apex:pageBlockSection columns="2">
+                <apex:inputField value="{!SBQQ__QuoteLine__c.Labor_Amount__c }"/>
+                <apex:inputField value="{!SBQQ__QuoteLine__c.Add_Work_Labor_Type__c }" />
+                <apex:inputField value="{!SBQQ__QuoteLine__c.Material_Amount__c }"/>
+                <apex:inputField value="{!SBQQ__QuoteLine__c.Material_Type__c }" />               
+                <apex:inputField value="{!SBQQ__QuoteLine__c.Job_Card__c }" />
+                <b/>
+                <apex:inputField value="{!SBQQ__QuoteLine__c.Job_Card_Description__c }"/>                          
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!ChangeResubmit}" value="Submit For Approval" />  
+                <apex:commandButton action="{!cancel }" value="Cancel" /> 
+            </apex:pageBlockButtons>
+        </apex:pageblock>        
+    </apex:form>
+</apex:page>

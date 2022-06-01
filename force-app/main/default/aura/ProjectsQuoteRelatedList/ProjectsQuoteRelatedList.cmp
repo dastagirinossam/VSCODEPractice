@@ -1,0 +1,114 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="quote" type="SBQQ__Quote__c"/>
+    <aura:attribute name="quoteSize" type="SBQQ__Quote__c"/> 
+	<aura:attribute name="project" type="String"/>
+	<aura:attribute name="projectName" type="String"/>
+    
+    
+	<div style="slds">        
+    	<div class="container">
+        	<div class="container forceRelatedListSingleContainer">  
+            	<div class="slds-page-header--object-home slds-page-header slds-shrink-none test-headerRegion forceListViewManagerHeader">
+                	<div class="slds-media slds-no-space slds-grow">
+                    	<div class="slds-media__figure">
+                        	<span class="uiImage">
+                            	<lightning:icon iconName="standard:maintenance_plan" size="large"/>
+                            </span>
+                  		</div>
+                        <div class="slds-media__body slds-align-middle">
+                        	<nav role="navigation" aria-label="Breadcrumbs">
+                            	<ol class="slds-breadcrumb slds-list--horizontal">
+                                 	<li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+                               			<a title="Project" href="javascript:void(0);">
+                                        	<span class="uiOutputText">Project</span>
+                                        </a>
+                                   	</li>
+                                    <li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+                                   		<a title="{!v.projectName}" href="javascript:void(0);">
+                                        	<span class="uiOutputText" onclick="{!c.redirect}">{!v.projectName}</span>
+                                        </a>
+                                    </li>
+                                </ol>
+                           	</nav>
+                            <h1 class="slds-page-header__title slds-truncate">Squawk Quotes</h1>
+                            <p class="slds-text-body--small">
+                           		<div class="test-listViewStatusInfo">
+                                	<span class="uiOutputText">{!v.quoteSize} items</span>
+                                </div>
+                            </p>
+                        </div>    
+                    </div>
+				</div>
+
+            
+                    <div style="slds container slds-p-top_medium forceRelatedListSingleContainer">
+                        <article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+                            <div class="slds-grid listDisplays">
+                                <table class="slds-table slds-table--bordered slds-table--cell-buffer">
+                                <thead>
+                                    <tr>            	
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Squawk Quote</div>  
+                                        </th>
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Type</div>  
+                                        </th>
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate">Created Date</div>  
+                                        </th>
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Pending Total</div>  
+                                        </th> 
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Approved Total</div>  
+                                        </th>
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Estimated Total</div>  
+                                        </th>
+                                        <th class="slds-text-title" scope="col">
+                                            <div class="slds-truncate slds-text-align--center">Work Order</div>  
+                                        </th> 
+                                    </tr> 
+                                </thead>
+                                <tbody>
+                                    <aura:iteration items="{!v.quote}" var="q">
+                                        <tr>				
+                                            <td scope="row" class="slds-p-vertical--xx-small slds-text-align--center"> 
+                                                <a class="cuf-entityLink" href="{!'/Customer/s/squawk-quote/'+q.Id}" >
+                                                    <span class="uiOutputText">{!q.Name}</span>
+                                                </a>
+                                            </td>   
+                                            <td scope="row" class="slds-p-vertical--xx-small">                                        
+                                                <div class="slds-truncate slds-text-align--center">{!q.Labor_Type1__c}</div>          	
+                                            </td>                                 
+                                            <td scope="row" class="slds-p-vertical--xx-small">
+                                                <ui:outputDate class="slds-truncate slds-text-align--center" value="{!q.CreatedDate}"/>                                                                                                                     
+                                            </td>
+                                            <td scope="row" class="slds-p-vertical--xx-small">
+                                                <div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!q.Pending_Total__c}</div>
+                                            </td>
+                                            <td scope="row" class="slds-p-vertical--xx-small">
+                                                <div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!q.Approved_Total__c}</div>
+                                            </td>
+                                            <td scope="row" class="slds-p-vertical--xx-small">
+                                                <div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!q.Estimated_Total__c}</div>                 
+                                            </td>
+                                            <td scope="row" class="slds-p-vertical--xx-small">
+                                                <div class="slds-truncate slds-text-align--center">{!q.Add_Work_Work_Order__c}</div>                 
+                                            </td>   
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>
+                        </div>
+                    </article>
+                </div>
+        	</div>
+        </div>
+    </div>
+
+       
+</aura:component>

@@ -1,0 +1,32 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global" >
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+
+    <div class="slds-clearfix">
+	 	<div class="slds-float_right slds-p-bottom_medium slds-p-right_xx-large">
+          	<ui:button class="btn" label="Log Out" press="{!c.logout}"/>
+        </div>
+    </div>
+   
+    <div class="container">       
+    	<article class="slds-card forceRelatedListCardDesktop"> 
+        	<img src="{!$Resource.CommunityHeader}" width="1500"/>
+            	<div class="slds-tabs--default" style="background-color: rgba(128,128,128,.75);">
+      				<ul class="slds-tabs--default__nav slds-m-horizontal--medium" role="tablist">
+         				<li aura:id="HomeId" class="slds-tabs--default__item" title="Home" role="presentation" >
+							<a href="/Customer/s/" title="Home" class="slds-tabs--default__link" role="tab" tabindex="0" aria-selected="false" aria-controls="tab-default-1">
+                                <span class="uiImage">
+                                    <lightning:icon iconName="standard:home" size="medium" class="icon"/>
+                                </span>
+                            </a>
+                       	</li>
+                        <li aura:id="ProjectsId" class="slds-tabs_default__item" title="My Projects" role="presentation" >
+							<a href="/Customer/s/myprojects" title="My Projects" class="slds-tabs--default__link" role="tab" tabindex="-1" aria-selected="false">
+                            	<span class="slds-truncate" style="color:white;">My Projects</span>
+                            </a>
+                       	</li> 
+                	</ul>
+                </div>
+    	</article>
+	</div>
+    
+</aura:component>

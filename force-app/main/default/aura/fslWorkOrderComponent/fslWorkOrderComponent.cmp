@@ -1,0 +1,88 @@
+<aura:component implements="lightning:availableForFlowScreens,force:appHostable,force:lightningQuickAction" access="global" controller="fslCreateServiceAuthorizations">
+    
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/>
+    
+    <aura:attribute name="spinner" type="boolean" default="false"/>
+    <aura:attribute name="recordError" type="String" />
+    <aura:attribute name="newrecord" type="Object" />
+    <aura:attribute name="targetR" type="String" />
+    <aura:handler name="change" value="{!v.wo}" action="{!c.handleChange}" />
+    
+    <aura:attribute name="WorkOrder" type="WorkOrder[]"/>
+    <aura:attribute name="WorkTypeId" type="String" />    
+    <aura:attribute name="ServiceTerritoryId" type="String" />    
+    <aura:attribute name="AccountId" type="String" />
+    <aura:attribute name="ContactId" type="String" />
+    <aura:attribute name="Aircraft" type="String" />      
+    <aura:attribute name="CaseId" type="String" />        
+    <aura:attribute name="StartDate" type="String" />        
+    <aura:attribute name="EndDate" type="String" />
+    <aura:attribute name="Status" type="String" />        
+    <aura:attribute name="Priority" type="String" />        
+    <aura:attribute name="Subject" type="String" />        
+    <aura:attribute name="Description" type="String" />        
+    <aura:attribute name="City" type="String" />        
+    <aura:attribute name="State" type="String" />        
+    <aura:attribute name="Country" type="String" />       
+    <aura:attribute name="PostalCode" type="String" />        
+    <aura:attribute name="Street" type="String" />
+    
+    <aura:attribute name="WorkOrderRecords" type="String"/>
+    <aura:attribute name="woEquipment" type="Equipment__c[]"/>
+    <aura:attribute name="WorkOrders" type="String[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading...</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    
+    <article class="slds-card">              
+        <div class="slds-card__body slds-card__body_inner">
+            <table class="slds-table slds-table--bordered slds-border_left slds-border_right slds-table--cell-buffer slds-resizable" role="grid">
+                <thead>
+                    <tr>
+                        <th><strong>Work Order</strong></th>
+                        <th><strong>Equipment</strong></th>
+                        <th><strong>PO #</strong></th>                        
+                        <th><strong>Crew Size</strong></th>                                         
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <aura:iteration items="{!v.woEquipment}" var="wo" indexVar="i">
+                        <tr>
+                            <td scope="row">
+                                <ui:outputText value="{!i+1}"/>
+                            </td>                                   
+                            <td scope="row">
+                                <ui:outputText value="{!wo.Name}"/>
+                                <ui:outputText class="slds-is-collapsed slds-hidden" aura:id="eqId" value="{!wo.Id}"/>
+                            </td>
+                            <td scope="row" >
+                                <ui:inputText aura:id="poNumbers" value=""/>
+                            </td>
+                            <td scope="row">
+                                <ui:inputNumber aura:id="crewSize" value=""/>
+                            </td>
+                        </tr>
+                    </aura:iteration>
+                </tbody> 
+            </table>
+        </div>
+        
+        <footer class="slds-card__footer slds-p-bottom_x-large">
+            <div class="slds-no-flex slds-float_right">
+                <lightning:button aura:id="BACK" label="Previous" variant="neutral" onclick="{!c.onButtonPressed}"/>
+                <lightning:button class="slds-button slds-button_brand" aura:id="woc" value="{!v.woEquipment.length - 1}" onclick="{!c.createWorkOrders}" label="Create Work Orders"/>              
+            </div>
+        </footer>                
+    </article>
+    
+</aura:component>

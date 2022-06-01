@@ -1,0 +1,176 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="quoteLine" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="quoteLineSize" type="SBQQ__QuoteLine__c"/> 
+    <aura:attribute name="project" type="String"/>
+    <aura:attribute name="projectName" type="String"/>
+    <aura:attribute name="isBroker" type="boolean" default="false" />
+    <aura:attribute name="showELH" type="boolean" default="false" />   
+    <aura:attribute name="ProjType" type="String" />
+     
+    <aura:if isTrue="{!v.ProjType=='Buyer'}">
+        <!-- <c:ProjectsSellerQuoteLinesRelatedList ProjTypes="{!v.ProjType}" /> -->
+        <c:ProjectsSellerQuoteLinesRelatedList/>
+    </aura:if>
+      
+    <aura:if isTrue="{!v.ProjType=='Seller'}">
+        <c:ProjectsBuyerQuoteLinesRelatedList/>
+    </aura:if>
+ 
+    <aura:if isTrue="{! (v.isBroker)}">
+        
+    </aura:if>
+    
+    <!--<aura:if isTrue ="{!  (v.isBroker)}">-->
+        <article class="slds-card">      
+            <div class="container">
+                <div class="container forceRelatedListSingleContainer">  
+                    <div class="slds-page-header--object-home slds-page-header slds-shrink-none test-headerRegion forceListViewManagerHeader">
+                        <div class="slds-media slds-no-space slds-grow">
+                            <div class="slds-media__figure">
+                                <span class="uiImage">
+                                    <lightning:icon iconName="standard:custom" size="large"/>
+                                </span>
+                            </div>
+                            <div class="slds-media__body slds-align-middle">
+                                <nav role="navigation" aria-label="Breadcrumbs">
+                                    <ol class="slds-breadcrumb slds-list--horizontal">
+                                        <li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+                                            <a title="Project" href="javascript:void(0);">
+                                                <span class="uiOutputText">Project</span>
+                                            </a>
+                                        </li>
+                                        <li class="slds-breadcrumb__item slds-text-title--caps slds-line-height--reset">
+                                            <a title="{!v.projectName}" href="javascript:void(0);">
+                                                <span class="uiOutputText" onclick="{!c.redirect}">{!v.projectName}</span>
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </nav>
+                                <h1 class="slds-page-header__title slds-truncate">Squawks</h1>
+                                <p class="slds-text-body--small">
+                                    <div class="test-listViewStatusInfo">
+                                        <span class="uiOutputText">{!v.quoteLineSize} items</span>
+                                    </div>
+                                </p>
+                            </div>
+                            <div class="slds-m-left--xx-small forceActionsContainer">
+                                <div class="slds-truncate">
+                                    <button class="slds-button slds-button--brand" onclick="{!c.downloadCsv}">Download To Excel</button>       
+                                </div>   
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="slds container slds-p-top_medium forceRelatedListSingleContainer">
+                        <article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+                            <div class="slds-grid listDisplays">
+                                <table class="slds-table slds-table--bordered slds-table--cell-buffer"> 
+                                    <thead>
+                                        <tr>            	
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">Squawk No.</div>  
+                                            </th>
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">NonRoutine No.</div>  
+                                            </th>
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">Status</div>  
+                                            </th>
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate">Squawk Description</div>  
+                                            </th>
+                                            <aura:if isTrue="{! not(v.isBroker)}">
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">Est. Total Amount</div>  
+                                            </th>
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">Material Amount</div>  
+                                            </th> 
+                                            </aura:if>
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">Material Type</div>  
+                                            </th> 
+                                            <aura:if isTrue="{! not(v.isBroker)}">
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">Labor Amount</div>  
+                                            </th> 
+                                            </aura:if>
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">Labor Type</div>  
+                                            </th> 
+                                            <aura:if isTrue="{!v.showELH}">
+                                                <th class="slds-text-title" scope="col">
+                                                    <div class="slds-truncate slds-text-align--center">Est. Labor Hrs</div>  
+                                                </th> 
+                                            </aura:if>
+                                            <th class="slds-text-title" scope="col">
+                                                <div class="slds-truncate slds-text-align--center">Req. for RTS</div>  
+                                            </th> 
+                                        </tr> 
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!v.quoteLine}" var="ql">
+                                            <tr>				
+                                                <td scope="row" class="slds-p-vertical--xx-small">
+                                                    <div class="slds-truncate slds-text-align--center">
+                                                        <aura:if isTrue ="{! not(v.isBroker)}">
+                                                        <a class="cuf-entityLink" href="{!'/Customer/s/squawk/'+ql.Id}" >
+                                                            <span class="uiOutputText">{!ql.fxSquawkNo__c}</span>
+                                                        </a>
+                                                        </aura:if>
+                                                        <aura:if isTrue ="{!  (v.isBroker)}">{!ql.fxSquawkNo__c}</aura:if>
+                                                    </div>
+                                                </td> 
+												<td scope="row" class="slds-p-vertical--xx-small">                                        
+                                                    <div class="slds-truncate slds-text-align--center">{!ql.Non_Routine__c}</div>          	
+                                                </td>                                 
+                                                <td scope="row" class="slds-p-vertical--xx-small">                                        
+                                                    <div class="slds-truncate slds-text-align--center">{!ql.Add_Work_Status__c}</div>          	
+                                                </td>                                 
+                                                <td scope="row" class="slds-p-vertical--xx-small">
+                                                    <div class="slds-truncate  slds-truncate slds-text-align--left col-1" title="{!ql.Job_Card_Description__c}">{!ql.Job_Card_Description__c}</div>                 
+                                                </td>
+                                                <aura:if isTrue="{! not(v.isBroker)}">
+                                                <td scope="row" class="slds-p-vertical--xx-small">
+                                                    <div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!ql.AddWork_Estimated_Total__c}</div>
+                                                </td>
+                                                <td scope="row" class="slds-p-vertical--xx-small">
+                                                    <div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!ql.Material_Amount__c}</div>
+                                                </td>
+                                                </aura:if>
+                                                <td scope="row" class="slds-p-vertical--xx-small">
+                                                    <div class="slds-truncate slds-text-align--center">{!ql.Material_Type__c}</div>                 
+                                                </td>
+                                                <aura:if isTrue="{! not(v.isBroker)}">
+                                                <td scope="row" class="slds-p-vertical--xx-small">
+                                                    <div class="slds-truncate slds-text-align--center uiOutputCurrency" type="Decimal">${!ql.Labor_Amount__c}</div>
+                                                </td>
+                                                </aura:if>
+                                                <td scope="row" class="slds-p-vertical--xx-small">
+                                                    <div class="slds-truncate slds-text-align--center">{!ql.Add_Work_Labor_Type__c}</div>                 
+                                                </td>
+                                                <aura:if isTrue="{!v.showELH}">
+                                                    <td scope="row" class="slds-p-vertical--xx-small">
+                                                        <div class="slds-truncate slds-text-align--center">{!ql.Estimated_Labor_Hours__c}</div>                 
+                                                    </td>
+                                                </aura:if>
+                                                <td scope="row" class="slds-p-vertical--xx-small">
+                                                    <div class="uiOutputCheckbox slds-text-align--center">
+                                                        <ui:outputCheckbox value="{!ql.RTS__c}"/>
+                                                    </div>
+                                                </td>   
+                                            </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>        
+                    </div> 
+                </div>
+            </div>
+        </article>
+    <!--</aura:if>-->
+</aura:component>

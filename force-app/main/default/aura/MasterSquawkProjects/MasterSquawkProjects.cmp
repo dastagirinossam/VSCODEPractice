@@ -1,0 +1,357 @@
+<aura:component extends="forceCommunity:navigationMenuBase" implements="forceCommunity:availableForAllPageTypes" controller="SquawkApproval" access="global">
+    <ltng:require styles="{! $Resource.SLDS24 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" /> 
+    <aura:handler event="aura:waiting" action="{!c.showSpinner}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}"/> 
+    
+    <aura:attribute name="displayModal" type="Boolean" default="false" access="public" />
+    <aura:attribute name="Spinner" type="boolean" default="false"/>
+	<aura:attribute name="currentProject" type="String[]"/>
+	<aura:attribute name="checkedSquawks" type="String[]" />
+	<aura:attribute name="projects" type="MPM4_BASE__Milestone1_Project__c[]"/>
+	<aura:attribute name="squawks" type="SBQQ__QuoteLine__c[]"/> 
+	<aura:attribute name="MasterCheckbox" type="Boolean" default="true" />
+    <aura:attribute name="selectedCount" type="integer" default="0"/>
+    <aura:attribute name="searchResult" type="List" description="use for store and display squawk list return from server"/>
+   	<aura:attribute name="searchKeyword" type="String" description="use for store user search input"/>
+   	<aura:attribute name="Message" type="boolean" default="false" description="use for display no record found message"/>
+   	<aura:attribute name="ErrorMessage" type="boolean" default="false" description="use for display no value entered"/>    
+    <aura:attribute name="numberOfRecord" type="integer" default="0" description="use for display Number of records"/>          
+    <aura:attribute name="arrowDirection" type="string" default="arrowup" description="Use for change arrow sign direction on header based on click"/>
+    <aura:attribute name="isAsc" type="boolean" default="true" description="boolean flag for pass sorting condition to apex class"/> 
+    <aura:attribute name="selectedTabsoft" type="string" default="Squawk Name" description="Use for show/hide arraow sign on header based on conditions"/>
+   
+ 	<aura:if isTrue="{!v.Spinner}">
+    	<div aura:id="spinnerId" class="slds-spinner_container">
+       		<div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-fixed" role="alert">
+         		<span class="slds-assistive-text">Loading</span>
+         		<div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+       		</div>
+    	</div>
+ 	</aura:if>
+
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="noneSelectedModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header slds-theme--error slds-theme--alert-texture">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">No Squawks Were Selected</h2>
+    			</div>
+    			<div class="slds-modal__content slds-p-around--medium slds-text-align--center">
+      				<p>No Squawks Were Selected. Please Select Squawks To Approve or Reject.</p>
+    			</div>
+    			<div class="slds-modal__footer">
+      				<button onclick="{!c.hideNoneSelectedModal}" class="slds-button slds-button--brand">Ok</button>
+    			</div>
+  			</div>
+		</div>  
+	</div>
+    
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="RtsSelectedModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header slds-theme--error slds-theme--alert-texture">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">Return To Service Squawk Denied</h2>
+    			</div>
+    			<div class="slds-modal__content slds-p-around--medium slds-text-align--center">
+      				<p>You have declined a squawk that is mandatory for RTS (Return to Service). Declining this squawk could result in delaying your project or requiring a written acknowledgement of the open discrepancy on the aircraft release from StandardAero. Are you sure you want to decline this squawk?</p>
+    			</div>
+                <div class="slds-modal__footer">                           
+                	<button onclick="{!c.hideRtsSelectedModal}" class="slds-button slds-button--neutral">Cancel</button>
+      				<button onclick="{!c.showRejectRtsModal}" class="slds-button rejectButton">Ok</button>
+                </div>
+  			</div>
+		</div>  
+	</div>
+    
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="approveModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header approveModal slds-theme--alert-texture">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">Approve Selected Squawks</h2>
+    			</div>
+    			<div class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread">
+                    <div >Are you sure you want to approve these {!v.selectedCount} squawks?</div>
+                    <div>
+                    	<button onclick="{!c.hideApproveModal}" class="slds-button slds-button--neutral">Cancel</button>
+      					<button onclick="{!c.approveSelected}" class="slds-button approveButton">Approve Squawks</button>
+                    </div>
+    			</div>
+    			<div class="slds-modal__footer">                           
+                	<div class="slds-text-align--left slds-align-bottom legal">You are bound to these <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank">conditions</a> upon approval of selected squawks. By clicking "Approve Squawks" you agree to these terms.</div>
+            	</div>
+  			</div>
+		</div>  
+	</div>
+    
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="rejectModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header rejectModal slds-theme--alert-texture">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">Reject Selected Squawks</h2>
+    			</div>
+    			<div class="slds-modal__content slds-p-around--medium slds-grid slds-grid--align-spread">
+                    <div >Are you sure you want to reject these {!v.selectedCount} squawks?</div>
+                    <div>
+                    	<button onclick="{!c.hideRejectModal}" class="slds-button slds-button--neutral">Cancel</button>
+      					<button onclick="{!c.rejectSelected}" class="slds-button rejectButton">Reject Squawks</button>
+                    </div>
+    			</div>
+    			<div class="slds-modal__footer">                           
+                	<div class="slds-text-align--left slds-align-bottom legal">You are bound to these <a href="http://standardaero.com/AboutUs/Legal.aspx" target="_blank">conditions</a> upon rejection of selected squawks. By clicking "Reject Squawks" you agree to these terms.</div>
+            	</div>
+  			</div>
+		</div>  
+	</div>
+    
+    <div class="slds">
+    	<div aria-hidden="true" role="dialog" tabindex="-1" aria-labelledby="header43" class="slds-modal slds-fade-in-hide" aura:id="projectModal">
+  			<div class="slds-modal__container">
+    			<div class="slds-modal__header">
+      				<button class="slds-button slds-modal__close slds-button--icon-inverse" title="Close">
+        				<span class="slds-assistive-text">Close</span>
+      				</button>	   		
+                	<h2 id="header43" class="slds-text-heading--medium">Project Information</h2>      
+    			</div>
+                <div class="slds-modal__content slds-p-around--medium">
+                	<aura:iteration items="{!v.projects}" var="proj">            
+						<tr>   
+							<td scope="row">                 
+                        		<div class="slds-truncate" title="{!proj.Name}">{!proj.Name}</div>                     
+							</td>
+                    	</tr>
+                    </aura:iteration>
+                </div>
+    			<div class="slds-modal__footer">
+      				<button onclick="{!c.hideProjectModal}" class="slds-button slds-button--brand">Ok</button>
+    			</div>
+  			</div>
+		</div>  
+	</div>
+    
+    <div class="slds-backdrop slds-backdrop--hide" aura:id="backdrop"></div>
+        
+	<div class="slds-page-header slds-grid slds-grid--align-spread">
+        <p class="slds-page-header__title slds-truncate" title="My Projects">My Projects</p>
+        <div class="slds-grid slds-grid--align-end">
+        	<label class="slds-form-element__label" for="search"></label>
+            <div class="slds-form-element__control">
+				<td> 
+                    <ui:inputtext aura:id="searchId" class="slds-input" value="{!v.searchKeyword}" placeholder="Search for squawk here..."/>
+                </td>
+                <td>
+                    <button type="button" onclick="{!c.Search}" class="slds-button slds-button--brand">Search</button>
+				</td>
+                <tr class="slds-grid slds-grid--align-end">
+                    <aura:if isTrue="{!v.ErrorMessage}">
+                        <div class="slds-text-color--error">Enter Search Keyword.</div>
+        			</aura:if> 
+                    <aura:if isTrue="{!v.Message}">
+                        <div class="slds-text-color--error">No Result Found...</div>
+        			</aura:if> 
+                </tr>
+        	</div>
+        </div>
+    </div>
+  
+	<table class="slds-table--cell-buffer slds-table--bordered slds-table--resizable-cols">
+		<thead>
+			<tr>
+            	<td scope="row" class="slds-p-vertical--x-small">
+					<th>
+                    	<strong>Project Name</strong>
+                    </th>
+                </td >
+                <td scope="row" class="slds-p-vertical--small slds-truncate">
+					<th>
+                    	<strong>View Squawks</strong>
+                    </th>
+                </td>
+			</tr>
+		</thead>
+		
+        <tbody>            
+			<aura:iteration items="{!v.projects}" var="proj">
+				<tr>   
+					<td scope="row" class="slds-text-link slds-p-vertical--small"> 
+                        <div class="slds-truncate" title="{!!proj.Name}"><a href="{!'https://fullcopy1-fullcopy1.cs60.force.com/s/project/'+proj.Id}" target="_blank">{!proj.Name}</a></div>            	                 
+					</td> 
+                	<td scope="row" class="slds-text-align--right" style="width:3.25rem;">
+  						<label class="slds-checkbox--toggle slds-grid">
+    						<ui:inputcheckbox name="checkbox" text="{!proj.Id}" aura:id="projPack" change="{!c.getSquawks}"/>
+    						<span id="toggle-desc" class="slds-checkbox--faux_container" aria-live="assertive">
+      							<span class="slds-checkbox--faux"></span>
+      							<span class="slds-checkbox--on slds-text-align--center">Viewing</span>
+      							<span class="slds-checkbox--off"></span>
+    						</span>
+  						</label>
+                	</td>                  
+				</tr> 
+			</aura:iteration>
+		</tbody>
+	</table>
+
+    <div class="slds-page-header">
+        <p class="slds-page-header__title slds-truncate" title="">Squawks List For Selected Project</p>
+        <div class="slds-grid slds-grid--align-spread">
+            <p>
+        		<span class="slds-badge">Selected Squawks:{!v.selectedCount}</span>
+            </p>
+        	<div>
+         		<button class="slds-button approveButton" onclick="{!c.showApprovalmodal}">Approve Squawks</button>
+         		<button class="slds-button rejectButton" onclick="{!c.rtsInRejectedSelection}">Reject Squawks</button>
+        	</div>
+        </div>
+   	</div>
+    
+	<table class="slds-table--resizable-cols slds-table--bordered slds-table--cell-buffer"> 
+        <thead>
+			<tr>
+           		<td class="slds-p-vertical--small">              	
+                    <th class="slds-is-sortable slds-text-title" scope="col" onclick="{!c.sortJobCard}">
+        				<a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+            				<span class="slds-assistive-text">Sort</span>
+                            <span class="slds-truncate"><b>Job Card</b></span>  
+            			<aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'Job_Card__c') }">&nbsp;  &#9660; </aura:if>  
+            			<aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'Job_Card__c') }"> &nbsp;  &#9650; </aura:if>                        
+        				</a>
+       				</th>
+            	</td>
+                <td class="slds-p-vertical--small">              	
+                    <th class="slds-is-sortable slds-text-title" scope="col" onclick="{!c.sortName}">
+        				<a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+            				<span class="slds-assistive-text">Sort</span>
+                            <span class="slds-truncate"><b>Name</b></span>  
+            			<aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'Name') }">&nbsp;  &#9660; </aura:if>  
+            			<aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'Name') }"> &nbsp;  &#9650; </aura:if>                        
+        				</a>
+       				</th>
+            	</td>
+                <td class="slds-p-vertical--small">              	
+                    <th class="slds-is-sortable slds-text-title" scope="col" onclick="{!c.sortDescription}">
+        				<a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+            				<span class="slds-assistive-text">Sort</span>
+                            <span class="slds-truncate"><b>Description</b></span>  
+            			<aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'Job_Card_Description_Section__c') }">&nbsp;  &#9660; </aura:if>  
+            			<aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'Job_Card_Description_Section__c') }"> &nbsp;  &#9650; </aura:if>                        
+        				</a>
+       				</th>
+            	</td>
+                <td class="slds-p-vertical--small">              	
+                	<th class="slds-is-sortable slds-text-title" scope="col" onclick="{!c.sortLaborCost}">
+        				<a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+            				<span class="slds-assistive-text">Sort</span>
+                            <span class="slds-truncate"><b>Labor Cost</b></span>  
+            			<aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'Labor_Amount__c') }">&nbsp;  &#9660; </aura:if>  
+            			<aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'Labor_Amount__c') }"> &nbsp;  &#9650; </aura:if>                        
+        				</a>
+       				</th>
+            	</td>
+                <td class="slds-p-vertical--small">              	
+                	<th class="slds-is-sortable slds-text-title" scope="col" onclick="{!c.sortFirmPriceLabor}">
+        				<a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+            				<span class="slds-assistive-text">Sort</span>
+                            <span class="slds-truncate slds-cell-shrink"><b>Labor Type</b></span>  
+            			<aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'IsFirmPriceLabour__c') }">&nbsp;  &#9660; </aura:if>  
+            			<aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'IsFirmPriceLabour__c') }"> &nbsp;  &#9650; </aura:if>                        
+        				</a>
+       				</th>
+            	</td>
+                <td class="slds-p-vertical--small">              	
+                	<th class="slds-is-sortable slds-text-title" scope="col" onclick="{!c.sortMaterialCost}">
+        				<a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+            				<span class="slds-assistive-text">Sort</span>
+                            <span class="slds-truncate"><b>Material Cost</b></span>  
+            			<aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'Material_Amount__c') }">&nbsp;  &#9660; </aura:if>  
+            			<aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'Material_Amount__c') }"> &nbsp;  &#9650; </aura:if>                        
+        				</a>
+       				</th>
+            	</td>
+                <td class="slds-p-vertical--small">              	
+                	<th class="slds-is-sortable slds-text-title" scope="col" onclick="{!c.sortFirmPriceMaterial}">
+        				<a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+            				<span class="slds-assistive-text">Sort</span>
+                            <span class="slds-truncate slds-cell-shrink"><b>Material Type</b></span>  
+            			<aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'IsFirmPriceMaterial__c') }">&nbsp;  &#9660; </aura:if>  
+            			<aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'IsFirmPriceMaterial__c') }"> &nbsp;  &#9650; </aura:if>                        
+        				</a>
+       				</th>
+            	</td>
+                <td class="slds-p-vertical--small">               	
+                	<th class="slds-is-sortable slds-text-title" scope="col" onclick="{!c.sortRTS}">
+        				<a href="javascript:void(0);" class="slds-th__action slds-text-link--reset">
+            				<span class="slds-assistive-text">Sort</span>
+                            <span class="slds-truncate"><b>RTS</b></span>  
+            			<aura:if isTrue="{! and(v.arrowDirection == 'arrowdown', v.selectedTabsoft == 'IsRTS__c') }">&nbsp;  &#9660; </aura:if>  
+            			<aura:if isTrue="{! and(v.arrowDirection != 'arrowdown', v.selectedTabsoft == 'IsRTS__c') }"> &nbsp;  &#9650; </aura:if>                        
+        				</a>
+       				</th>
+            	</td>
+            	<td class="slds-p-vertical--small">
+            		<th class="slds-text-align--right slds-text-title">
+                    	<label class="slds-checkbox">
+                        	<span class="slds-truncate"><b>Select All   </b></span>
+                        	<ui:inputCheckbox aura:id="box3" value="" change="{!c.selectAll}"/>
+                        	<span class="slds-checkbox--faux"></span>
+                     	</label>
+            		</th>
+    			</td>       		
+			</tr> 
+    	</thead>        
+		<tbody>
+			<aura:iteration items="{!v.squawks}" var="currentSquawks" >            
+				<tr>				
+                	<td scope="row" class="slds-p-vertical--xx-small">                 
+                     	<div class="slds-truncate slds-text-align--center">{!currentSquawks.Job_Card__c}</div>
+					</td>   
+					<td scope="row" class="slds-p-vertical--xx-small">                                        
+                    	<div class="slds-truncate"><a href="{!'https://fullcopy1-fullcopy1.cs60.force.com/s/squawk/'+currentSquawks.Id}" target="_blank">{!currentSquawks.Name}</a></div>            	
+					</td>                 
+					<td scope="row" class="slds-p-vertical--xx-small">
+                    	<div class="slds-truncate"  title="{!currentSquawks.Job_Card_Description__c}">{!currentSquawks.Job_Card_Description_Section__c}</div>
+					</td>                 
+					<td scope="row" class="slds-p-vertical--xx-small">
+						<div class="slds-truncate slds-text-align--center">${!currentSquawks.Labor_Amount__c}</div>                 
+					</td>
+                    <td scope="row" class="slds-p-vertical--xx-small">
+						<div class="slds-truncate slds-text-align--center">{!currentSquawks.IsFirmPriceLabour__c}</div>                 
+					</td>
+                	<td scope="row" class="slds-p-vertical--xx-small">
+						<div class="slds-truncate slds-text-align--center">${!currentSquawks.Material_Amount__c}</div>                 
+					</td>
+                    <td scope="row" class="slds-p-vertical--xx-small">
+						<div class="slds-truncate slds-text-align--center">{!currentSquawks.IsFirmPriceMaterial__c}</div>                 
+					</td>
+                    <td scope="row" class="slds-p-vertical--xx-small">
+						<div class="slds-truncate slds-text-align--center">{!currentSquawks.IsRTS__c}</div>                 
+					</td>
+                	<td scope="row" class="slds-text-align--center slds-p-vertical--xx-small" style="width:3.25rem;">
+                  		<div class="slds-form-element">
+                     		<div class="slds-form-element__control">                            
+                        		<label class="slds-checkbox">
+                           			<ui:inputCheckbox text="{!currentSquawks.Id}" aura:id="boxPack" change="{!c.checkboxSelect}"/>
+                           			<span class="slds-checkbox--faux"></span>
+                           			<span class="slds-form-element__label text"></span>
+                        		</label>
+                    		</div>
+                		</div>
+                	</td>               
+				</tr> 
+			</aura:iteration> 
+        </tbody>           
+	</table>
+       
+</aura:component>

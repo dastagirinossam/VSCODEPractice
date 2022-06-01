@@ -1,0 +1,7 @@
+<apex:page standardController="Request__c" tabstyle="Request__c" lightningStylesheets="true">
+<apex:slds />
+    <apex:sectionHeader title="Create Project From Request" subtitle="Request: {!Request__c.Name}"/>
+    <flow:interview name="Create_Project_From_Request" finishLocation="/{!Request__c.Id}">
+        <apex:param name="varRequestId" value="{!Request__c.Id}" />
+    </flow:interview>
+</apex:page>

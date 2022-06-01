@@ -1,0 +1,100 @@
+/* Create two equal columns that floats next to each other */
+.THIS.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+
+.THIS .asterix{
+    float:left;
+    color: #8B0000;
+    padding-left:5px;
+}
+
+
+
+.THIS .form-style-3{
+	max-width: 350px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.THIS .form-style-3{
+	max-width: 350px;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+.THIS .form-style-3 label{
+	display:block;
+	margin-bottom: 10px;
+}
+.THIS .form-style-3 label > span{
+	float: left;
+	width: 80px;
+	color:#d0f7f5;
+	font-weight: bold;
+	font-size: 13px;
+	text-shadow: 1px 1px 1px #fff;
+}
+.THIS .form-style-3 fieldset{
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	margin: 0px 0px 10px 0px;
+	border: 1px solid #FFD2D2;
+	padding: 20px;
+	background: #d0f7f5;
+	box-shadow: inset 0px 0px 15px #FFE5E5;
+	-moz-box-shadow: inset 0px 0px 15px #FFE5E5;
+	-webkit-box-shadow: inset 0px 0px 15px #FFE5E5;
+}
+
+.THIS .form-style-3 textarea{
+	width:200px;
+	height:100px;
+}
+
+.THIS .textarea-field{
+	border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border: 1px solid #FFC2DC;
+	outline: none;
+	color:#d0f7f5;
+	padding: 5px 8px 5px 8px;
+	box-shadow: inset 1px 1px 4px #FFD5E7;
+	-moz-box-shadow: inset 1px 1px 4px #FFD5E7;
+	-webkit-box-shadow: inset 1px 1px 4px #FFD5E7;
+	background:#d0f7f5;
+	width:50%;
+}
+.THIS .form-style-3 fieldset legend{
+	color:#010f0f;
+	border-top: 1px solid #FFD2D2;
+	border-left: 1px solid #FFD2D2;
+	border-right: 1px solid #FFD2D2;
+	border-radius: 5px 5px 0px 0px;
+	-webkit-border-radius: 5px 5px 0px 0px;
+	-moz-border-radius: 5px 5px 0px 0px;
+	background:#72e3f0;
+	padding: 0px 8px 3px 8px;
+	box-shadow: -0px -1px 2px #F1F1F1;
+	-moz-box-shadow:-0px -1px 2px #F1F1F1;
+	-webkit-box-shadow:-0px -1px 2px #F1F1F1;
+	font-weight: normal;
+	font-size: 12px;
+}
+.THIS .form-style-3 textarea{
+	width:350px;
+	height:100px;
+}
+
+/* Clear floats after the columns */
+.THIS.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.THIS.a {
+    font-size: 150%;
+}

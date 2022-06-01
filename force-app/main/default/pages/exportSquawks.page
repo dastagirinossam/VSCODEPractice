@@ -1,0 +1,7 @@
+<apex:page standardController="MPM4_BASE__Milestone1_Project__c" extensions="exportSquawks" action="{!exportToExcel}" readOnly="true" contentType="application/vnd.ms-excel#{!MPM4_BASE__Milestone1_Project__c.Name}_Squawks.csv" lightningStylesheets="true">
+<apex:slds />
+{!header}
+    <apex:repeat value="{!lstwrapper}" var="x">
+        {!x.squawk},{!x.jobcard},{!x.status},{!x.description},{!x.laborAmount},{!x.laborType},{!x.materialAmount},{!x.materialType},{!x.isRTS}
+    </apex:repeat>
+</apex:page>

@@ -1,0 +1,403 @@
+<aura:component controller="JetnetAPI_Callouts" implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.makeRequest}"/>
+    
+    <aura:attribute name="Aircraft" type="Map"/>
+    <aura:attribute name="purchaseDate" type="String"/>
+    <aura:attribute name="regnbrexpires" type="String"/>
+    <aura:attribute name="timesasofdate" type="String"/>
+    
+    <aura:attribute name="Engine" type="Map"/>
+    <aura:attribute name="APU" type="Map"/> 
+    <aura:attribute name="Company" type="Map"/>
+    <aura:attribute name="CompanyRelationships" type="Map"/>
+    <aura:attribute name="Contacts" type="Map"/>
+                          
+    <aura:attribute name="recordId" type="String"/>
+    
+    <article class="slds-card">
+        <!--Airframe-->
+        <div class="slds-p-around_x-small">
+            <div class="slds-box">
+                <article class="slds-card">
+                    <div class="slds-page-header slds-page-header_joined slds-page-header_bleed slds-shrink-none slds-is-relative">
+                        <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                            <div class="slds-col slds-has-flexi-truncate firstHeaderRow">
+                                <div class="slds-media slds-no-space slds-grow">
+                                    <span class="record-avatar-container slds-avatar slds-avatar_medium icon slds-m-right_medium">
+                                        <lightning:icon iconName="custom:custom20"/>
+                                    </span>
+                                    <div class="slds-media__body slds-align-middle">
+                                        <div class="entityNameTitle slds-line-height--reset">Jetnet Info</div>
+                                        <div class="slds-page-header__title slds-m-right--small slds-align-middle clip-text slds-line-clamp">
+                                            <a href="{!v.Aircraft.pageurl}" class="slds-card__header-link slds-truncate" target="_blank">
+                                                <span class="slds-truncate slds-m-right--xx-small">{!v.Aircraft.make + ' ' + v.Aircraft.model + ' SN #' + v.Aircraft.sernbr}</span>           
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-card__body">
+                        <table role="grid">
+                            <thead>
+                                <tr>
+                                    <td class="slds-p-around_x-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Year Mfr/Dlv:</b>&nbsp;{!v.Aircraft.yearmfg}/{!v.Aircraft.yeardlv}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_x-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Registration&nbsp;#:</b>&nbsp;{!v.Aircraft.regnbr},&nbsp;Expires:&nbsp;
+                                            <lightning:formattedDateTime value="{!v.regnbrexpires}"/>
+                                            <aura:if isTrue="{!not(empty(v.Aircraft.prevregnbr))}">
+                                                ,&nbsp;Previous&nbsp;Reg&nbsp;#{!v.Aircraft.prevregnbr}
+                                            </aura:if>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_x-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Purchase Date:</b>&nbsp;
+                                            <lightning:formattedDateTime value="{!v.purchaseDate}"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_x-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Location:</b>&nbsp;{!v.Aircraft.baseiata}/{!v.Aircraft.baseicao}/{!v.Aircraft.baseairport},&nbsp;{!v.Aircraft.basecity},&nbsp;{!v.Aircraft.basestate}&nbsp;-&nbsp;{!v.Aircraft.basecountry}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_x-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Status:</b>&nbsp;{!v.Aircraft.marketstatus}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_x-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Ownership:</b>&nbsp;{!v.Aircraft.ownership}
+                                            <aura:if isTrue="{!v.Aircraft.previouslyowned}">
+                                                &nbsp;/&nbsp;Previously&nbsp;Owned
+                                            </aura:if>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_x-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Lifecycle/Use:</b>&nbsp;{!v.Aircraft.lifecycle}&nbsp;/&nbsp;{!v.Aircraft.usage}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="slds-p-around_x-small slds-border_top" scope="col">
+                                        <div class="slds-truncate">Airframe</div>
+                                    </th>
+                                    <th class="slds-p-around_x-small slds-border_top" scope="col">
+                                        <div class="slds-truncate">Current Values</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_fixed-layout slds-border_top">
+                                    <th scope="row">
+                                        <div class="slds-truncate">Data Valid As Of</div>
+                                    </th>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">
+                                            <lightning:formattedDateTime value="{!v.timesasofdate}"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_fixed-layout slds-border_top">
+                                    <th scope="row">
+                                        <div class="slds-truncate">Aircraft Total Time:</div>
+                                    </th>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Aircraft.aftt}</div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_fixed-layout slds-border_top">
+                                    <th scope="row">
+                                        <div class="slds-truncate">Landings/Cycles:</div>
+                                    </th>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Aircraft.landings}</div>
+                                    </td>
+                                </tr>
+                            </tbody>  
+                        </table>
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <!--Company-->
+        <div class="slds-p-around_x-small">
+            <div class="slds-box">
+                <article class="slds-card">
+                    <div class="slds-page-header slds-page-header_joined slds-page-header_bleed slds-shrink-none slds-is-relative slds-grid">
+                        <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                            <div class="slds-col slds-has-flexi-truncate firstHeaderRow">
+                                <div class="slds-media slds-no-space slds-grow">
+                                    <span class="record-avatar-container slds-avatar slds-avatar_medium icon slds-m-right_medium">
+                                        <lightning:icon class="slds-icon-standard-account slds-icon_container" iconName="standard:account"/>
+                                    </span>
+                                    <div class="slds-media__body slds-align-middle">
+                                        <div class="entityNameTitle slds-line-height--reset">{!v.Aircraft.make + ' ' + v.Aircraft.model + ' SN #' + v.Aircraft.sernbr}</div>
+                                        <div class="slds-page-header__title slds-m-right--small slds-align-middle clip-text slds-line-clamp">
+                                            <a href="#" class="slds-card__header-link slds-truncate">
+                                                <span class="slds-truncate slds-m-right--xx-small">Company</span>           
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-card__body">
+                        <table role="grid">
+                            <tbody>
+                                <aura:iteration items="{!v.Company.companies}" var="co" start="0">
+                                    <div class="slds-p-around_xx-small">
+                                        <div class="slds-box">
+                                        <tr class="slds-table slds-table_cell-buffer slds-no-row-hover">
+                                            <tr scope="row">
+                                                <div class="slds-truncate slds-p-around_xxx-small slds-border_bottom slds-text-title_caps"><b>{!co.name}</b></div>
+                                            </tr>
+                                            <tr>
+                                                <aura:if isTrue="{!not(empty(co.altname))}">
+                                                    <div class="slds-truncate slds-p-around_xxx-small ">Alt Company/Type: {!co.altname} / {!co.alttype}</div>
+                                                </aura:if>
+                                            </tr>
+                                            <tr>
+                                                <div class="slds-truncate slds-p-around_xxx-small ">{!co.address1}</div>
+                                                <aura:if isTrue="{!not(empty(co.address2))}">
+                                                    <div class="slds-truncate slds-p-around_xxx-small ">{!co.address2}</div>
+                                                </aura:if>
+                                                <div class="slds-truncate slds-p-around_xxx-small ">{!co.city}, {!co.state}&nbsp;{!co.postcode}&nbsp;{!co.country}</div>
+                                            </tr>
+                                        </tr>
+                                        </div>
+                                    </div>
+                                </aura:iteration>              
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <!--Contacts-->
+        <div class="slds-p-around_x-small">
+            <div class="slds-box">
+                <article class="slds-card">
+                    <div class="slds-page-header slds-page-header_joined slds-page-header_bleed slds-shrink-none slds-is-relative slds-grid">
+                        <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                            <div class="slds-col slds-has-flexi-truncate firstHeaderRow">
+                                <div class="slds-media slds-no-space slds-grow">
+                                    <span class="record-avatar-container slds-avatar slds-avatar_medium icon slds-m-right_medium">
+                                        <lightning:icon class="slds-icon-standard-contact slds-icon_container" iconName="standard:contact"/>
+                                    </span>
+                                    <div class="slds-media__body slds-align-middle">
+                                        <div class="entityNameTitle slds-line-height--reset">{!v.Aircraft.make + ' ' + v.Aircraft.model + ' SN #' + v.Aircraft.sernbr}</div>
+                                        <div class="slds-page-header__title slds-m-right--small slds-align-middle clip-text slds-line-clamp">
+                                            <a href="#" class="slds-card__header-link slds-truncate">
+                                                <span class="slds-truncate slds-m-right--xx-small">Contacts</span>           
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-card__body">
+                        <table role="grid">
+                            <tbody>
+                                <aura:iteration items="{!v.Contacts.contacts}" var="con" start="0">  
+                                    <div class="slds-p-around_xx-small">
+                                        <div class="slds-box">
+                                        <tr class="slds-table slds-table_cell-buffer slds-no-row-hover">
+                                                <div class="slds-truncate slds-p-around_xxx-small slds-border_bottom slds-text-title_caps"><b>{!con.firstname}&nbsp;{!con.middleinitial}&nbsp;{!con.lastname}</b></div>
+                                            </tr>
+                                            <tr>
+                                                <div class="slds-truncate slds-p-around_xxx-small ">Company: {!con.companyname}</div>
+                                            </tr>
+                                            <tr>
+                                                <div class="slds-truncate slds-p-around_xxx-small ">Title: {!con.title}</div>
+                                            </tr>
+                                            <tr>
+                                                <div class="slds-truncate slds-p-around_xxx-small ">Email: {!con.email}</div>
+                                            </tr>
+                                            <tr>
+                                                <div class="slds-truncate slds-p-around_xxx-small ">Phone: {!con.phonenumber}</div>
+                                            </tr>
+                                        </div>
+                                    </div>
+                                </aura:iteration>              
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <!--Engine-->
+        <div class="slds-p-around_x-small">
+            <div class="slds-box">
+                <article class="slds-card">
+                    <div class="slds-page-header slds-page-header_joined slds-page-header_bleed slds-shrink-none slds-is-relative slds-grid">
+                        <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                            <div class="slds-col slds-has-flexi-truncate firstHeaderRow">
+                                <div class="slds-media slds-no-space slds-grow">
+                                    <span class="record-avatar-container slds-avatar slds-avatar_medium icon slds-m-right_medium">
+                                        <lightning:icon class="slds-icon-custom-custom67 slds-icon_container" iconName="custom:custom67"/>
+                                    </span>
+                                    <div class="slds-media__body slds-align-middle">
+                                        <div class="entityNameTitle slds-line-height--reset">{!v.Aircraft.make + ' ' + v.Aircraft.model + ' SN #' + v.Aircraft.sernbr}</div>
+                                        <div class="slds-page-header__title slds-m-right--small slds-align-middle clip-text slds-line-clamp">
+                                            <a href="#" class="slds-card__header-link slds-truncate">
+                                                <span class="slds-truncate slds-m-right--xx-small">Engine(s): {!v.Engine.model}</span>           
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-card__body">
+                        <table role="grid">
+                            <thead>
+                                <tr>
+                                    <td class="slds-p-around_xx-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>On Condition TBO:</b>&nbsp;
+                                            <aura:if isTrue="{!v.Engine.onconditiontbo}">
+                                                Yes
+                                                <aura:set attribute="else">
+                                                    No
+                                                </aura:set>
+                                            </aura:if>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_xx-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Maintenance Program:</b>&nbsp;{!v.Engine.maintenanceprogram}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="slds-p-around_xx-small slds-border_top" scope="col">
+                                        <div class="slds-truncate" title="Model">Model&nbsp;{!v.Engine.model}</div>
+                                    </th>
+                                    <th class="slds-p-around_xx-small slds-border_top" scope="col">
+                                        <div class="slds-truncate" title="Engine 1">Engine 1</div>
+                                    </th>
+                                    <th class="slds-p-around_xx-small slds-border_top" scope="col">
+                                        <div class="slds-truncate" title="Engine2">Engine 2</div>
+                                    </th>
+                                    <th class="slds-p-around_xx-small slds-border_top" scope="col">
+                                        <div class="slds-truncate" title="Engine 3">Engine 3</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_fixed-layout slds-border_top">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="Serial Number">Serial Number</div>
+                                    </th>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[0].serialnum}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[1].serialnum}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[2].serialnum}</div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_fixed-layout slds-border_top">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="Total Time Since New Hrs">Total Time Since News</div>
+                                    </th>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[0].ttsnew}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[1].ttsnew}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[2].ttsnew}</div>
+                                    </td>
+                                </tr>
+                                <tr class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_fixed-layout slds-border_top">
+                                    <th scope="row">
+                                        <div class="slds-truncate" title="Total Cycles Since New Hrs">Total Cycles Since New</div>
+                                    </th>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[0].tcsn}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[1].tcsn}</div>
+                                    </td>
+                                    <td role="gridcell">
+                                        <div class="slds-truncate">{!v.Engine.engines[2].tcsn}</div>
+                                    </td>
+                                </tr>
+                            </tbody>  
+                        </table>
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <!--APU-->
+        <div class="slds-p-around_x-small">
+            <div class="slds-box">
+                <article class="slds-card">
+                    <div class="slds-page-header slds-page-header_joined slds-page-header_bleed slds-shrink-none slds-is-relative slds-grid">
+                        <div class="slds-media slds-media_center slds-has-flexi-truncate">
+                            <div class="slds-col slds-has-flexi-truncate firstHeaderRow">
+                                <div class="slds-media slds-no-space slds-grow">
+                                    <span class="record-avatar-container slds-avatar slds-avatar_medium icon slds-m-right_medium">
+                                        <lightning:icon class="slds-icon-custom-custom67 slds-icon_container" iconName="custom:custom67"/>
+                                    </span>
+                                    <div class="slds-media__body slds-align-middle">
+                                        <div class="entityNameTitle slds-line-height--reset">{!v.Aircraft.make + ' ' + v.Aircraft.model + ' SN #' + v.Aircraft.sernbr}</div>
+                                        <div class="slds-page-header__title slds-m-right--small slds-align-middle clip-text slds-line-clamp">
+                                            <a href="#" class="slds-card__header-link slds-truncate">
+                                                <span class="slds-truncate slds-m-right--xx-small">APU: {!v.APU.model}</span>           
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-card__body">
+                        <table role="grid">
+                            <thead>
+                                <tr>
+                                    <td class="slds-p-around_xx-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Serial Number:</b>&nbsp;{!v.APU.sernbr}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_xx-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Time Since New:</b>&nbsp;{!v.APU.ttsnew}</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="slds-p-around_xx-small slds-border_top" colspan="4">
+                                        <div class="slds-truncate"><b>Maintenance Plan:</b>&nbsp;{!v.APU.maintenanceprogram}</div>
+                                    </td>
+                                </tr>
+                            </thead>  
+                        </table>
+                    </div>
+                </article>
+            </div>
+        </div>
+        
+        <footer class="slds-card__footer">
+        </footer>
+    </article>
+</aura:component>

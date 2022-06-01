@@ -1,0 +1,150 @@
+<aura:component controller="QuotaController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:lightningQuickAction" access="global" >
+        
+    <aura:attribute name="wrapper" type="Object" />
+    <aura:attribute name="searchResult" type="List"/>
+     <aura:attribute name="searchResult2" type="List"/>
+    <aura:attribute name ="perfID" type= "ID"/>
+    <aura:attribute name="recordlistview" type="boolean"  default ="true"/>
+     <aura:attribute name="recordlistview2" type="boolean"  default ="true"/>
+    <aura:attribute name="listOfYear" type="list"  default ="All,2017,2018,2019,2020,2021"/>
+    <aura:attribute name="selectedYear" type="String" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <h1 class="slds-section-title--divider slds-theme_inverse"><b>Performance Details</b></h1>
+    <div>Select Year :
+        <lightning:select aura:id="mySelect" onchange="{!c.selectYear}">       
+            
+            <aura:iteration items="{!v.listOfYear}" var="item">
+                <option text="{!item.label}" value="{!item.value}" selected="{!item.selected}">
+                    {!item}
+                </option>
+            </aura:iteration>
+        </lightning:select>
+        <br/><br/>
+        
+        <!-- <lightning:button label="Go" onclick="{!c.getPerformance}"/><br/><br/>-->
+    </div>
+    
+    <aura:if isTrue="{!not(empty(v.searchResult))}">
+        <aura:if isTrue="{!v.recordlistview}">
+            <div class="slds-scrollable_x" style="width: 84rem;">
+                <div class="slds-m-left_small">
+                    <ul class="slds-accordion">
+                        <div class="slds-grid slds-wrap">
+                            <h1 class="slds-section-title--divider slds-theme_inverse"><b>Performance Quaterly:</b></h1>
+                            <table class="slds-table slds-table_bordered slds-table_striped slds-table_cell-buffer">
+                                <thead>
+                                    <tr class="slds-text-heading_label">
+                                        <th scope="col" id="Select">
+                                            <div class="slds-truncate" title="Name">Name</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Quota_Master__c">Performance Revenue Total</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Quota_Master__c">Performance Margin Total</div>
+                                        </th>
+                                        <th scope="col" id="Select">
+                                            <div class="slds-truncate" title="Quota_Sales_Employee__c">Quota Sales Employee </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    <!--### display all records of searchResult attribute by aura:iteration ###-->
+                                    <aura:iteration items="{!v.searchResult}" var="per" indexVar="count">
+                                        <tr>    
+                                            <td>
+                                                <div class="slds-truncate">
+                                                    <a href = "" aura:id="{!per.name}" data-conId="{!per.Id}" onclick ="{!c.navigateToper}">{!per.Name}</a>    
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <lightning:formattedNumber value="{!per.Performance_Revenue_Total__c*.01}" style="percent"/>
+                                            </td>
+                                            <td>
+                                                <lightning:formattedNumber value="{!per.Performance_Margin_Total__c*.01}" style="percent"/>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">
+                                                    <a href = "" aura:id="{!per.Quota_Sales_Employee__c}" data-conId="{!per.Quota_Sales_Employee__c}" onclick ="{!c.navigateToemp}">{!per.Quota_Sales_Employee__r.Name}</a>    
+                                                </div>                                               
+                                            </td>                                           
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>              
+                        </div>
+                    </ul>                    
+                </div>
+            </div>
+            <aura:set attribute="else">
+                <c:QuotaChildPerformance perf2ID = "{!v.perfID}"/>
+            </aura:set>
+        </aura:if>
+    </aura:if> <br/><br/>
+<aura:if isTrue="{!not(empty(v.selectedYear))}">
+    <aura:if isTrue="{!not(v.selectedYear == 'All')}">
+      <aura:if isTrue="{!not(empty(v.searchResult2))}">
+        <aura:if isTrue="{!v.recordlistview2}">
+            <div class="slds-scrollable_x" style="width: 84rem;">
+                <div class="slds-m-left_small">
+                    <ul class="slds-accordion">
+                        <div class="slds-grid slds-wrap">
+                            <h1 class="slds-section-title--divider slds-theme_inverse"><b>Performance Yearly:</b></h1>
+                            <table class="slds-table slds-table_bordered slds-table_striped slds-table_cell-buffer">
+                                <thead>
+                                    <tr class="slds-text-heading_label">
+                                        <th scope="col" id="Select">
+                                            <div class="slds-truncate" title="Name">Name</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Quota_Master__c">Performance Revenue Total</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Quota_Master__c">Performance Margin Total</div>
+                                        </th>
+                                        <th scope="col" id="Select">
+                                            <div class="slds-truncate" title="Quota_Sales_Employee__c">Quota Sales Employee </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody> 
+                                    <!--### display all records of searchResult attribute by aura:iteration ###-->
+                                    <aura:iteration items="{!v.searchResult2}" var="per" indexVar="count">
+                                        <tr>    
+                                            <td>
+                                                <div class="slds-truncate">
+                                                    <a href = "" aura:id="{!per.name}" data-conId="{!per.Id}" onclick ="{!c.navigateToper2}">{!per.Name}</a>    
+                                                </div>
+                                            </td>
+                                            <td>
+                                              
+                                                <lightning:formattedNumber value="{!per.PerformanceRevenueTotal*0.01}" style="percent"/>
+                                            </td>
+                                            <td>
+                                                <lightning:formattedNumber value="{!per.PerformanceMarginTotal*0.01}" style="percent"/>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">
+                                                    <a href = "" aura:id="{!per.salesId}" data-conId="{!per.salesId}" onclick ="{!c.navigateToemp}"> {!per.salesEMPName}</a>    
+                                                </div>                                               
+                                            </td>                                           
+                                        </tr>
+                                    </aura:iteration>
+                                </tbody>
+                            </table>              
+                        </div>
+                    </ul>                    
+                </div>
+            </div>
+            <aura:set attribute="else">
+                <c:QuotaPerformanceYearlyCMP selectedYear = "{!v.selectedYear}"/>
+            </aura:set>
+        </aura:if>
+        </aura:if></aura:if></aura:if>
+    <aura:if isTrue="{!(empty(v.searchResult))}">
+        No Performance Records for the Selected Year , Please select another Year !!
+    </aura:if>
+    
+</aura:component>

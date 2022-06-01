@@ -1,0 +1,8 @@
+<aura:component controller="cloneBuyerQuoteLines">
+    
+    <aura:method name="DeferToBuyerQL" action="{!c.createDeferToBuyer}" 
+                 description="Clone the quote lines from seller to buyer"> 
+         <aura:attribute name="listofRecords" type="String[]" />
+    </aura:method>
+	
+</aura:component>

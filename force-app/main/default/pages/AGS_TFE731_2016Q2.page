@@ -1,0 +1,33 @@
+<apex:page LightningStylesheets="true">
+<apex:slds />
+<style>
+        .myFormStyle {
+            background-color: #E6F7FC; text-align:left;
+            border-style:solid;
+            border-color: #D7DADB;
+            }
+        .myHeaderStyle {  
+             
+        }
+    </style>
+  <!-- Begin Default Content REMOVE THIS -->
+<apex:form styleClass="myFormStyle">
+  <h1>Our Commitment</h1>
+<p> </p>
+36 MSP July-August events valued @ 15.7M in SFDC:  <br></br>
+ -- RFS: MPI/CZI in window = 4 / outside for request = 5  <br></br>
+ -- CSQ: MPI/CZI in window = 10 / outside for request = 16    <br></br>
+ --  -- Action: ESM/RSM to contact all by 3-30-2016   <p> </p>
+RSA to revalidate via call the 33 tracking TFE Q2 input events (low probability work) <br></br>
+ --  -- Action: RSA to contact all by 3-30-2016   <p> </p>
+33.9M Q2 CSQ / 6.2M in Qualified (5.5M International /.7K Domestic)  <p> </p>
+27.4M AGS TFE Q2 target w/ 6.2M in WIP/Gate 0, go get of 21.2M      <p> </p>
+Current Domestic win rate is 61%, International 10%, LATAM 50%   <p> </p>
+Increase win rates to meet plan of 33.9M CSQ / 6.2M Qualified below equals 27.4M:    <br></br>
+ --  -- Action: Domestic 61% increase to 70%     <br></br>
+ --  -- Action: International 10% increase to 32%    <br></br>
+ --  -- Action: LATAM 50% increase to 65%  <br></br>
+
+  <!-- End Default Content REMOVE THIS -->
+  </apex:form>
+</apex:page>

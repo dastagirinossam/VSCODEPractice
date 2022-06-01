@@ -1,0 +1,44 @@
+<apex:page standardController="Aircraft__c" Extensions="AircraftFlightHours" lightningStylesheets="true">
+<apex:slds />
+<script type="text/javascript">
+    function selectAllCheckboxes(obj,receivedInputID){
+        var inputCheckBox = document.getElementsByTagName("input");                 
+            for(var i=0; i<inputCheckBox.length; i++){         
+                if(inputCheckBox[i].id.indexOf(receivedInputID)!=-1){                                    
+                    inputCheckBox[i].checked = obj.checked;
+            }
+        }
+    }
+</script>
+
+<apex:form >
+
+<apex:pageBlock title="{!Aircraft__c.name} Flight Hours" mode="edit">
+
+   <apex:pageBlockButtons location="top">
+      <apex:commandButton value="Save" action="{!saveAndReturn}"/>
+      <apex:commandButton value="Cancel" action="{!cancel}"/>
+   </apex:pageBlockButtons>
+
+   <apex:pageBlockTable value="{!fhrs}" var="fh">
+   
+      <apex:column value="{!fh.Name}"/>
+      <apex:column value="{!fh.Source__c}"/>
+      <apex:column value="{!fh.Hours__c}"/>
+      <apex:column value="{!fh.Hours_Date__c}"/>
+
+      <apex:column >
+         <apex:facet name="header">
+            <apex:outputPanel layout="none">
+               <apex:inputCheckbox onclick="selectAllCheckboxes(this,'inputId')"/><apex:outputLabel value="Archive Flight Hours"/>
+            </apex:outputPanel>                     
+         </apex:facet>
+         <apex:inputCheckbox value="{!fh.Archive_Flight_Hours__c}" id="inputId"/>
+      </apex:column> 
+    
+   </apex:pageBlockTable>
+</apex:pageBlock>
+
+
+</apex:form>    
+</apex:page>

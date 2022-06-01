@@ -1,0 +1,106 @@
+<!--==============================================================================================================
+@Author - Krunal Pala
+@Date - 14/3/17
+@Purpose-  This page is used for displaying Proposal Detail Section for Quote Templates. (XSL-FO Based Custom Layout)
+==========================================================================================================-->
+<apex:page contentType="text/xml" showHeader="false" sidebar="false" cache="false"
+ controller="SB_QTProposalDetailAndExecutiveSummary">
+
+
+ <block>
+        <table table-layout="fixed" width="100%" border-color="#000000" border-width="1px" border-style="solid">
+            
+            <table-column border-width="2px" border-style="solid" column-width="10%"> </table-column>
+            <table-column border-width="2px" border-style="solid" column-width="25%"> </table-column>
+            <table-column border-width="2px" border-style="solid" column-width="10%"> </table-column>
+            <table-column border-width="2px" border-style="solid" column-width="8%"> </table-column>
+            <table-column border-width="2px" border-style="solid" column-width="20%"> </table-column>
+            <table-column border-width="2px" border-style="solid" column-width="12%"> </table-column>
+            <table-column border-width="2px" border-style="solid" column-width="15%"> </table-column>
+           
+             
+            <table-body>
+                <table-row font-size="0.9em"  font-weight="bold" text-align="center" color="#000000" >
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                            <block> QL #</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                            <block>Material Part #</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="10pt">
+                            <block>Condition</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="18pt">
+                            <block> QTY</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="18pt">
+                            <block>Vendor Name</block>
+                        </table-cell>                      
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="18pt">
+                            <block>Vendor #</block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" padding-top="18pt">
+                            <block>Net Price</block>
+                        </table-cell>                      
+                       
+                    </table-row>
+            <apex:repeat var="ql" value="{!quoteLineBillOfMaterials}" >
+                    <table-row font-size="0.7em">
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> <apex:outputText value="{!HTMLENCODE(ql.Name)} " ></apex:outputText></block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block wrap-option="wrap"> <apex:outputText value="{!HTMLENCODE(ql.SBQQ__ProductCode__c)}"></apex:outputText></block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> <apex:outputText value="{!HTMLENCODE(ql.Condition__c)} " ></apex:outputText></block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> <apex:outputText value="{!ql.SBQQ__Quantity__c} " ></apex:outputText></block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> <apex:outputText value="{!HTMLENCODE(ql.Vendor_Name__c)} " ></apex:outputText></block>
+                        </table-cell>
+                        <table-cell border="1px solid black" margin="0pt" padding="2pt" padding-left="2pt" >
+                            <block> <apex:outputText value="{!HTMLENCODE(ql.SBQQ__Product__r.Vendor_Number__c)} " ></apex:outputText></block>
+                        </table-cell>
+
+                        <table-cell border="1px solid black" text-align="right" margin="0pt" padding="2pt" padding-left="2pt" >
+                        <block> 
+                                 <apex:outputText value="{0,number,currency}"  >
+                                    <apex:param value="{!ql.fxNet_Total__c}" ></apex:param>
+                                 </apex:outputText>
+                            </block>
+                        </table-cell>
+                                            
+                    </table-row>
+                    <table-row font-size="0.7em">
+                        <table-cell border="1px solid black" number-columns-spanned="7" margin="0pt" padding="2pt" padding-left="2pt" >
+                             <block font-style="Arial" margin-left="10%" text-align="justify" linefeed-treatment="preserve" white-space-collapse="false"   font-size="9pt" keep-with-previous="always"><apex:outputText value="{!HTMLENCODE(ql.Specification__c)}" escape="false"></apex:outputText></block>
+                        </table-cell>
+                     </table-row>
+            </apex:repeat>
+                     <table-row font-size="0.9em">
+                        <table-cell border="1px solid black" font-weight="bold" number-columns-spanned="6" margin="0pt" padding="4pt" padding-left="2pt"  text-align="right"  >
+                             <block> Total :</block>
+                        </table-cell>
+
+                         <table-cell border="1px solid black"  text-align="right" margin="0pt" padding="4pt" padding-left="2pt" >
+                             <block> 
+                                 <apex:outputText value="{0,number,currency}"  >
+                                    <apex:param value="{!additionalWorkAmount}" ></apex:param>
+                                 </apex:outputText>
+                            </block>
+                        </table-cell>
+                     </table-row>
+                  
+
+                     
+                        
+            </table-body>
+
+            </table>
+            </block>
+
+    
+</apex:page>

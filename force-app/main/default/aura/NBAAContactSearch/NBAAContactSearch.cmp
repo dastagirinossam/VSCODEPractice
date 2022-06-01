@@ -1,0 +1,75 @@
+<aura:component extends="forceCommunity:navigationMenuBase" 
+                implements="forceCommunity:availableForAllPageTypes,force:appHostable,force:hasRecordId" 
+                access="global" 
+                controller="CreateUserHandler">
+    
+    <aura:attribute name="recordId" type="String"/>  
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner />
+    </aura:if>
+    
+    <aura:if isTrue="{!!v.saved}">
+        <lightning:recordEditForm
+                                  aura:id="contactForm"
+                                  onload="{!c.handleLoad}"
+                                  onsuccess="{!c.handleSuccess}"
+                                  onsubmit="{!c.handleSaveRecord}"
+                                  recordId="{!v.recordId}"
+                                  objectApiName="Contact">
+            <!-- the messages component is for error messages -->
+            <lightning:messages />
+            
+            <div class="Create Contact"> 
+                
+                <article class="slds-card">
+                    <header class="slds-card__header slds-grid">
+                        <lightning:icon size="large" iconName="custom:custom20" />
+                        <div class="slds-media slds-media--center slds-has-flexi-truncate slds-p-left_x-small">
+                            <div class="slds-media__figure">                            
+                                <h1>
+                                    <span>Invite to StandardAero's</span>
+                                </h1>
+                                <h2>
+                                    <span class="slds-text-heading--small">NBAA - 2019 Party</span>
+                                </h2>
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <div class="slds-p-horizontal--small">  
+                        
+                        <lightning:outputField fieldName="AccountId"/>
+                        <lightning:inputField fieldName="Name"/>
+                        <lightning:inputField fieldName="Title" />
+                        <lightning:inputField fieldName="Email" />  
+                        <div class="slds-card__footer">
+                            <lightning:button label="Cancel" onclick="{!c.handleCancel}" />
+                            <lightning:button variant="brand" label="Send Invite" type="submit" />                                                       
+                        </div>               
+                        
+                    </div>
+                </article>
+            </div>
+            <lightning:inputField fieldName="Invited_to_NBAA__c" value="Invited" class="slds-hidden"/> 
+        </lightning:recordEditForm> 
+        
+        <aura:set attribute="else">
+            <div class="Create Contact">
+                <lightning:card variant="Narrow" iconName="custom:custom20" title="NBAA 2019 - Invitation" >  
+                    <div class="slds-p-horizontal--small">  
+                        <p>Your Invitation Has Been Sent!</p>
+                        
+                        <div class="slds-m-top_medium">
+                            <lightning:button label="Return" onclick="{!c.handleCancel}" />
+                        </div>
+                    </div>
+                </lightning:card>
+            </div>
+        </aura:set>	
+        
+    </aura:if>
+</aura:component>

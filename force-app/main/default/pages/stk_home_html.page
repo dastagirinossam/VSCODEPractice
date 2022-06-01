@@ -1,0 +1,77 @@
+<apex:page showheader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+
+<ion-view view-title="Sales Toolkit">
+  <ion-content class="padding">
+    <div class="list card">
+      <div class="item item-divider  list-darkBlue"><b>Home</b></div>
+      <div class="item item-body">
+        <div>
+          <label class="item item-input item-select">
+            <div class="input-label">
+              Aircraft Make 
+            </div>
+            <select id="make" ng-model="models" ng-options="make for (make, models) in makes"><option value=''>Select Aircraft Make</option></select>
+          </label>
+          <label class="item item-input item-select list-darkblue">
+            <div class="input-label">
+              Aircraft Model
+            </div>
+           <select id="model" ng-disabled="!models" ng-model="subjects" ng-options="model for (model, models) in models"><option value=''>Select Aircraft Model</option></select>
+           </label>
+        </div>
+      </div>
+    </div>
+<div class="list card">
+      <div class="item item-divider list-darkBlue"><b>Aircraft Overview</b></div>
+      <div class="item item-body">
+        <div>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            Top 10 Questions
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            Facility Capabilities
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            General Overviews
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            Facts Sheet
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            Rom + Downtime Estimates
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+        </div>
+      </div>
+      </div>
+      <div class="list card">
+      <div class="item item-divider list-darkBlue"><b>Product Line</b></div>
+      <div class="item item-body">
+        <div>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            Engines and APU
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            Airframe Inspections
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            Avionics Products
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+          <ion-item class="item-icon-right" type="item-text-wrap">
+            Paint and Interior Options
+          <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+         </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
+
+</apex:page>

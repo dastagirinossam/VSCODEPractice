@@ -1,0 +1,23 @@
+<apex:page controller="EngineForSaleApex" showHeader="false" sidebar="false">
+
+    <table style="width: 100%; layout: fixed;">       
+        <tr>      
+            <th>Model</th>
+            <th>Part No</th>
+            <th>Serial No</th>
+            <th>Total Hours</th>
+            <th>Total Cycles</th>
+        </tr>
+        
+        <apex:repeat var="e" value="{!PW_Engines}">
+            <tr>                       
+                <td>{!e.Model__c}</td>   
+                <td>{!e.Part_No__c}</td>                    
+                <td>{!e.EngineorAPUSN__c}</td>
+                <td>{!e.LastHours__c}</td>
+                <td>{!e.LastCycles__c}</td>
+            </tr>
+        </apex:repeat>
+    </table>
+
+</apex:page>

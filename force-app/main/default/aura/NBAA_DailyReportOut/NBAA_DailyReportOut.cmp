@@ -1,0 +1,78 @@
+<aura:component extends="forceCommunity:navigationMenuBase" implements="forceCommunity:availableForAllPageTypes,force:appHostable" access="global">
+    
+    <aura:attribute name="newNBAA_DailyReportOut" type="Object"/>
+    <aura:attribute name="simpleNewNBAA_DailyReportOut" type="Object"/>
+    <aura:attribute name="newNBAA_DailyReportOutError" type="String"/>
+    <aura:attribute name="Stages" type="String[]" default=",RFS (Won),RFQ (Quote),New/Qualified"/>
+    <aura:attribute name="RecruitmentEntry" type="String[]" default="No,Yes"/>
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="showSpinner" type="Boolean" default="true" />
+    
+    <aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.showSpinner}">
+        <lightning:spinner />
+    </aura:if>
+    
+    <force:recordData aura:id="NBAA_DailyReportOut_RecordCreator" 
+                      layoutType="FULL"
+                      targetRecord="{!v.newNBAA_DailyReportOut}"
+                      targetFields="{!v.simpleNewNBAA_DailyReportOut}"
+                      targetError="{!v.newNBAA_DailyReportOutError}" />
+    
+    <!-- Display the new contact form -->
+    <aura:if isTrue="{!!v.saved}">
+        <div>
+            <lightning:card variant="Narrow" iconName="custom:custom20" title="Create NBAA Daily Report Out">          
+                <div class="slds-p-horizontal--small">
+                    <lightning:input aura:id="nbaaField" label="Customer Name"  value="{!v.simpleNewNBAA_DailyReportOut.Customer_Name__c}"/>
+                    <lightning:input aura:id="nbaaField" label="Input Date (Induction Date)" type="date" dateStyle="short" value="{!v.simpleNewNBAA_DailyReportOut.Input_Date_Induction_Date__c}"/>
+                    <lightning:input aura:id="nbaaField" label="Amount" type="number" dateStyle="short" value="{!v.simpleNewNBAA_DailyReportOut.Amount__c}"/>
+                    <lightning:input aura:id="nbaaField" label="Product Line (Type)" value="{!v.simpleNewNBAA_DailyReportOut.Product_Line_Type__c}"/>
+                    <lightning:select aura:id="nbaaField" name="select" value="{!v.simpleNewNBAA_DailyReportOut.Sales_Stage__c}" label="Sales Stage">
+                        <aura:iteration items="{!v.Stages}" var="s">
+                            <option text="{!s}"></option>
+                        </aura:iteration>
+                    </lightning:select>                  
+                    <lightning:input aura:id="nbaaField" label="Workscope" value="{!v.simpleNewNBAA_DailyReportOut.Workscope__c}"/>
+                    <br/>
+                    <lightning:select aura:id="nbaaField" name="select" value="{!v.simpleNewNBAA_DailyReportOut.Recruitment_Entry__c}" label="Recruitment Entry">
+                        <aura:iteration items="{!v.RecruitmentEntry}" var="s">
+                            <option text="{!s}"></option>
+                        </aura:iteration>
+                    </lightning:select> 
+                    <br/>
+                    <lightning:textarea aura:id="nbaaField" rowspan="3" label="Workscope Comments / Recruitment Notes" value="{!v.simpleNewNBAA_DailyReportOut.Comments__c}"/>
+                    <lightning:textarea aura:id="nbaaField" rowspan="3" label="Market Intelligence"  type="date" value="{!v.simpleNewNBAA_DailyReportOut.Market_Intelligence__c}"/>
+                    <br/> 
+                    <br/> 
+                    <lightning:button label="Cancel" onclick="{!c.handleCancel}" class="slds-m-top_medium" />
+                    <lightning:button label="Submit Entry" class="slds-m-top_medium" variant="brand" onclick="{!c.handleSaveNBAA_DailyReportOut}"/>
+                    <lightning:button label="Clear Fields" class="slds-m-top_medium" variant="destructive" onclick="{!c.handleClear}"/>
+                    <lightning:button label="My Entries" class="slds-m-top_medium" onclick="{!c.showEntries}"/>
+                </div>
+            </lightning:card>
+        </div>
+        <aura:set attribute="else">
+            <div>
+                <lightning:card variant="Narrow" iconName="custom:custom20" title="NBAA Daily Report Out" >  
+                    <div class="slds-p-horizontal--small">  
+                        <p>Your NBAA Daily Report Out has been created!</p>
+                        
+                        <div class="slds-m-top_medium">
+                            <lightning:button label="Return" onclick="{!c.createNBAA_DailyReportOut}" />
+                        </div>
+                    </div>
+                </lightning:card>
+            </div>
+        </aura:set>	
+    </aura:if>
+    
+    <!-- Display Lightning Data Service errors -->
+    <aura:if isTrue="{!not(empty(v.newNBAA_DailyReportOutError))}">
+        <div class="recordError">
+            {!v.newNBAA_DailyReportOutError}</div>
+    </aura:if>
+    
+</aura:component>

@@ -1,0 +1,175 @@
+<apex:page standardController="MPM4_BASE__Milestone1_Project__c" extensions="CPM_SquawkVisual" docType="html-5.0" showHeader="True" lightningStylesheets="true" tabStyle="MPM4_BASE__Milestone1_Project__c">
+<apex:slds />
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"/>
+    <apex:includeScript value="{!URLFOR($Resource.StickyHeaders)}"/>
+
+    <head>
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"/>
+    </head>
+    
+    <apex:pageBlock title="Quote Lines" mode="edit" id="criteria" tabStyle="MPM4_BASE__Milestone1_Project__c">  
+        <apex:form id="CPM_SquawkOverview">
+            <style>
+                .popupBackground {
+                    background-color:black;
+                    opacity: 0.20;
+                    filter: alpha(opacity = 20);
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    z-index: 998;
+                    position: absolute;
+                    cursor:wait;
+                }
+                .squeeze {
+                    overflow: auto;
+                    height: 300px;
+                }
+            </style>
+    
+            <apex:pageMessages id="errors" />  
+                <table width="100%" border="0">
+                    <tr>  
+                        <td width="200" valign="top">       
+                            <apex:pageBlock title="Search" mode="maindetail" id="criteria">                                
+                                <script type="text/javascript">
+                                    function doSearch(){
+                                        searchServer(document.getElementById("name").value,
+                                            document.getElementById("JobCardDescription").value,
+                                            document.getElementById("sqkStatus").value
+                                        );
+                                    }                                                       
+                                </script> 
+                 
+                                <apex:actionFunction name="searchServer" action="{!runSearch}" status="spinnerStatus" rerender="results,debug,errors">
+                                    <apex:param name="name" value="" />
+                                    <apex:param name="JobCardDescription" value=""/>
+                                    <apex:param name="sqkStatus" value=""/>                                     
+                                </apex:actionFunction>                               
+     
+                                <table cellpadding="3" cellspacing="3">
+                                    <tr>
+                                        <td style="font-weight:bold;">Squawk Name<br/>
+                                            <input type="text" id="name" onkeyup="doSearch();"/>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td style="font-weight:bold;">Description<br/>
+                                            <input type="text" id="JobCardDescription" onkeyup="doSearch();"/>
+                                        </td>
+                                    </tr>    
+                                    <tr>
+                                        <td style="font-weight:bold;">Status<br/>
+                                            <select id="sqkStatus" onchange="doSearch();">
+                                                <option value=""></option>
+                                                <apex:repeat value="{!sqkStatusS}" var="objStatus">
+                                                    <option value="{!objStatus}">{!objStatus}</option>
+                                                </apex:repeat>
+                                            </select>
+                                        </td>
+                                    </tr>                                                                
+                                </table>
+                            </apex:pageBlock>
+                        </td>
+                        
+                        <td valign="top">
+                            <apex:pageBlock mode="maindetail" id="results">
+                                <apex:outputPanel layout="block" styleClass="squeeze">
+                                    <apex:pageBlockTable value="{!sqk}" var="objQL" id="pgb_table">
+                                    
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:outputLabel >Job Card</apex:outputLabel>
+                                        </apex:facet>
+                                        <apex:outputField value="{!objQL.fxJob_Card__c}"/>
+                                    </apex:column>
+                                                                       
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:commandLink value="Squawk Name" action="{!toggleSort}" rerender="results,debug">
+                                                <apex:param name="sortField" value="name" assignTo="{!sortField}"/>
+                                            </apex:commandLink>                   
+                                        </apex:facet>
+                                        
+                                        <apex:repeat value="{!objQL.Name}">
+                                            <apex:outputLink value="{! If( or( objQL.Add_Work_Status__c == 'Pending', objQL.Add_Work_Status__c == 'Approved', objQL.Add_Work_Status__c == 'Denied') ,URLFOR($Page.Squawk, null, [Id=objQL.Id]), '/' + objQL.Id) }" target="_blank">{!objQL.Name}</apex:outputLink>
+                                        </apex:repeat>
+                                    </apex:column>                         
+                                        
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:commandLink value="Status" action="{!toggleSort}" status="spinnerStatus" rerender="results,debug">
+                                                <apex:param name="sortField" value="Add_Work_Status__c" assignTo="{!sortField}"/>
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                        <apex:outputField value="{!objQL.Add_Work_Status__c}"/>
+                                    </apex:column>
+                                    
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:outputText >Description</apex:outputText>
+                                        </apex:facet>
+                                        <apex:outputText value="{!objQL.Job_Card_Description__c}"/>
+                                    </apex:column>
+                                        
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:commandLink value="Labor Amount" action="{!toggleSort}" status="spinnerStatus" rerender="results,debug">
+                                                <apex:param name="sortField" value="Labor_Amount__c" assignTo="{!sortField}"/>
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                        <apex:outputText value="{!objQL.Labor_Amount__c}"/>
+                                    </apex:column>
+                                        
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:commandLink value="Labor Type" action="{!toggleSort}" status="spinnerStatus" rerender="results,debug">
+                                                <apex:param name="sortField" value="Add_Work_Labor_Type__c" assignTo="{!sortField}"/>
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                        <apex:outputText value="{!objQL.Add_Work_Labor_Type__c}"/>
+                                    </apex:column>
+                                        
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:commandLink value="Material Amount" action="{!toggleSort}" status="spinnerStatus" rerender="results,debug">
+                                                <apex:param name="sortField" value="Material_Amount__c" assignTo="{!sortField}"/>
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                        <apex:outputText value="{!objQL.Material_Amount__c}"/>
+                                    </apex:column>
+                                        
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:commandLink value="Material Type" action="{!toggleSort}" status="spinnerStatus" rerender="results,debug">
+                                                <apex:param name="sortField" value="Material_Type__c" assignTo="{!sortField}"/>
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                        <apex:outputText value="{!objQL.Material_Type__c}"/>
+                                    </apex:column>
+                                        
+                                    <apex:column >
+                                        <apex:facet name="header">
+                                            <apex:commandLink value="Is RTS?" action="{!toggleSort}" status="spinnerStatus" rerender="results,debug">
+                                                <apex:param name="sortField" value="IsRTS__c" assignTo="{!sortField}"/>
+                                            </apex:commandLink>
+                                        </apex:facet>
+                                        <apex:outputText value="{!objQL.IsRTS__c}"/>
+                                    </apex:column>                                                                      
+                                </apex:pageBlockTable>
+                                
+                                <script>
+                                    $('[id$=pgb_table]').stickyTableHeaders({scrollableArea: $('.squeeze')});
+                                </script>
+                                    
+                            </apex:outputPanel>                           
+                        </apex:pageBlock>
+                    </td>
+                </tr>
+            </table>  
+        </apex:form>
+    </apex:pageBlock>
+
+</apex:page>

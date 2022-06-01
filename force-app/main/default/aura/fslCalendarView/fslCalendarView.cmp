@@ -1,0 +1,15 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,forceCommunity:availableForAllPageTypes,force:lightningQuickAction,force:hasRecordId"
+                access="global">
+    
+    <aura:attribute name="recordId" type="string"/>      
+    
+    <div class="container">
+        <article class="slds-card">   
+            <iframe src="{!'https://standardaero--fsl.na156.visual.force.com/apex/fsl__vf079_ResourceCalendar?id=' + v.recordId}"
+                    width="100%"
+                    height="700px">
+            </iframe>
+        </article>
+    </div>
+    
+</aura:component>

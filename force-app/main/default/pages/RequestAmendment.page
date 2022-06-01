@@ -1,0 +1,10 @@
+<apex:page standardController="Opportunity" lightningStylesheets="true">
+<apex:slds />
+    <apex:sectionHeader title="Request Amendment For" subtitle="{!Opportunity.Name}"/> 
+    <flow:interview name="AmendmentEmail" finishLocation="/{!Opportunity.Id}">
+        <apex:param name="varOppId" value="{!Opportunity.Id}" />
+    </flow:interview>
+    <apex:form >
+        <apex:commandLink value="Cancel" action="{!cancel}"/>  
+    </apex:form>
+</apex:page>

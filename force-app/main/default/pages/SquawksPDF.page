@@ -1,0 +1,225 @@
+<apex:page standardcontroller="MPM4_BASE__Milestone1_Project__c" extensions="CPM_ViewAllSquawks" applyBodyTag="false" sidebar="false" showHeader="false" renderAs="pdf" >
+    <head>
+        <style type="text/css" media="print">
+            @page {
+                size:landscape;
+                margin-top: 1cm;
+                margin-bottom: 1.5cm;
+              
+                @top-center {                   
+                    content: element(header);               
+                }
+  
+                @bottom-right {
+                    content: element(footer);
+                }                           
+            }             
+            
+            .title{
+                font-weight:bold;
+                font-size:19px;
+                color:black;
+                text-align: center;
+                font-family: Arial, Helvetica, sans-serif
+            }
+
+            div.content {
+                padding-top: 2%;
+            }
+            
+            div.footer {
+                display: block;
+                position: running(footer);
+            }
+            
+            div.subfooter {
+                display: inline-block;
+            }
+            
+            div.right {
+                float: right;
+            }
+            
+            .pagenumber:before {
+                content: counter(page);
+            }
+            
+            .pagecount:before {
+                content: counter(pages);
+            }
+            
+            table {
+                border-spacing: 0px;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            td.h {
+                border-spacing: 0px;
+                border-collapse: collapse;
+                border-style: solid;
+                border-color: black;
+                border-width: thin; 
+                color:white;
+                background-color: gray;
+                font-size:14px;
+                text-align: center;
+            }
+                                   
+            td.b {
+                border-spacing: 0px;
+                border-collapse: collapse;
+                border-style: solid;
+                border-color: black;
+                border-width: thin; 
+                font-size:12px;
+                text-align: center;
+                line-height: 28px;
+            }
+            
+            td.c {
+                border-spacing: 0px;
+                border-collapse: collapse;
+                border-style: solid;
+                border-color: black;
+                border-width: thin; 
+                font-size:12px;
+                text-align: left;               
+                white-space: normal;
+            }
+            
+            td.d {
+                border-spacing: 0px;
+                border-collapse: collapse;
+                border-left-style: solid;
+                border-bottom-style: solid;
+                border-right-style: solid;
+                border-color: black;
+                border-width: thin; 
+                font-size:14px;
+                text-align: left;
+                line-height: 20px;
+            }          
+            .centered {
+                text-align: center;
+            }
+            
+            .right {
+                text-align: right;
+            }
+            
+            table.fixed { 
+                table-layout:fixed; 
+            }
+                              
+        </style> 
+    </head>
+    
+    <h1 class="title">{!MPM4_BASE__Milestone1_Project__c.Name} Squawks</h1>
+    <apex:repeat value="{!Project}" var="p">
+        <table>    
+            <tr>  
+                <td class="h" width="15%">
+                    <apex:outputLabel >CPM</apex:outputLabel> 
+                </td>
+                <td class="h" width="15%">
+                    <apex:outputLabel >Customer</apex:outputLabel>
+                </td>
+                <td class="h" width="15%">
+                    <apex:outputLabel >Account</apex:outputLabel>
+                </td>
+                <td class="h" width="7%">
+                    <apex:outputLabel >Aircraft</apex:outputLabel>
+                </td>
+                <td class="h" width="40%">
+                    <apex:outputLabel >Project Description</apex:outputLabel>
+                </td>
+                <td class="h" width="8%">
+                    <apex:outputLabel >Delivery Date</apex:outputLabel>
+                </td>
+            </tr>
+        </table>
+        <table>                                
+            <tr>
+                <td class="b" width="15%">{!p.CPM_Name__c}</td>
+                <td class="b" width="15%">{!p.Designated_Approver__r.Name}</td>
+                <td class="b" width="15">{!p.MPM4_BASE__Account__r.Name}</td>
+                <td class="b" width="7%">{!p.Aircraft__r.ACReg__c}</td>
+                <td class="c" width="40%">{!p.MPM4_BASE__Description__c}</td>
+                <td class="b" width="8%">
+                    <apex:outputText value="{0,date, MM'/'dd'/'yyyy}">
+                        <apex:param value="{!p.Delivery_Date__c}"/>
+                    </apex:outputText>
+                </td>
+            </tr>                             
+        </table>
+    </apex:repeat>
+    <p/>    
+    <div>      
+        <apex:variable value="{!1}" var="num"/>
+        <apex:repeat value="{!sqk}" var="ql">
+            <apex:outputpanel rendered="{!num == 1  || num == 9 || (num > 19 && MOD((num - 9) , 11) == 0) }"> 
+                <table class="fixed">    
+                    <tr> 
+                        <td class="h" width="7%">
+                            <apex:outputLabel ><b>Squawk No.</b></apex:outputLabel> 
+                        </td>
+                        <td class="h" width="48%">
+                            <apex:outputLabel ><b>Job Card Description</b></apex:outputLabel>
+                        </td>
+                        <td class="h" width="8%">
+                            <apex:outputLabel ><b>Status</b></apex:outputLabel>
+                        </td>
+                        <td class="h" width="9%">
+                            <apex:outputLabel ><b>Material Amount</b></apex:outputLabel>
+                        </td>
+                        <td class="h" width="7%">
+                            <apex:outputLabel ><b>Material Type</b></apex:outputLabel>
+                        </td>
+                        <td class="h" width="9%">
+                            <apex:outputLabel ><b>Labor Amount</b></apex:outputLabel>
+                        </td>
+                        <td class="h" width="7%">
+                            <apex:outputLabel ><b>Labor Type</b></apex:outputLabel>
+                        </td>
+                        <td class="h" width="5%">
+                            <apex:outputLabel ><b>Is RTS?</b></apex:outputLabel>
+                        </td>
+                    </tr>
+                </table>    
+            </apex:outputpanel>
+                
+            <table class="fixed">                                
+                <tr>
+                    <td class ="b" width="7%" rowspan="2">
+                        <apex:outputtext value="{!IF(ISNULL(ql.Item_No__c), num, ql.fxSquawkNo__c)}"/>
+                    </td>
+                    <td class ="c" width="48%">&nbsp;{!ql.Job_Card_Description__c}</td>
+                    <td class ="b" width="8%">{!ql.Add_Work_Status__c}</td>
+                    <td class ="b" width="9%">{!ql.Material_Amount__c}</td>
+                    <td class ="b" width="7%">{!ql.Material_Type__c}</td>
+                    <td class ="b" width="9%">{!ql.Labor_Amount__c}</td>
+                    <td class ="b" width="7%">{!ql.Add_Work_Labor_Type__c}</td>
+                    <td class ="b" width="5%">{!ql.IsRTS__c}</td>
+                </tr>
+                <tr>
+                    <td class ="d" colspan="8">&nbsp;&nbsp;Notes:</td>
+                </tr>
+            </table>
+                         
+            <div class="footer"> 
+                <div class="centered">Generated by {!$User.FirstName} {!$User.LastName}</div>
+                <div>            
+                    <div class="subfooter">{!NOW()}</div>           
+                    <div class="subfooter right">Page <span class="pagenumber"/> of <span class="pagecount"/></div>
+                </div>
+            </div>
+                
+            <apex:outputpanel rendered="{!num == 8 ||  num == 19 || (num > 20 && MOD((num - 8) , 11) == 0)}">                  
+                <div style="page-break-after: always;"/>
+            </apex:outputpanel>       
+                  
+            <apex:variable value="{!num+1}" var="num"/>
+        </apex:repeat>
+    </div>                       
+</apex:page>

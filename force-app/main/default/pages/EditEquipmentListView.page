@@ -1,0 +1,72 @@
+<apex:page standardController="Equipment__c" recordSetVar="Equipment" tabStyle="Equipment__c" lightningStylesheets="true">
+<apex:slds />
+<style type="text/css">
+.dateFormat{
+   visibility:hidden;
+}
+</style>
+    <apex:form >
+        <apex:pageBlock title="Edit Equipment List" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="top">
+                <apex:commandButton value="Save" action="{!save}"/>
+                <apex:commandButton value="Cancel" action="{!cancel}"/>
+            </apex:pageBlockButtons>
+
+ 
+            <apex:pageblocktable value="{!selected}" var="e" >
+            
+        
+                <apex:column value="{!e.Name}" headervalue="Aircraft" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                   
+                  </apex:column>
+         <!--   <apex:column headerValue="Owner" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Ownerid}"/>
+                </apex:column>      
+         -->   <apex:column headerValue="Account" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField required="true" value="{!e.Account__c}"/>
+                </apex:column>
+            <apex:column headerValue="Aircraft" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Aircraft__c}"/>
+                </apex:column> 
+            <apex:column headerValue="AMH" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Average_Monthly_Hours__c}" style="width:30px"/>
+                </apex:column> 
+            <apex:column headerValue="Description" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Description__c}" style="width: 350px;height:50px"/>
+                </apex:column> 
+            <apex:column headerValue="Maintenance Prgm ID (MPID)" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.MaintenancePrgmID__c}"/>
+                </apex:column>    
+            <apex:column headerValue="MX Prgm Data Refresh Date" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Maintenance_Prgm_Data_Refresh_Date__c}"/>
+                </apex:column>    
+            <apex:column headerValue="MX Prgm Type" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.MaintenancePrgmType__c}"/>
+                </apex:column>                  
+           <apex:column headerValue="MX Prgm Status" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Maintenance_Prgm_Status__c}"/>
+                </apex:column> 
+            <apex:column headerValue="MX Prgm Expiration" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.MaintenancePrgmExpiration__c}"/>
+                </apex:column>     
+            <apex:column headerValue="MX Prgm Account Name" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Maintenance_Prgm_Account_Name__c}"/>
+                </apex:column> 
+            <apex:column headerValue="MX Prgm Account Phone" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Maintenance_Prgm_Account_Phone__c}"/>
+                </apex:column>    
+            <apex:column headerValue="MX Prgm Account Address" style="background-color:#F0F8FF;border:solid;border-width:.1px;border-color:gray">
+                    <apex:inputField value="{!e.Maintenance_Prgm_Account_Address__c}"/>
+                </apex:column>    
+                
+                
+                    
+            </apex:pageblocktable>    
+    
+          
+
+              
+        </apex:pageBlock>
+    </apex:form>
+    </apex:page>

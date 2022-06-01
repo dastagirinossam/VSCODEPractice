@@ -1,0 +1,303 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+    <ltng:require styles="{!$Resource.SLDS26 + '/styles/salesforce-lightning-design-system.css'}"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" default="{!recordId}"/>
+    <aura:attribute name="AddWorkStatus" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="EstTotal" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="dApprover" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="dApproverId" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="RTS" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="jcdesc" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="labAmount" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="matAmount" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="estimatedLaborHrs" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="showELH" type="boolean" default="false"/>    
+    <aura:attribute name="labType" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="matType" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="Project" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="ProjectId" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="createdBy" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="createdById" type="SBQQ__QuoteLine__c"/>
+    <aura:attribute name="cpm" type="String"/>
+    <aura:attribute name="cpmId" type="String"/>
+    <aura:attribute name="quote" type="String"/>
+    <aura:attribute name="quoteId" type="String"/>
+     
+	<div class="container slds-p-top_medium forceRelatedListSingleContainer">
+		<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+        	<div class="slds-card__header slds-grid">
+            	<header class="slds-media slds-media--center slds-has-flexi-truncate">
+                	<div class="slds-media__figure">
+                    	<span class="uiImage">
+                        	<lightning:icon iconName="standard:service_contract" size="small"/>
+                        </span>
+                   	</div>
+                    <div class="slds-media__body">
+                    	<h2 class="slds-section__title">
+            				<span class="section-header-title slds-p-horizontal--small slds-truncate">Squawk Information</span>
+            			</h2>
+                    </div>
+                </header>
+            </div>
+    		<div class="slds-card__body slds-card__body--inner">
+        		<table class="slds-table slds-table--cell-buffer">
+                	<thead/>
+                    <tbody>
+                        <div class="slds-grid full forcePageBlockSectionRow">
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Squawk Status</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">{!v.AddWorkStatus}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Estimated Total</span>
+                                        <span>
+                                            <lightning:icon iconName="utility:info" size="xx-small" title="Material Amount + Labor Amount"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">${!v.EstTotal}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                        </div>
+                        <div class="slds-grid full forcePageBlockSectionRow">
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Designated Approver</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/profile/'+v.dApproverId}" >
+                                                <span class="uiOutputText">{!v.dApprover}</span>
+                                            </a>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Req. for RTS</span>
+                                        <span>
+                                            <lightning:icon iconName="utility:info" size="xx-small" title="Is Squawk Required for Aircraft To Be Returned To Service"/>
+                                        </span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputCheckbox">
+                                                <ui:outputCheckbox value="{!v.RTS}"/>
+                                            </span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                        </div>
+                        <aura:if isTrue="{!v.showELH}">
+                            <div class="slds-grid full forcePageBlockSectionRow">
+                                <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                    <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                        <div class="test-id__field-label-container">
+                                        </div>
+                                        <div class="slds-form-element__control slds-grid itemBody">
+                                        </div>                        
+                                    </div>                        
+                                </div>
+                                <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                    <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                        <div class="test-id__field-label-container">
+                                            <span class="test-id__field-label slds-form-element__label">Estimate Labor Hours</span>
+                                        </div>
+                                        <div class="slds-form-element__control slds-grid itemBody">
+                                            <span class="test-id__field-value slds-form-element__static slds-grow">
+                                                <span class="uiOutputText">{!v.estimatedLaborHrs}</span>
+                                            </span>
+                                        </div>                        
+                                    </div>                        
+                                </div>
+                            </div>
+                        </aura:if>
+                        <div class="slds-grid full forcePageBlockSectionRow">
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Job Card Description</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputTextArea">{!v.jcdesc}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                        </div>
+                    </tbody>
+                </table>
+    		</div>
+        </article>
+    </div>
+
+	<div class="container slds-p-top_medium forceRelatedListSingleContainer">
+		<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+        	<div class="slds-card__header slds-grid">
+            	<header class="slds-media slds-media--center slds-has-flexi-truncate">
+                	<div class="slds-media__figure">
+                    	<span class="uiImage">
+                        	<lightning:icon iconName="standard:contract_line_item" size="small"/>
+                        </span>
+                   	</div>
+                    <div class="slds-media__body">
+                    	<h2 class="slds-section__title">
+            				<span class="section-header-title slds-p-horizontal--small slds-truncate">Estimated Pricing Details</span>
+            			</h2>
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body slds-card__body--inner">
+        		<table class="slds-table slds-table--cell-buffer">
+                	<thead/>
+                    <tbody>
+    					<div class="slds-grid full forcePageBlockSectionRow">
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Labor Amount</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">${!v.labAmount}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Material Amount</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">${!v.matAmount}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                        </div>
+                        <div class="slds-grid full forcePageBlockSectionRow">
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Labor Type</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">{!v.labType}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Material Type</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow">
+                                            <span class="uiOutputText">{!v.matType}</span>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                        </div>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </div>
+    
+	<div class="container slds-p-top_medium forceRelatedListSingleContainer">
+		<article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+        	<div class="slds-card__header slds-grid">
+            	<header class="slds-media slds-media--center slds-has-flexi-truncate">
+                	<div class="slds-media__figure">
+                    	<span class="uiImage">
+                        	<lightning:icon iconName="standard:related_list" size="small"/>
+                        </span>
+                   	</div>
+                    <div class="slds-media__body">
+                    	<h2 class="slds-section__title">
+            				<span class="section-header-title slds-p-horizontal--small slds-truncate">Related Information</span>
+            			</h2>
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body slds-card__body--inner">
+        		<table class="slds-table slds-table--cell-buffer">
+                	<thead/>
+                    <tbody>
+    					<div class="slds-grid full forcePageBlockSectionRow">
+        					<div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Project</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow"> 
+                                            <a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/project/'+v.ProjectId}" >
+                                                <span class="uiOutputText">{!v.Project}</span>
+                                            </a>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">CPM</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">            
+                                        <span class="test-id__field-value slds-form-element__static slds-grow"> 
+                                            <a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/profile/'+v.cpmId}" >
+                                                <span class="uiOutputText">{!v.cpm}</span>
+                                            </a>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+        				</div>
+                        <div class="slds-grid full forcePageBlockSectionRow">
+                            <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                    <div class="test-id__field-label-container">
+                                        <span class="test-id__field-label slds-form-element__label">Squawk Quote</span>
+                                    </div>
+                                    <div class="slds-form-element__control slds-grid itemBody">
+                                        <span class="test-id__field-value slds-form-element__static slds-grow"> 
+                                            <a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/squawk-quote/'+v.quoteId}" >
+                                                <span class="uiOutputText">{!v.quote}</span>
+                                            </a>
+                                        </span>
+                                    </div>                        
+                                </div>                        
+                            </div>
+                        </div>
+                    </tbody>
+                </table>
+            </div>
+        </article>
+    </div>
+	
+</aura:component>

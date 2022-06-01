@@ -1,0 +1,3 @@
+<apex:page standardController="MPM4_BASE__Milestone1_Project__c" extensions="CreateQuoteController" action="{!autoRun}" >
+
+</apex:page>

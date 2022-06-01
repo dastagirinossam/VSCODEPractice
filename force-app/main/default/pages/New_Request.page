@@ -1,0 +1,39 @@
+<apex:page standardController="Request__c" tabStyle="Request__c" lightningStylesheets="true">  
+    <apex:sectionHeader title="Create Request" subtitle="New Request"/>  
+    
+    <apex:form > 
+        <apex:pageBlock title="Request Edit" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!save}" value="Save"/>
+                <apex:commandButton action="{!save}" value="Save & New"/>
+                <apex:commandButton action="{!cancel}" value="Cancel"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Information" columns="2">
+                <apex:inputField value="{!Request__c.SOps_Tier_Level__c}"/>
+                <apex:inputField value="{!Request__c.Supported_By__c}"/>
+                <apex:inputField value="{!Request__c.Don_t_Send_Notices__c}"/>
+                <apex:inputField value="{!Request__c.Requested_Due_Date__c}"/>
+            </apex:pageBlockSection>
+             <apex:pageBlockSection columns="1">
+                <apex:inputField value="{!Request__c.Subject_Purpose__c}" Required="True"/>
+                <apex:inputField value="{!Request__c.Description__c}" Required="True"/>
+            </apex:pageBlockSection>           
+            <apex:pageBlockSection title="Request Scope, Schedule, Details" columns="2">
+                <apex:inputField value="{!Request__c.Status__c}"/>
+                <apex:inputField value="{!Request__c.Category__c}" Required="True"/>
+                <apex:inputField value="{!Request__c.Next_Steps__c}"/>
+                <apex:inputField value="{!Request__c.Estimated_Completion_Date__c}" />
+                <apex:inputField value="{!Request__c.Completed_Date__c}" />
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="Rejected Request Information" columns="2">
+                <apex:inputField value="{!Request__c.Rejected__c}"/>
+                <apex:inputField value="{!Request__c.Reason__c}"/>                
+            </apex:pageBlockSection>
+            <apex:pageBlockSection title="System Information" columns="2">
+                <apex:inputField value="{!Request__c.RequestedBy__c}"/>
+                <apex:inputField value="{!Request__c.Created_Date__c}"/>
+                <apex:inputField value="{!Request__c.CreationEmail__c}"/>           
+            </apex:pageBlockSection>                       
+        </apex:pageBlock>
+    </apex:form>      
+</apex:page>

@@ -1,0 +1,8 @@
+<apex:page standardController="Product2" extensions="RedirectExtension" showHeader="true" sidebar="true" >
+<apex:slds ></apex:slds>
+    <!--<apex:form >
+     <apex:commandButton action="{!doSubmit}" title="Back" value="Back" />
+     
+   </apex:form>-->
+    <apex:detail subject="{!$CurrentPage.parameters.c__id}" inlineEdit="true" relatedListHover="false"/>
+</apex:page>

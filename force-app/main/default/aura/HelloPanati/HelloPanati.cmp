@@ -1,0 +1,6 @@
+<aura:component implements="forceCommunity:availableForAllPageTypes" access="global">
+    <ui:outputText value="Hello Customer! hii"/>
+    <aura:attribute name="myproject" type="MPM4_BASE__Milestone1_Project__c"/>
+    
+   
+</aura:component>

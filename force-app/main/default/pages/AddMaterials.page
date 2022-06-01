@@ -1,0 +1,28 @@
+<apex:page tabStyle="SBQQ__ProductOption__c" Controller="ProductOptions">
+
+    <apex:param value="{!$CurrentPage.Parameters.retURL}"/> 
+    <apex:param value="{!$CurrentPage.Parameters.prodId}"/> 
+    <apex:param value="{!$CurrentPage.Parameters.number}"/> 
+    <apex:param value="{!$CurrentPage.Parameters.feature}"/>
+    <apex:param value="{!$CurrentPage.Parameters.pricebook}"/> 
+    <apex:param value="{!$CurrentPage.Parameters.cost}"/>  
+
+    <apex:sectionHeader title="Add Material"/>
+    
+    <apex:form >
+        <apex:pageBlock title="Add Material To Product" mode="edit">
+            
+            <apex:pageBlockButtons >
+                <apex:commandButton value="Save" action="{!saveProductOption}"/>
+                <apex:commandButton value="Cancel" action="{!cancelProductOption}"/>
+                <apex:commandButton value="Create New Material" action="{!AddProduct}" title="Click Here To Create Material If Material Does Not Exist"/>
+            </apex:pageBlockButtons>
+   
+            <apex:pageBlockSection showHeader="false" columns="1">
+                <apex:inputField value="{!prodOpt.SBQQ__OptionalSKU__c}"/> 
+            </apex:pageBlockSection> 
+                    
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>

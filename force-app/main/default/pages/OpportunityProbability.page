@@ -1,0 +1,88 @@
+<apex:page standardController="Opportunity" tabStyle="Opportunity" extensions="OpportunityProbabilityController" sidebar="false" lightningStylesheets="true">          
+    <apex:slds />
+    <apex:form >
+                 
+        <style>
+            .popupBackground {
+                background-color:black;
+                opacity: 0.20;
+                filter: alpha(opacity = 20);
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: 998;
+                position: absolute;
+                cursor:wait;
+            }
+            .pbTitle {
+                white-space: nowrap;
+            }
+        </style>
+        
+        
+        <apex:actionStatus id="spinnerStatus">
+            <apex:facet name="start">
+                <div>
+                    <div class="popupBackground"/>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+        
+        <apex:sectionHeader title="Opportunity Probability Update"/>   
+      
+        <apex:pageBlock title="Opportunity Probability"  mode="edit" id="results" >
+            <apex:pageMessages ></apex:pageMessages> 
+            <apex:pageBlockTable value="{!opps}" var="o" rendered="{!opps.Size > 0}" > 
+                
+                <apex:column >                                                   
+                    <apex:facet name="header">
+                        <apex:outputLabel >Probability Override</apex:outputLabel>
+                    </apex:facet>
+                    <apex:inputField value="{!o.Probability_Grouping_Override__c}"/>                      
+                </apex:column>
+                
+                <apex:column >                      
+                    <apex:facet name="header">                          
+                        <apex:commandLink value="Opportunities" status="spinnerStatus" action="{!toggleSort}" rerender="results">                               
+                            <apex:param name="sortField" value="Name" assignTo="{!sortField}"/>
+                        </apex:commandLink>                     
+                    </apex:facet>                           
+                    <apex:outputLink value="/{!o.id}" target="_blank">{!o.Name}</apex:outputLink>                                          
+                </apex:column>   
+                
+                <apex:column >                                                   
+                    <apex:facet name="header">
+                        <apex:outputLabel >Probability</apex:outputLabel>
+                    </apex:facet>
+                    <apex:inputField value="{!o.Probability}"/>                      
+                </apex:column>
+                              
+                <apex:column >                                                   
+                    <apex:facet name="header">                          
+                        <apex:commandLink value="Input Date" status="spinnerStatus" action="{!toggleSort}" rerender="results">                              
+                            <apex:param name="sortField" value="InputDate__c" assignTo="{!sortField}"/>
+                        </apex:commandLink>                     
+                    </apex:facet>   
+                    <apex:outputField value="{!o.InputDate__c}"/>                      
+                </apex:column>
+                
+                <apex:column >                                                   
+                    <apex:facet name="header">                          
+                        <apex:commandLink value="Stage" status="spinnerStatus" action="{!toggleSort}" rerender="results">                               
+                            <apex:param name="sortField" value="StageName" assignTo="{!sortField}"/>
+                        </apex:commandLink>                     
+                    </apex:facet>   
+                    <apex:outputField value="{!o.StageName}"/>                      
+                </apex:column>
+
+                <apex:column >                                                   
+                    <apex:facet name="header">
+                        <apex:commandButton action="{!saveOpportunities}" value="Save" reRender="results" status="spinnerStatus"/>
+                    </apex:facet>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>        
+    </apex:form>
+            
+</apex:page>

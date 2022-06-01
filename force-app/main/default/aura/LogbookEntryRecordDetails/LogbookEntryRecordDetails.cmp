@@ -1,0 +1,98 @@
+<aura:component controller="SquawkApproval" implements="forceCommunity:availableForAllPageTypes,force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId" access="global">
+	<ltng:require styles="{!$Resource.SLDS26 + '/assets/styles/salesforce-lightning-design-system.css'}"/>
+
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="recordId" type="String" default="{!recordId}"/>
+    <aura:attribute name="workOrder" type="String"/>
+    <aura:attribute name="entryDate" type="String"/>
+    <aura:attribute name="project" type="String"/>
+    <aura:attribute name="projectId" type="String"/>
+	<aura:attribute name="name" type="String"/>
+	<aura:attribute name="contentDocId" type="String"/>    
+
+    <div class="container slds-p-top_medium forceRelatedListSingleContainer">
+    
+        <div class="slds-grid primaryFieldRow">
+            <div class="slds-grid slds-col slds-has-flexi-truncate slds-media--center">
+                <div class="profilePicWrapper slds-media slds-no-space slds-p-right_small">
+                    <lightning:icon iconName="custom:custom55" size="large"/>
+                </div>
+                <div class="slds-media__body">
+                    <p class="slds-text-heading--label slds-line-height--reset">Log Book Entry</p>
+                    <h2 class="slds-page-header__title slds-m-right--small slds-truncate slds-align-middle">{!v.name}</h2>
+                </div>
+            </div>
+            <div class="slds-m-left--xx-small forceActionsContainer">
+                <div class="slds-truncate">
+                    <button class="slds-button slds-button--neutral slds-truncate" onclick="{!c.viewDoc}" id="{!v.recordId}">View</button>        
+                </div>  
+            </div>
+        </div>
+        
+        <div class="uiScroller native">
+            <div class="container slds-p-top_medium slds-p-bottom_xx-large forceRelatedListSingleContainer">
+                <article class="slds-card forceRelatedListCardDesktop scrollable uiScroller scroller-wrapper scroll-bidirectional native">
+                    <div class="slds-card__header slds-grid">
+                        <header class="slds-media slds-media--center slds-has-flexi-truncate">
+                            <div class="slds-media__body">
+                                <h2 class="slds-section__title">
+                                    <span class="section-header-title slds-p-horizontal--small slds-truncate">Log Book Entry Details</span>
+                                </h2>
+                            </div>
+                        </header>
+                    </div>
+                    <div class="slds-card__body slds-card__body--inner">
+                        <table class="slds-table slds-table--cell-buffer">
+                            <thead/>
+                            <tbody>                   
+                                <div class="slds-grid full forcePageBlockSectionRow">
+                                    <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                        <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                            <div class="test-id__field-label-container">
+                                                <span class="slds-form-element__label">Project</span>
+                                            </div>
+                                            <div class="slds-form-element__control slds-grid itemBody">
+                                                <span class="slds-form-element__static slds-grow"> 
+                                                    <a class="cuf-entityLink cuf-entityLink" href="{!'/Customer/s/project/'+v.projectId}" >
+                                                        <span class="uiOutputText">{!v.project}</span>
+                                                    </a>
+                                                </span>
+                                            </div>                        
+                                        </div>                        
+                                    </div>                                                    			
+                                    <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                        <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                            <div>
+                                                <span class="slds-form-element__label">Work Order</span>
+                                            </div>
+                                            <div class="slds-form-element__control slds-grid itemBody">
+                                                <span class="slds-form-element__static slds-grow">
+                                                    <span class="uiOutputText">{!v.workOrder}</span>
+                                                </span>
+                                            </div>                        
+                                        </div>                        
+                                    </div>            			
+                                </div>                                
+                                <div class="slds-grid full forcePageBlockSectionRow">
+                                    <div class="slds-has-flexi-truncate slds-has-divider_top slds-p-horizontal_x-small full forcePageBlockItem forcePageBlockItemView">
+                                        <div class="slds-form-element slds-form-element_edit slds-grow slds-hint-parent slds-p-vertical_xx-small override--slds-form-element">
+                                            <div>
+                                                <span class="slds-form-element__label">Entry Date</span>
+                                            </div>
+                                            <div class="slds-form-element__control slds-grid itemBody">
+                                                <span class="slds-form-element__static slds-grow">
+                                                    <ui:outputDate value="{!v.entryDate}"/>
+                                                </span>
+                                            </div>                        
+                                        </div>                        
+                                    </div>
+                                </div>                              
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

@@ -1,0 +1,27 @@
+<apex:page controller="EngineForSaleApex" showHeader="false" sidebar="false">
+
+    <table style="width: 100%; layout: fixed;">       
+        <tr>
+            <th>Engine Manufacture</th>      
+            <th>Model</th>
+            <th>Serial No</th>
+            <th>Last Hours</th>
+            <th>Last Cycles</th>
+            <th>MPI Remaining</th>
+            <th>CZI Remaining</th>
+        </tr>
+        
+        <apex:repeat var="e" value="{!ExchangeEngines}">
+            <tr>  
+                <td>{!e.Engine_Manufacture__c}</td>                     
+                <td>{!e.Model__c}</td>                       
+                <td>{!e.EngineorAPUSN__c}</td>
+                <td>{!e.LastHours__c}</td>
+                <td>{!e.LastCycles__c}</td>
+                <td>{!e.MPI_Remaining__c}</td>
+                <td>{!e.CZI_Remaining__c}</td>
+            </tr>
+        </apex:repeat>
+    </table>
+
+</apex:page>

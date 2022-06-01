@@ -1,0 +1,31 @@
+<apex:page StandardController="SBQQ__QuoteLine__c" showHeader="false" tabStyle="SBQQ__QuoteLine__c" lightningStylesheets="true">
+<apex:slds />
+ <apex:includeScript value="{!$Resource.SBQQ__jQuery}"/>
+ <apex:relatedList list="ProcessSteps"/>
+ <style>
+     //to hide submit for approval button
+     //input.btn[name="piSubmit"] {
+     //       display: none;
+     //}     
+     
+     //to hide recall button
+     //input.btn[name="piRemove"] { 
+     //       display: none;
+     //} 
+         
+ </style>
+ <script>
+     var jeet = $.noConflict();
+     jeet(document).ready(function(){
+         jeet('.actionLink').each( function(){
+            var addr =  jeet(this).attr("href");
+             jeet(this).attr("href", "#");
+             jeet(this).bind( "click", function() { window.parent.location= addr; });
+         });
+         jeet('.tertiaryPalette').css("background-color", "rgb(132, 73, 73)");
+         jeet('.secondaryPalette').css('border-top', '3px solid rgb(132, 73, 73)');
+         //if you requirement is not show any button, then remove the styles from above and add/uncomment below statement
+         jeet('.btn').css('display', 'none');
+     });
+ </script>
+</apex:page>

@@ -1,0 +1,11 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes" access="global" >
+    <aura:attribute name="recordId" type="String" />
+    
+    <lightning:fileCard fileId="{!v.recordId}" description="Click To Preview File"/>
+    
+    <div class="slds-p-top_small">
+        <button title="Go Back To Your Preivous Page" class="slds-button slds-button_neutral" onclick="{!c.redirect}">Back</button>
+    </div>
+
+
+</aura:component>

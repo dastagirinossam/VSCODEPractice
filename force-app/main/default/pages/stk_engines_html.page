@@ -1,0 +1,11 @@
+<apex:page showheader="false" sidebar="false" standardStylesheets="false" applyBodyTag="false" applyHtmlTag="false">
+
+<ion-view view-title="Sales Tool Kit">
+  <ion-content>
+    <ion-list>
+      
+    </ion-list>
+  </ion-content>
+</ion-view>
+
+</apex:page>
